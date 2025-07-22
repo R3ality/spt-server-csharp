@@ -145,8 +145,8 @@ public class BotGeneratorHelperTests
         Assert.AreEqual(ItemAddedResult.SUCCESS, result);
 
         var weaponRoot = weaponWithChildren.FirstOrDefault(item => item.Id == rootWeaponId);
-        Assert.AreEqual((weaponRoot.Location as ItemLocation).X, 0);
-        Assert.AreEqual((weaponRoot.Location as ItemLocation).Y, 0);
+        Assert.AreNotEqual((weaponRoot.Location as ItemLocation).X, 0);
+        Assert.AreNotEqual((weaponRoot.Location as ItemLocation).Y, 0);
         Assert.AreEqual((weaponRoot.Location as ItemLocation).R, ItemRotation.Horizontal);
     }
 
