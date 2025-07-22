@@ -15,6 +15,7 @@ public class DI
     private static IServiceProvider _serviceProvider;
 
     private static DI? _instance;
+
     private DI()
     {
         ConfigureServices();
@@ -59,7 +60,8 @@ public class DI
         }
     }
 
-    public T GetService<T>() where T : notnull
+    public T GetService<T>()
+        where T : notnull
     {
         return _serviceProvider.GetRequiredService<T>();
     }
