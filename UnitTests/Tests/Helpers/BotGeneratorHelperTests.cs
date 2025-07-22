@@ -127,7 +127,20 @@ public class BotGeneratorHelperTests
             botInventory
         );
 
-        _botLootGenerator.AddLootFromPool(new Dictionary<MongoId, double>{{ItemTpl.BARTER_MALBORO_CIGARETTES, 1}, {ItemTpl.FOREGRIP_SAKO_TRG_M10_GRIP_PAD, 1}, {ItemTpl.BARTER_GOLD_SKULL_RING, 1}, {ItemTpl.BARTER_PACK_OF_NAILS, 1}}, [EquipmentSlots.Backpack], 4, botInventory, "assault", null);
+        _botLootGenerator.AddLootFromPool(
+            new Dictionary<MongoId, double>
+            {
+                { ItemTpl.BARTER_MALBORO_CIGARETTES, 1 },
+                { ItemTpl.FOREGRIP_SAKO_TRG_M10_GRIP_PAD, 1 },
+                { ItemTpl.BARTER_GOLD_SKULL_RING, 1 },
+                { ItemTpl.BARTER_PACK_OF_NAILS, 1 },
+            },
+            [EquipmentSlots.Backpack],
+            4,
+            botInventory,
+            "assault",
+            null
+        );
 
         Assert.AreEqual(ItemAddedResult.SUCCESS, result);
 

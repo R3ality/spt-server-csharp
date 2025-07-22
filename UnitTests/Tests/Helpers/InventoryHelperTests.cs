@@ -173,13 +173,7 @@ public class InventoryHelperTests
             Template = "6699249f3c4fda6471005cba",
             ParentId = root.Id,
             SlotId = "mod_stock",
-            Upd = new Upd
-            {
-                Foldable = new UpdFoldable
-                {
-                    Folded = true
-                }
-            },
+            Upd = new Upd { Foldable = new UpdFoldable { Folded = true } },
         };
         weaponWithChildren.Add(stock);
 
