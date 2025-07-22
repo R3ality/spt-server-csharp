@@ -312,9 +312,7 @@ public class QuestController(
             else
             {
                 // Remove item with children
-                var toRemove = pmcData.Inventory.Items.FindAndReturnChildrenByItems(
-                    itemHandover.Id
-                );
+                var toRemove = pmcData.Inventory.Items.GetItemWithChildrenTpls(itemHandover.Id);
                 var index = pmcData.Inventory.Items.Count;
 
                 // Important: don't tell the client to remove the attachments, it will handle it
@@ -335,7 +333,7 @@ public class QuestController(
                         // element `location` properties of the parent so they are sequential, while retaining order
                         if (removedItem.Location?.GetType() == typeof(int))
                         {
-                            var childItems = pmcData.Inventory.Items.FindAndReturnChildrenAsItems(
+                            var childItems = pmcData.Inventory.Items.GetItemWithChildren(
                                 removedItem.ParentId
                             );
                             childItems.RemoveAt(0); // Remove the parent

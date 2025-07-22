@@ -410,7 +410,7 @@ public class InsuranceController(
                 if (parentAttachmentsMap.ContainsKey(insuredItem.Id))
                 {
                     // This call will also return the parent item itself, queueing it for deletion as well.
-                    var itemAndChildren = insured.Items.FindAndReturnChildrenAsItems(
+                    var itemAndChildren = insured.Items.GetItemWithChildren(
                         insuredItem.Id
                     );
                     foreach (var item in itemAndChildren)

@@ -299,7 +299,7 @@ public class ProfileController(
         foreach (var rootItems in hideoutRootItems)
         {
             // Check each root items for children and add
-            var itemWithChildren = profileToViewPmc.Inventory.Items.FindAndReturnChildrenAsItems(
+            var itemWithChildren = profileToViewPmc.Inventory.Items.GetItemWithChildren(
                 rootItems.Id
             );
             itemsToReturn.AddRange(itemWithChildren);

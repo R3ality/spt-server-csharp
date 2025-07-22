@@ -591,7 +591,7 @@ public class RagfairController(
 
         // multi-offers are all the same item,
         // Get first item and its children and use as template
-        var inventoryItems = pmcData.Inventory.Items.FindAndReturnChildrenAsItems(
+        var inventoryItems = pmcData.Inventory.Items.GetItemWithChildren(
             firstOfferItemId // Choose first item as they're all the same item
         );
 
@@ -707,7 +707,7 @@ public class RagfairController(
 
         // multi-offers are all the same item,
         // Get first item and its children and use as template
-        var firstInventoryItemAndChildren = pmcData.Inventory.Items.FindAndReturnChildrenAsItems(
+        var firstInventoryItemAndChildren = pmcData.Inventory.Items.GetItemWithChildren(
             offerRequest.Items.FirstOrDefault()
         );
 
@@ -1090,7 +1090,7 @@ public class RagfairController(
 
             rootItem.FixItemStackCount();
 
-            itemsToReturn.Add(pmcData.Inventory.Items.FindAndReturnChildrenAsItems(itemId));
+            itemsToReturn.Add(pmcData.Inventory.Items.GetItemWithChildren(itemId));
         }
 
         if (itemsToReturn.Count == 0)

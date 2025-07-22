@@ -80,12 +80,12 @@ public class InRaidHelper(
         );
 
         // Get all items that have a parent of `serverProfile.Inventory.equipment` (All items player had on them at end of raid)
-        var postRaidInventoryItems = postRaidProfile.Inventory.Items.FindAndReturnChildrenAsItems(
+        var postRaidInventoryItems = postRaidProfile.Inventory.Items.GetItemWithChildren(
             postRaidProfile.Inventory.Equipment.Value
         );
 
         // Get all items that have a parent of `serverProfile.Inventory.questRaidItems` (Quest items player had on them at end of raid)
-        var postRaidQuestItems = postRaidProfile.Inventory.Items.FindAndReturnChildrenAsItems(
+        var postRaidQuestItems = postRaidProfile.Inventory.Items.GetItemWithChildren(
             postRaidProfile.Inventory.QuestRaidItems.Value
         );
 

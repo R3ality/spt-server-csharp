@@ -199,7 +199,7 @@ namespace SPTarkov.Server.Core.Extensions
         /// <param name="items">List of items (item + possible children)</param>
         /// <param name="baseItemId">Parent item's id</param>
         /// <returns>list of child item ids</returns>
-        public static List<MongoId> FindAndReturnChildrenByItems(
+        public static List<MongoId> GetItemWithChildrenTpls(
             this IEnumerable<Item> items,
             MongoId baseItemId
         )
@@ -210,7 +210,7 @@ namespace SPTarkov.Server.Core.Extensions
             {
                 if (childItem.ParentId == baseItemId.ToString())
                 {
-                    list.AddRange(FindAndReturnChildrenByItems(items, childItem.Id));
+                    list.AddRange(GetItemWithChildrenTpls(items, childItem.Id));
                 }
             }
 
@@ -267,16 +267,16 @@ namespace SPTarkov.Server.Core.Extensions
         }
 
         /// <summary>
-        /// A variant of FindAndReturnChildren where the output is list of item objects instead of their ids.
+        /// Get an item with its attachments (children)
         /// </summary>
         /// <param name="items">List of items (item + possible children)</param>
         /// <param name="baseItemId">Parent item's id</param>
-        /// <param name="modsOnly">OPTIONAL - Include only mod items, exclude items stored inside root item</param>
+        /// <param name="excludeStoredItems">OPTIONAL - Include only mod items, exclude items stored inside root item</param>
         /// <returns>list of Item objects</returns>
-        public static List<Item> FindAndReturnChildrenAsItems(
+        public static List<Item> GetItemWithChildren(
             this IEnumerable<Item> items,
             MongoId baseItemId,
-            bool modsOnly = false
+            bool excludeStoredItems = false
         )
         {
             // Use dictionary to make key lookup faster, convert to list before being returned
@@ -308,13 +308,13 @@ namespace SPTarkov.Server.Core.Extensions
                 }
 
                 // Is stored in parent and disallowed
-                if (modsOnly && item.Location is not null)
+                if (excludeStoredItems && item.Location is not null)
                 {
                     continue;
                 }
 
                 // Item may have children, check
-                foreach (var subItem in FindAndReturnChildrenAsItems(itemList, item.Id))
+                foreach (var subItem in GetItemWithChildren(itemList, item.Id))
                 {
                     result.Add(subItem.Id, subItem);
                 }
@@ -375,7 +375,7 @@ namespace SPTarkov.Server.Core.Extensions
                 return [];
             }
 
-            var itemsInSecureContainer = items.FindAndReturnChildrenByItems(secureContainer.Id);
+            var itemsInSecureContainer = items.GetItemWithChildrenTpls(secureContainer.Id);
 
             // Return all items returned and exclude the secure container item itself
             return itemsInSecureContainer.Where(x => x != secureContainer.Id).ToList();

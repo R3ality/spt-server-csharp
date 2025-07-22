@@ -1313,7 +1313,7 @@ public class ItemHelper(
         var forcedLeft = 0;
         var forcedRight = 0;
 
-        var children = items.FindAndReturnChildrenAsItems(rootItemId);
+        var children = items.GetItemWithChildren(rootItemId);
         foreach (var child in children)
         {
             var itemTemplate = GetItem(child.Template).Value;

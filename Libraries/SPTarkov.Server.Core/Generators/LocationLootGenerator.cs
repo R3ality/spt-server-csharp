@@ -1170,7 +1170,7 @@ public class LocationLootGenerator(
         {
             // Also used by armors to get child mods
             // Get item + children and add into array we return
-            var itemWithChildren = lootItems.FindAndReturnChildrenAsItems(chosenItem.Id);
+            var itemWithChildren = lootItems.GetItemWithChildren(chosenItem.Id);
 
             // Ensure all IDs are unique
             itemWithChildren = _cloner.Clone(itemWithChildren).ReplaceIDs().ToList();

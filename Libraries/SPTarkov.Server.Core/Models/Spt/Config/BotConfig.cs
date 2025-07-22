@@ -188,7 +188,7 @@ public record WalletLootSettings
     ///     What wallets will have money in them
     /// </summary>
     [JsonPropertyName("walletTplPool")]
-    public required List<string> WalletTplPool { get; set; }
+    public required List<MongoId> WalletTplPool { get; set; }
 }
 
 public record EquipmentFilters

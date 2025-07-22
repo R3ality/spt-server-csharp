@@ -373,9 +373,7 @@ public class ProfileHelper(
         if (secureContainer is not null)
         {
             // Find and remove container + children
-            var childItemsInSecureContainer = items.FindAndReturnChildrenByItems(
-                secureContainer.Id
-            );
+            var childItemsInSecureContainer = items.GetItemWithChildrenTpls(secureContainer.Id);
 
             // Remove child items + secure container
             profile.Inventory.Items = items
@@ -646,7 +644,7 @@ public class ProfileHelper(
         foreach (var itemId in profile.Inventory?.FavoriteItems ?? [])
         {
             // When viewing another users profile, the client expects a full item with children, so get that
-            var itemAndChildren = profile.Inventory.Items.FindAndReturnChildrenAsItems(itemId);
+            var itemAndChildren = profile.Inventory.Items.GetItemWithChildren(itemId);
             if (itemAndChildren?.Count > 0)
             {
                 // To get the client to actually see the items, we set the main item's parent to null, so it's treated as a root item

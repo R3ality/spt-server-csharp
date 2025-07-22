@@ -492,7 +492,7 @@ public class InventoryHelper(
         }
 
         // Get children of item, they get deleted too
-        var itemAndChildrenToRemove = profile.Inventory.Items.FindAndReturnChildrenAsItems(itemId);
+        var itemAndChildrenToRemove = profile.Inventory.Items.GetItemWithChildren(itemId);
         if (!itemAndChildrenToRemove.Any())
         {
             if (logger.IsLogEnabled(LogLevel.Debug))
@@ -569,7 +569,7 @@ public class InventoryHelper(
             if (messageWithReward is not null)
             {
                 // Find item + any possible children and remove them from mails items array
-                var itemWithChildren = messageWithReward.Items.Data.FindAndReturnChildrenAsItems(
+                var itemWithChildren = messageWithReward.Items.Data.GetItemWithChildren(
                     removeRequest.Item
                 );
                 foreach (var itemToDelete in itemWithChildren)
@@ -626,7 +626,7 @@ public class InventoryHelper(
         }
 
         // Goal is to keep removing items until we can remove part of an items stack
-        var itemsToReduce = pmcData.Inventory.Items.FindAndReturnChildrenAsItems(itemId);
+        var itemsToReduce = pmcData.Inventory.Items.GetItemWithChildren(itemId);
         var remainingCount = countToRemove;
         foreach (var itemToReduce in itemsToReduce)
         {
@@ -1139,7 +1139,7 @@ public class InventoryHelper(
         HandleCartridgeMove(sourceItems, request);
 
         // Get all children item has, they need to move with item
-        var idsToMove = sourceItems.FindAndReturnChildrenByItems(request.Item.Value);
+        var idsToMove = sourceItems.GetItemWithChildrenTpls(request.Item.Value);
         foreach (var itemId in idsToMove)
         {
             var itemToMove = sourceItems.FirstOrDefault(item => item.Id == itemId);

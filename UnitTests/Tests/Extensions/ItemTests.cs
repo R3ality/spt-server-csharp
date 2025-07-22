@@ -12,7 +12,7 @@ public class ItemTests
     public void Initialize() { }
 
     [Test]
-    public void FindAndReturnChildrenAsItems_one_child_mods_only()
+    public void GetItemWithChildren_one_child_mods_only()
     {
         var testData = new List<Item>();
         var rootItem = new Item
@@ -29,13 +29,13 @@ public class ItemTests
         testData.Add(rootItem);
         testData.Add(childItem);
 
-        var result = testData.FindAndReturnChildrenAsItems(rootItem.Id, true);
+        var result = testData.GetItemWithChildren(rootItem.Id, true);
 
         Assert.AreEqual(result[1].Id, childItem.Id);
     }
 
     [Test]
-    public void FindAndReturnChildrenAsItems_mods_only_one_inventory_item()
+    public void GetItemWithChildren_mods_only_one_inventory_item()
     {
         var testData = new List<Item>();
         var rootItem = new Item
@@ -60,14 +60,14 @@ public class ItemTests
         testData.Add(childItem);
         testData.Add(childItem2);
 
-        var result = testData.FindAndReturnChildrenAsItems(rootItem.Id, true);
+        var result = testData.GetItemWithChildren(rootItem.Id, true);
 
         Assert.AreEqual(result[1].Id, childItem2.Id);
         Assert.AreEqual(result.Count, 2);
     }
 
     [Test]
-    public void FindAndReturnChildrenAsItems_mods_and_inventory_item()
+    public void GetItemWithChildren_mods_and_inventory_item()
     {
         var testData = new List<Item>();
         var rootItem = new Item
@@ -92,14 +92,14 @@ public class ItemTests
         testData.Add(childItem);
         testData.Add(childItem2);
 
-        var result = testData.FindAndReturnChildrenAsItems(rootItem.Id, false);
+        var result = testData.GetItemWithChildren(rootItem.Id, false);
 
         Assert.AreEqual(result[1].Id, childItem.Id);
         Assert.AreEqual(result.Count, 3);
     }
 
     [Test]
-    public void FindAndReturnChildrenAsItems_mod_with_child()
+    public void GetItemWithChildren_mod_with_child()
     {
         var testData = new List<Item>();
         var rootItem = new Item
@@ -123,14 +123,14 @@ public class ItemTests
         testData.Add(childItem);
         testData.Add(childOfChild);
 
-        var result = testData.FindAndReturnChildrenAsItems(rootItem.Id, true);
+        var result = testData.GetItemWithChildren(rootItem.Id, true);
 
         Assert.AreEqual(result[1].Id, childItem.Id);
         Assert.AreEqual(result.Count, 3);
     }
 
     [Test]
-    public void FindAndReturnChildrenAsItems_no_matching_children()
+    public void GetItemWithChildren_no_matching_children()
     {
         var testData = new List<Item>();
         var rootItem = new Item
@@ -154,7 +154,7 @@ public class ItemTests
         testData.Add(childItem);
         testData.Add(childOfChild);
 
-        var result = testData.FindAndReturnChildrenAsItems(rootItem.Id, true);
+        var result = testData.GetItemWithChildren(rootItem.Id, true);
 
         Assert.AreEqual(result[0].Id, rootItem.Id);
         Assert.AreEqual(result.Count, 1);

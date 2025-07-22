@@ -341,7 +341,7 @@ public class TradeController(
         TraderBase traderDetails
     )
     {
-        var itemWithChildren = items.FindAndReturnChildrenAsItems(parentItemId);
+        var itemWithChildren = items.GetItemWithChildren(parentItemId);
 
         var totalPrice = 0;
         foreach (var itemToSell in itemWithChildren)

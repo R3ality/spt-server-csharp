@@ -735,7 +735,7 @@ public class BotGeneratorHelper(
             // Check item in container for children, store for later insertion into `containerItemsToCheck`
             // (used later when figuring out how much space weapon takes up)
             List<Item> itemsToFilter = [.. itemsWithoutLocation, rootItem];
-            var itemWithChildItems = itemsToFilter.FindAndReturnChildrenAsItems(rootItem.Id);
+            var itemWithChildItems = itemsToFilter.GetItemWithChildren(rootItem.Id);
 
             // Item had children, replace existing data with item + its children
             result.AddRange(itemWithChildItems);

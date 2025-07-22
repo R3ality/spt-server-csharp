@@ -34,7 +34,7 @@ namespace SPTarkov.Server.Core.Extensions
             assort.LoyalLevelItems.Remove(itemId);
 
             // The item being removed may have children linked to it, find and remove them too
-            var idsToRemove = assort.Items.FindAndReturnChildrenByItems(itemId);
+            var idsToRemove = assort.Items.GetItemWithChildrenTpls(itemId);
             assort.Items.RemoveAll(item => idsToRemove.Contains(item.Id));
 
             return assort;
