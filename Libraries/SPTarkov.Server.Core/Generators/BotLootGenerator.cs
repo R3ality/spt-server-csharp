@@ -493,7 +493,7 @@ public class BotLootGenerator(
     /// <param name="containersIdFull"></param>
     /// <param name="totalValueLimitRub">Total value of loot allowed in roubles</param>
     /// <param name="isPmc">Is bot being generated for a pmc</param>
-    protected void AddLootFromPool(
+    protected internal void AddLootFromPool(
         Dictionary<MongoId, double> pool,
         HashSet<EquipmentSlots> equipmentSlots,
         double totalItemCount,

@@ -1,20 +1,21 @@
+using NUnit.Framework;
 using SPTarkov.Server.Core.Extensions;
 using SPTarkov.Server.Core.Utils;
 
 namespace UnitTests.Tests.Utils;
 
-[TestClass]
+[TestFixture]
 public class MathUtilTests
 {
     private MathUtil _mathUtil;
 
-    [TestInitialize]
+    [OneTimeSetUp]
     public void Initialize()
     {
-        _mathUtil = DI.GetService<MathUtil>();
+        _mathUtil = DI.GetInstance().GetService<MathUtil>();
     }
 
-    [TestMethod]
+    [Test]
     public void ListSumTest()
     {
         var test = new List<float> { 1.1f, 2.1f, 3.3f };
@@ -25,7 +26,7 @@ public class MathUtilTests
         Assert.AreEqual(expected, actual, $"ListSum() Expected: {expected}, Actual: {actual}");
     }
 
-    [TestMethod]
+    [Test]
     public void ListCumSumTest()
     {
         var test = new List<double> { 1f, 2f, 3f, 4f };
@@ -44,7 +45,7 @@ public class MathUtilTests
         }
     }
 
-    [TestMethod]
+    [Test]
     public void ListProductTest()
     {
         var test = new List<double> { 1f, 2f, 3f, 4f };
@@ -63,7 +64,7 @@ public class MathUtilTests
         }
     }
 
-    [TestMethod]
+    [Test]
     public void ListAddTest()
     {
         var test = new List<double> { 1f, 2f, 3f, 4f };
@@ -82,7 +83,7 @@ public class MathUtilTests
         }
     }
 
-    [TestMethod]
+    [Test]
     public void MapToRangeTest()
     {
         const double expected = 2;
@@ -92,22 +93,21 @@ public class MathUtilTests
         Assert.AreEqual(expected, actual, $"MapToRange() Expected: {expected}, Actual: {actual}");
     }
 
-    [TestMethod]
-    [DataRow(
+    [TestCase(
         15d,
         new double[] { 1, 10, 20, 30, 40, 50, 60 },
         new double[] { 11000, 20000, 32000, 45000, 58000, 70000, 82000 },
         26000d
     )]
-    [DataRow(5d, new double[] { 1, 10 }, new double[] { 0, 1000 }, 444.44444444444446d)]
-    [DataRow(
+    [TestCase(5d, new double[] { 1, 10 }, new double[] { 0, 1000 }, 444.44444444444446d)]
+    [TestCase(
         12d,
         new double[] { 1, 10, 500, 510 },
         new double[] { 0, 10, 20, 30 },
         10.040816326530612d
     )]
-    [DataRow(1d, new double[] { 1, 10, 500, 510 }, new double[] { 2, 10, 20, 30 }, 2d)]
-    [DataRow(11d, new double[] { 1, 10 }, new double[] { 2, 10 }, 10d)]
+    [TestCase(1d, new double[] { 1, 10, 500, 510 }, new double[] { 2, 10, 20, 30 }, 2d)]
+    [TestCase(11d, new double[] { 1, 10 }, new double[] { 2, 10 }, 10d)]
     public void InterpTest(double input, double[] x, double[] y, double expected)
     {
         var actual = _mathUtil.Interp1(input, x.ToList(), y.ToList());

@@ -1,19 +1,31 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
 using SPTarkov.DI;
 using SPTarkov.Server.Core.DI;
 using SPTarkov.Server.Core.Models.Spt.Mod;
 using SPTarkov.Server.Core.Utils;
+using SPTarkov.Server.Core.Utils.Logger.Handlers;
 using UnitTests.Mock;
 
 namespace UnitTests;
 
-[TestClass]
+[TestFixture]
 public class DI
 {
     private static IServiceProvider _serviceProvider;
 
-    [AssemblyInitialize]
-    public static void ConfigureServices(TestContext context)
+    private static DI? _instance;
+    private DI()
+    {
+        ConfigureServices();
+    }
+
+    public static DI GetInstance()
+    {
+        return _instance ??= new DI();
+    }
+
+    private void ConfigureServices()
     {
         if (_serviceProvider != null)
         {
@@ -39,12 +51,15 @@ public class DI
 
         foreach (var onLoad in _serviceProvider.GetServices<IOnLoad>())
         {
+            if (onLoad is FileLogHandler)
+            {
+                continue;
+            }
             onLoad.OnLoad().Wait();
         }
     }
 
-    public static T GetService<T>()
-        where T : notnull
+    public T GetService<T>() where T : notnull
     {
         return _serviceProvider.GetRequiredService<T>();
     }

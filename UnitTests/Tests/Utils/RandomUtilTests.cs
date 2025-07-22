@@ -1,19 +1,21 @@
+using NUnit.Framework;
 using SPTarkov.Server.Core.Utils;
 
 namespace UnitTests.Tests.Utils;
 
-[TestClass]
+[TestFixture]
+[TestFixture]
 public sealed class RandomUtilTests
 {
     private RandomUtil _randomUtil;
 
-    [TestInitialize]
+    [OneTimeSetUp]
     public void Initialize()
     {
-        _randomUtil = DI.GetService<RandomUtil>();
+        _randomUtil = DI.GetInstance().GetService<RandomUtil>();
     }
 
-    [TestMethod]
+    [Test]
     public void GetIntTest()
     {
         // Run 10000 test cases
@@ -30,7 +32,7 @@ public sealed class RandomUtilTests
         }
     }
 
-    [TestMethod]
+    [Test]
     public void GetIntExTest()
     {
         // Run 10000 test cases
@@ -45,7 +47,7 @@ public sealed class RandomUtilTests
         }
     }
 
-    [TestMethod]
+    [Test]
     public void GetDoubleTest()
     {
         // Run 10000 test cases
@@ -62,7 +64,7 @@ public sealed class RandomUtilTests
         }
     }
 
-    [TestMethod]
+    [Test]
     public void GetPercentOfValueTest()
     {
         const float expected = 45.5f;
@@ -76,7 +78,7 @@ public sealed class RandomUtilTests
         );
     }
 
-    [TestMethod]
+    [Test]
     public void ReduceValueByPercentTest()
     {
         const float expected = 54.5f;
@@ -90,7 +92,7 @@ public sealed class RandomUtilTests
         );
     }
 
-    [TestMethod]
+    [Test]
     public void GetChance100Test()
     {
         for (var i = 0; i < 100; i++)
@@ -120,7 +122,7 @@ public sealed class RandomUtilTests
 
     // TODO: Missing methods between these two
 
-    [TestMethod]
+    [Test]
     public void RandIntTest()
     {
         for (var i = 0; i < 100; i++)
@@ -148,7 +150,7 @@ public sealed class RandomUtilTests
         }
     }
 
-    [TestMethod]
+    [Test]
     public void RandNumTest()
     {
         for (var i = 0; i < 10000; i++)
@@ -190,7 +192,7 @@ public sealed class RandomUtilTests
         }
     }
 
-    [TestMethod]
+    [Test]
     public void ShuffleTest()
     {
         var testList = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -205,19 +207,17 @@ public sealed class RandomUtilTests
         );
     }
 
-    [TestMethod]
-    [DataRow(0.1, 1)]
-    [DataRow(0.0001, 4)]
-    [DataRow(0, 0)]
-    [DataRow(10000000, 0)]
-    [DataRow(0.000_000_000_000_000_000_000_000_1D, 25)]
+    [TestCase(0.1, 1)]
+    [TestCase(0.0001, 4)]
+    [TestCase(0, 0)]
+    [TestCase(10000000, 0)]
+    [TestCase(0.000_000_000_000_000_000_000_000_1D, 25)]
     public void GetNumberPrecision_WithDoubles_ReturnsDecimalPoints(double value, int decimalPoints)
     {
         Assert.AreEqual(decimalPoints, _randomUtil.GetNumberPrecision(value));
     }
 
-    [TestMethod]
-    [DataRow(new[] { "test" }, "test", "Expected first array value")]
+    [TestCase(new[] { "test" }, "test", "Expected first array value")]
     public void GetArrayValueTest(string[] input, string expectedOutput, string failMessage)
     {
         var result = _randomUtil.GetArrayValue(input);

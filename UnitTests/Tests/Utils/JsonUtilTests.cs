@@ -1,20 +1,21 @@
+using NUnit.Framework;
 using SPTarkov.Server.Core.Models.Enums;
 using SPTarkov.Server.Core.Utils;
 
 namespace UnitTests.Tests.Utils;
 
-[TestClass]
+[TestFixture]
 public class JsonUtilTests
 {
     private JsonUtil _jsonUtil;
 
-    [TestInitialize]
+    [OneTimeSetUp]
     public void Initialize()
     {
-        _jsonUtil = DI.GetService<JsonUtil>();
+        _jsonUtil = DI.GetInstance().GetService<JsonUtil>();
     }
 
-    [TestMethod]
+    [Test]
     public void SerializeAndDeserialize_WithDictionaryOfETFEnum_ExpectCorrectParsing()
     {
         var value = new Dictionary<QuestStatusEnum, int>

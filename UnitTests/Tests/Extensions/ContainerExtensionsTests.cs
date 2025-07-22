@@ -1,14 +1,15 @@
-﻿using SPTarkov.Server.Core.Extensions;
+﻿using NUnit.Framework;
+using SPTarkov.Server.Core.Extensions;
 
 namespace UnitTests.Tests.Extensions;
 
-[TestClass]
+[TestFixture]
 public partial class ContainerExtensionsTests
 {
-    [TestInitialize]
+    [SetUp]
     public void Initialize() { }
 
-    [TestMethod]
+    [Test]
     public void CanItemBePlacedInContainerAtPosition_1x1_Item_Fits_1x2_Container_At_0x0()
     {
         var container = new int[1, 2];
@@ -27,7 +28,7 @@ public partial class ContainerExtensionsTests
         Assert.IsTrue(result);
     }
 
-    [TestMethod]
+    [Test]
     public void CanItemBePlacedInContainerAtPosition_1x1_Item_Fails_1x2_Container_At_0x0_With_Item_At_0x0()
     {
         var container = new int[1, 2];
@@ -47,7 +48,7 @@ public partial class ContainerExtensionsTests
         Assert.IsFalse(result);
     }
 
-    [TestMethod]
+    [Test]
     public void CanItemBePlacedInContainerAtPosition_1x2_Item_Fits_1x2_Container_At_0x0()
     {
         var container = new int[2, 1];
@@ -66,7 +67,7 @@ public partial class ContainerExtensionsTests
         Assert.IsTrue(result);
     }
 
-    [TestMethod]
+    [Test]
     public void CanItemBePlacedInContainerAtPosition_1x2_Item_Fails_1x2_Container_At_0x0_With_Item_At_0x0()
     {
         var container = new int[1, 2];
@@ -86,7 +87,7 @@ public partial class ContainerExtensionsTests
         Assert.IsFalse(result);
     }
 
-    [TestMethod]
+    [Test]
     public void CanItemBePlacedInContainerAtPosition_2x2_Item_Fits_2x2_Container_At_0x0()
     {
         var container = new int[2, 2];
@@ -105,7 +106,7 @@ public partial class ContainerExtensionsTests
         Assert.IsTrue(result);
     }
 
-    [TestMethod]
+    [Test]
     public void CanItemBePlacedInContainerAtPosition_1x2_Item_Fits_2x2_Container_At_0x1()
     {
         var container = new int[2, 2];
@@ -127,7 +128,7 @@ public partial class ContainerExtensionsTests
 
 public partial class ContainerExtensionsTests
 {
-    [TestMethod]
+    [Test]
     public void FindSlotForItem_1x1_item_fits_1x1_container_no_rotation()
     {
         var container = new int[1, 1];
@@ -142,7 +143,7 @@ public partial class ContainerExtensionsTests
         Assert.AreEqual(result.Y, 0);
     }
 
-    [TestMethod]
+    [Test]
     public void FindSlotForItem_1x2_item_fits_3x3_container_rotated_with_items()
     {
         // |1|1|1|
@@ -167,7 +168,7 @@ public partial class ContainerExtensionsTests
         Assert.AreEqual(result.Y, 1);
     }
 
-    [TestMethod]
+    [Test]
     public void FindSlotForItem_1x1_item_fails_1x1_container_no_space()
     {
         var container = new int[1, 1];
@@ -180,7 +181,7 @@ public partial class ContainerExtensionsTests
         Assert.IsFalse(result.Success);
     }
 
-    [TestMethod]
+    [Test]
     public void FindSlotForItem_1x2_item_fits_1x2_container_no_rotation()
     {
         var container = new int[2, 1];
@@ -195,7 +196,7 @@ public partial class ContainerExtensionsTests
         Assert.AreEqual(result.Y, 0);
     }
 
-    [TestMethod]
+    [Test]
     public void FindSlotForItem_1x2_item_fails_1x2_container_no_space()
     {
         var container = new int[1, 1];
@@ -209,7 +210,7 @@ public partial class ContainerExtensionsTests
         Assert.IsFalse(result.Success);
     }
 
-    [TestMethod]
+    [Test]
     public void FindSlotForItem_2x2_item_fits_2x2_container_no_rotation()
     {
         var container = new int[2, 2];
@@ -224,7 +225,7 @@ public partial class ContainerExtensionsTests
         Assert.AreEqual(result.Y, 0);
     }
 
-    [TestMethod]
+    [Test]
     public void FindSlotForItem_1x2_item_fits_2x2_container_no_rotation_with_item_at_0x0()
     {
         var container = new int[2, 2];
@@ -243,7 +244,7 @@ public partial class ContainerExtensionsTests
 
 public partial class ContainerExtensionsTests
 {
-    [TestMethod]
+    [Test]
     public void FillContainerMapWithItem_1x1_at_0x0_in_1x1_no_rotation()
     {
         var container = new int[1, 1];
@@ -266,7 +267,7 @@ public partial class ContainerExtensionsTests
         Assert.AreEqual(container[0, 0], 1);
     }
 
-    [TestMethod]
+    [Test]
     public void FillContainerMapWithItem_1x2_at_0x0_in_1x2_no_rotation()
     {
         var container = new int[2, 1];
@@ -290,7 +291,7 @@ public partial class ContainerExtensionsTests
         Assert.AreEqual(container[1, 0], 1);
     }
 
-    [TestMethod]
+    [Test]
     public void FillContainerMapWithItem_2x2_at_0x0_in_2x2_no_rotation()
     {
         var container = new int[2, 2];
@@ -314,7 +315,7 @@ public partial class ContainerExtensionsTests
         Assert.AreEqual(container[1, 1], 1);
     }
 
-    [TestMethod]
+    [Test]
     public void FillContainerMapWithItem_1x2_at_0x0_in_2x2_with_rotation()
     {
         var container = new int[2, 2];
@@ -338,7 +339,7 @@ public partial class ContainerExtensionsTests
         Assert.AreEqual(container[0, 1], 1);
     }
 
-    [TestMethod]
+    [Test]
     public void FillContainerMapWithItem_1x2_at_1x0_in_2x2_with_rotation_with_existing_item()
     {
         var container = new int[2, 2];

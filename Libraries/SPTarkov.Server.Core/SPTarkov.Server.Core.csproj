@@ -32,6 +32,10 @@
     <SptBuildType Condition="'$(SptBuildType)' == ''">LOCAL</SptBuildType>
     <!--  BuildType options - LOCAL, DEBUG, RELEASE, BLEEDING_EDGE, BLEEDING_EDGE_MODS - *must be all caps*-->
   </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="UnitTests"/>
+  </ItemGroup>
+
   <Target Name="AfterEverythingDone" AfterTargets="PostBuildEvent">
     <Exec
       ConsoleToMsBuild="true"
