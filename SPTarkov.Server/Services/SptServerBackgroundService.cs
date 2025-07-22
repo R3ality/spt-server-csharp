@@ -19,14 +19,7 @@ public class SptServerBackgroundService(
             {
                 if (mod.ModMetadata?.IsBundleMod == true)
                 {
-                    // Convert to relative path
-                    var relativeModPath = Path.GetRelativePath(
-                            Directory.GetCurrentDirectory(),
-                            mod.Directory
-                        )
-                        .Replace('\\', '/');
-
-                    bundleLoader.AddBundles(relativeModPath);
+                    await bundleLoader.LoadBundlesAsync(mod);
                 }
             }
         }
