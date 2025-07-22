@@ -734,10 +734,10 @@ public class BotGeneratorHelper(
         {
             // Check item in container for children, store for later insertion into `containerItemsToCheck`
             // (used later when figuring out how much space weapon takes up)
-            var itemWithChildItems = itemsWithoutLocation.FindAndReturnChildrenAsItems(rootItem.Id);
+            List<Item> itemsToFilter = [..itemsWithoutLocation, rootItem];
+            var itemWithChildItems = itemsToFilter.FindAndReturnChildrenAsItems(rootItem.Id);
 
             // Item had children, replace existing data with item + its children
-            result.Add(rootItem);
             result.AddRange(itemWithChildItems);
         }
 

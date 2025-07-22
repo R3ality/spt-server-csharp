@@ -127,7 +127,14 @@ public class BotGeneratorHelperTests
             botInventory
         );
 
-        _botLootGenerator.AddLootFromPool(new Dictionary<MongoId, double>{{ItemTpl.BARTER_MALBORO_CIGARETTES, 1}, {ItemTpl.FOREGRIP_SAKO_TRG_M10_GRIP_PAD, 1}, {ItemTpl.BARTER_GOLD_SKULL_RING, 1}, {ItemTpl.BARTER_PACK_OF_NAILS, 1}}, [EquipmentSlots.Backpack], 4, botInventory, "assault", null);
+        var tplsToAdd = new Dictionary<MongoId, double>
+        {
+            { ItemTpl.BARTER_MALBORO_CIGARETTES, 1 },
+            { ItemTpl.FOREGRIP_SAKO_TRG_M10_GRIP_PAD, 1 },
+            { ItemTpl.BARTER_GOLD_SKULL_RING, 1 },
+            { ItemTpl.BARTER_PACK_OF_NAILS, 1 }
+        };
+        _botLootGenerator.AddLootFromPool(tplsToAdd, [EquipmentSlots.Backpack], 4, botInventory, "assault", null);
 
         Assert.AreEqual(ItemAddedResult.SUCCESS, result);
 
@@ -135,6 +142,12 @@ public class BotGeneratorHelperTests
         Assert.AreEqual((weaponRoot.Location as ItemLocation).X, 0);
         Assert.AreEqual((weaponRoot.Location as ItemLocation).Y, 0);
         Assert.AreEqual((weaponRoot.Location as ItemLocation).R, ItemRotation.Horizontal);
+        foreach (var item in botInventory.Items.Where(i => tplsToAdd.ContainsKey(i.Template)))
+        {
+            var location = item.Location as ItemLocation;
+            Assert.True(location.X >= 0 && location.X <= 3, "Error! An item was misplaced on the X axis inside the item grid!");
+            Assert.AreEqual(1, location.Y, "Error! An item was misplaced on the Y axis inside the item grid!");
+        }
     }
 
     /// <summary>
