@@ -20,7 +20,7 @@ public class SptJsonConverterRegistrator : IJsonConverterRegistrator
             new StringToMongoIdConverter(),
             new EftEnumConverterFactory(),
             new EftListEnumConverterFactory(),
-            new EnumerableConverterFactory()
+            new EnumerableConverterFactory(),
         ];
     }
 }

@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace SPTarkov.Server.Core.Utils.Json.Converters;
 
-
 public class EftEnumConverterFactory : JsonConverterFactory
 {
     public override bool CanConvert(Type typeToConvert)
@@ -18,12 +17,9 @@ public class EftEnumConverterFactory : JsonConverterFactory
     )
     {
         return (JsonConverter)
-            Activator.CreateInstance(
-                typeof(EftEnumConverter<>).MakeGenericType(typeToConvert)
-            );
+            Activator.CreateInstance(typeof(EftEnumConverter<>).MakeGenericType(typeToConvert));
     }
 }
-
 
 public class EftEnumConverter<T> : JsonConverter<T>
 {
