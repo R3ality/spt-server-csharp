@@ -285,7 +285,7 @@ public class BotLootGenerator(
         var itemPriceLimits = GetSingleItemLootPriceLimits(botLevel, isPmc);
 
         // Backpack - generate loot if they have one
-        if (containersBotHasAvailable.Contains(EquipmentSlots.Backpack))
+        if (containersBotHasAvailable.Contains(EquipmentSlots.Backpack) && backpackLootCount > 0)
         {
             // Add randomly generated weapon to PMC backpacks
             if (isPmc && randomUtil.GetChance100(_pmcConfig.LooseWeaponInBackpackChancePercent))
@@ -506,9 +506,7 @@ public class BotLootGenerator(
     )
     {
         // Loot pool has items
-        var poolSize = pool.Count;
-
-        if (poolSize <= 0)
+        if (pool.Count <= 0)
         {
             return;
         }

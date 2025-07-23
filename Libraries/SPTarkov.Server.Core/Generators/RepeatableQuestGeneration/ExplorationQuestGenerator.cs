@@ -209,11 +209,14 @@ public class ExplorationQuestGenerator(
     /// <param name="locationKey">Map id (e.g. factory4_day)</param>
     /// <param name="playerGroup">Pmc/Scav</param>
     /// <returns>List of Exit objects</returns>
-    protected List<Exit>? GetLocationExitsForSide(string locationKey, PlayerGroup playerGroup)
+    protected IEnumerable<Exit>? GetLocationExitsForSide(
+        string locationKey,
+        PlayerGroup playerGroup
+    )
     {
         var mapExtracts = databaseService.GetLocation(locationKey.ToLowerInvariant())?.AllExtracts;
 
-        return mapExtracts?.Where(exit => exit.Side == Enum.GetName(playerGroup)).ToList();
+        return mapExtracts?.Where(exit => exit.Side == Enum.GetName(playerGroup));
     }
 
     /// <summary>
@@ -308,18 +311,16 @@ public class ExplorationQuestGenerator(
         }
 
         // Only get exits that have a greater than 0% chance to spawn
-        var exitPool = mapExits.Where(exit => exit.Chance > 0).ToList();
+        var exitPool = mapExits.Where(exit => exit.Chance > 0);
 
         // Exclude exits with a requirement to leave (e.g. car extracts)
-        var possibleExits = exitPool
-            .Where(exit =>
-                repeatableConfig.QuestConfig.Exploration.SpecificExits.PassageRequirementWhitelist.Contains(
-                    "PassageRequirement"
-                )
+        var possibleExits = exitPool.Where(exit =>
+            repeatableConfig.QuestConfig.Exploration.SpecificExits.PassageRequirementWhitelist.Contains(
+                "PassageRequirement"
             )
-            .ToList();
+        );
 
-        if (possibleExits.Count == 0)
+        if (!possibleExits.Any())
         {
             logger.Error(
                 localisationService.GetText(
@@ -332,7 +333,7 @@ public class ExplorationQuestGenerator(
         }
 
         // Choose one of the exits we filtered above
-        var chosenExit = randomUtil.DrawRandomFromList(possibleExits)[0];
+        var chosenExit = randomUtil.DrawRandomFromList(possibleExits.ToList())[0];
 
         // Create a quest condition to leave raid via chosen exit
         var exitCondition = GenerateQuestConditionCounter(chosenExit);

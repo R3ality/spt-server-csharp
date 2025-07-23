@@ -369,9 +369,10 @@ public class ItemHelper(
     {
         var itemTemplate = GetItem(itemTpl);
 
-        return itemTemplate.Value.Properties.Slots.Any(slot =>
-            _removablePlateSlotIds.Contains(slot.Name.ToLowerInvariant())
-        );
+        return itemTemplate.Value?.Properties?.Slots is not null
+            && itemTemplate.Value.Properties.Slots.Any(slot =>
+                _removablePlateSlotIds.Contains(slot.Name.ToLowerInvariant())
+            );
     }
 
     /// <summary>
@@ -543,7 +544,7 @@ public class ItemHelper(
     {
         if (databaseService.GetItems().TryGetValue(itemTpl, out var item))
         {
-            return item?.Properties?.Slots?.Count > 0;
+            return item.Properties?.Slots is not null && item.Properties.Slots.Any();
         }
 
         return false;
@@ -1534,7 +1535,7 @@ public class ItemHelper(
             magTemplate.Id,
             BaseClasses.SPRING_DRIVEN_CYLINDER
         )
-            ? magProps?.Slots?.Count // Edge case for rotating grenade launcher magazine
+            ? magProps?.Slots?.Count() // Edge case for rotating grenade launcher magazine
             : magProps?.Cartridges?.FirstOrDefault()?.MaxCount;
 
         if (magazineCartridgeMaxCount is null)
@@ -2001,8 +2002,8 @@ public class ItemHelper(
         var containerTemplate = GetItem(containerTpl).Value;
 
         // Get height/width
-        var height = containerTemplate.Properties.Grids[0].Props.CellsV;
-        var width = containerTemplate.Properties.Grids[0].Props.CellsH;
+        var height = containerTemplate.Properties.Grids.First().Props.CellsV;
+        var width = containerTemplate.Properties.Grids.First().Props.CellsH;
 
         return GetBlankContainerMap(width.Value, height.Value);
     }

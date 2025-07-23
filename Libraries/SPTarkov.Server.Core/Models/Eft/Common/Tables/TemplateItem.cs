@@ -353,10 +353,10 @@ public record Props
     public bool? DogTagQualities { get; set; }
 
     [JsonPropertyName("Grids")]
-    public List<Grid>? Grids { get; set; }
+    public IEnumerable<Grid>? Grids { get; set; }
 
     [JsonPropertyName("Slots")]
-    public List<Slot>? Slots { get; set; }
+    public IEnumerable<Slot>? Slots { get; set; }
 
     [JsonPropertyName("CanPutIntoDuringTheRaid")]
     public bool? CanPutIntoDuringTheRaid { get; set; }

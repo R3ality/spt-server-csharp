@@ -905,9 +905,9 @@ public class BotWeaponGenerator(
     /// <param name="weaponMods">Weapon with children.</param>
     /// <param name="ubglMod">Underbarrrel grenade launcher item.</param>
     /// <param name="ubglAmmoTpl">Grenade ammo template.</param>
-    protected void FillUbgl(IEnumerable<Item> weaponMods, Item ubglMod, MongoId ubglAmmoTpl)
+    protected void FillUbgl(List<Item> weaponMods, Item ubglMod, MongoId ubglAmmoTpl)
     {
-        weaponMods.Append(
+        weaponMods.Add(
             new Item
             {
                 Id = new MongoId(),

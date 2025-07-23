@@ -225,7 +225,7 @@ public class RagfairOfferHelper(
         PmcData pmcData
     )
     {
-        var offersMap = new Dictionary<string, List<RagfairOffer>>();
+        var offersMap = new Dictionary<MongoId, List<RagfairOffer>>();
         var offersToReturn = new List<RagfairOffer>();
         var playerIsFleaBanned = pmcData.PlayerIsFleaBanned(timeUtil.GetTimeStamp());
         var tieredFlea = _ragfairConfig.TieredFlea;

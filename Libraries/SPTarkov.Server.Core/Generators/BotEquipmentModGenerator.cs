@@ -197,7 +197,8 @@ public class BotEquipmentModGenerator(
                 );
                 switch (plateSlotFilteringOutcome.Result)
                 {
-                    case Result.UNKNOWN_FAILURE or Result.NO_DEFAULT_FILTER:
+                    case Result.UNKNOWN_FAILURE
+                    or Result.NO_DEFAULT_FILTER:
                         if (logger.IsLogEnabled(LogLevel.Debug))
                         {
                             logger.Debug(
@@ -692,6 +693,7 @@ public class BotEquipmentModGenerator(
             // Force spawn chance to be 100% to ensure it gets added
             if (
                 modSlot == "mod_handguard"
+                && modToAddTemplate.Properties?.Slots is not null
                 && modToAddTemplate.Properties.Slots.Any(slot => slot.Name == "mod_handguard")
                 && !request.Weapon.Any(item => item.SlotId == "mod_launcher")
             )
@@ -772,6 +774,7 @@ public class BotEquipmentModGenerator(
                 if (
                     isRandomisableSlot
                     && !containsModInPool
+                    && modToAddTemplate.Properties?.Slots is not null
                     && modToAddTemplate.Properties.Slots.Any()
                 )
                 {
@@ -835,9 +838,15 @@ public class BotEquipmentModGenerator(
     /// <returns>True it lacks cartridges/chamber slots</returns>
     protected bool ItemLacksSlotsCartridgesAndChambers(TemplateItem item)
     {
-        return item.Properties.Slots?.Count == 0
-            && item.Properties.Cartridges?.Count == 0
-            && item.Properties.Chambers?.Count == 0;
+        if (item.Properties is null)
+        {
+            return true;
+        }
+
+        return item.Properties.Slots is null
+            || !item.Properties.Slots.Any()
+                && item.Properties.Cartridges?.Count == 0
+                && item.Properties.Chambers?.Count == 0;
     }
 
     /// <summary>
@@ -854,7 +863,9 @@ public class BotEquipmentModGenerator(
     )
     {
         // Can the stock hold child items
-        var hasSubSlots = modToAddTemplate.Properties.Slots?.Count > 0;
+        var hasSubSlots =
+            modToAddTemplate.Properties?.Slots is not null
+            && modToAddTemplate.Properties.Slots.Any();
 
         return (_stockSlots.Contains(modSlot) && hasSubSlots)
             || botEquipConfig.ForceStock.GetValueOrDefault(false);
@@ -1280,8 +1291,8 @@ public class BotEquipmentModGenerator(
         var desiredMagazineTpls = modPool.Where(magTpl =>
         {
             var magazineDb = itemHelper.GetItem(magTpl).Value;
-            return magazineDb.Properties is not null
-                && magazineDb.Properties.Cartridges.FirstOrDefault().MaxCount
+            return magazineDb.Properties?.Cartridges is not null
+                && magazineDb.Properties.Cartridges.FirstOrDefault()?.MaxCount
                     >= minMagSizeFromSettings;
         });
 
@@ -1546,7 +1557,7 @@ public class BotEquipmentModGenerator(
         // Mod isn't in existing pool, only add if it has no children and exists inside parent filter
         if (
             (parentSlotCompatibleItems?.Contains(matchingModFromPreset.Template) ?? false)
-            && itemHelper.GetItem(matchingModFromPreset.Template).Value.Properties.Slots?.Count == 0
+            && !itemHelper.GetItem(matchingModFromPreset.Template).Value.Properties.Slots.Any()
         )
         {
             // Chosen mod has no conflicts + no children + is in parent compat list
@@ -2070,22 +2081,23 @@ public class BotEquipmentModGenerator(
 
         // Filter items that are not directly scopes OR mounts that do not hold the type of scope we allow for this weapon type
         HashSet<MongoId> filteredScopesAndMods = [];
-        foreach (var item in scopes)
+        foreach (var scopeTpl in scopes)
         {
             // Mods is a scope, check base class is allowed
-            if (itemHelper.IsOfBaseclasses(item, whitelistedSightTypes))
+            if (itemHelper.IsOfBaseclasses(scopeTpl, whitelistedSightTypes))
             {
                 // Add mod to allowed list
-                filteredScopesAndMods.Add(item);
+                filteredScopesAndMods.Add(scopeTpl);
                 continue;
             }
 
             // Edge case, what if item is a mount for a scope and not directly a scope?
             // Check item is mount + has child items
-            var itemDetails = itemHelper.GetItem(item).Value;
+            var itemDetails = itemHelper.GetItem(scopeTpl).Value;
             if (
-                itemHelper.IsOfBaseclass(item, BaseClasses.MOUNT)
+                itemDetails?.Properties?.Slots is not null
                 && itemDetails.Properties.Slots.Any()
+                && itemHelper.IsOfBaseclass(scopeTpl, BaseClasses.MOUNT)
             )
             {
                 // Check to see if mount has a scope slot (only include primary slot, ignore the rest like the backup sight slots)
@@ -2107,7 +2119,7 @@ public class BotEquipmentModGenerator(
                 )
                 // Add mod to allowed list
                 {
-                    filteredScopesAndMods.Add(item);
+                    filteredScopesAndMods.Add(scopeTpl);
                 }
             }
         }

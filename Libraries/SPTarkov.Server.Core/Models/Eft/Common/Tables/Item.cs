@@ -199,7 +199,7 @@ public record LockableComponent
     [JsonExtensionData]
     public Dictionary<string, object>? ExtensionData { get; set; }
 
-    public List<string>? KeyIds { get; set; }
+    public IEnumerable<string>? KeyIds { get; set; }
     public bool? Locked { get; set; }
     public LockableKeyComponent? KeyComponent { get; set; }
 }
@@ -327,10 +327,10 @@ public record UpdSight
     public Dictionary<string, object>? ExtensionData { get; set; }
 
     [JsonPropertyName("ScopesCurrentCalibPointIndexes")]
-    public List<int>? ScopesCurrentCalibPointIndexes { get; set; }
+    public IEnumerable<int>? ScopesCurrentCalibPointIndexes { get; set; }
 
     [JsonPropertyName("ScopesSelectedModes")]
-    public List<int>? ScopesSelectedModes { get; set; }
+    public IEnumerable<int>? ScopesSelectedModes { get; set; }
 
     [JsonPropertyName("SelectedScope")]
     public int? SelectedScope { get; set; }

@@ -68,7 +68,7 @@ public class RagfairOfferHolder(
     /// </summary>
     /// <param name="templateId">Tpl to get offers for</param>
     /// <returns>RagfairOffer list</returns>
-    public List<RagfairOffer>? GetOffersByTemplate(MongoId templateId)
+    public IEnumerable<RagfairOffer>? GetOffersByTemplate(MongoId templateId)
     {
         // Get the offerIds we want to return
         if (!_offersByTemplate.TryGetValue(templateId, out var offerIds))
@@ -76,7 +76,7 @@ public class RagfairOfferHolder(
             return null;
         }
 
-        var result = _offersById.Where(x => offerIds.Contains(x.Key)).Select(x => x.Value).ToList();
+        var result = _offersById.Where(x => offerIds.Contains(x.Key)).Select(x => x.Value);
 
         return result;
     }
@@ -86,7 +86,7 @@ public class RagfairOfferHolder(
     /// </summary>
     /// <param name="traderId">Id of trader to get offers for</param>
     /// <returns>RagfairOffer list</returns>
-    public List<RagfairOffer> GetOffersByTrader(MongoId traderId)
+    public IEnumerable<RagfairOffer> GetOffersByTrader(MongoId traderId)
     {
         if (!_offersByTrader.TryGetValue(traderId, out var offerIds))
         {
@@ -95,8 +95,7 @@ public class RagfairOfferHolder(
 
         return offerIds
             .Select(offerId => _offersById.GetValueOrDefault(offerId))
-            .Where(offer => offer != null)
-            .ToList();
+            .Where(offer => offer != null);
     }
 
     /// <summary>
@@ -117,7 +116,7 @@ public class RagfairOfferHolder(
     ///     Add a collection of offers to ragfair
     /// </summary>
     /// <param name="offers">Offers to add</param>
-    public void AddOffers(List<RagfairOffer> offers)
+    public void AddOffers(IEnumerable<RagfairOffer> offers)
     {
         foreach (var offer in offers)
         {
@@ -326,7 +325,7 @@ public class RagfairOfferHolder(
     ///     Get an array of arrays of expired offer items + children
     /// </summary>
     /// <returns>Expired offer assorts</returns>
-    public List<List<Item>> GetExpiredOfferItems()
+    public IEnumerable<List<Item>> GetExpiredOfferItems()
     {
         lock (_expiredOfferIdsLock)
         {

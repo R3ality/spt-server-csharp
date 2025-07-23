@@ -46,7 +46,7 @@ public record Location
     ///     All possible map extracts
     /// </summary>
     [JsonPropertyName("allExtracts")]
-    public Exit[] AllExtracts { get; set; }
+    public IEnumerable<Exit> AllExtracts { get; set; }
 }
 
 public record StaticContainer
@@ -133,10 +133,10 @@ public record StaticContainerDetails
     public List<SpawnpointTemplate> StaticWeapons { get; set; }
 
     [JsonPropertyName("staticContainers")]
-    public List<StaticContainerData> StaticContainers { get; set; }
+    public IEnumerable<StaticContainerData> StaticContainers { get; set; }
 
     [JsonPropertyName("staticForced")]
-    public List<StaticForced> StaticForced { get; set; }
+    public IEnumerable<StaticForced> StaticForced { get; set; }
 }
 
 public record StaticForced

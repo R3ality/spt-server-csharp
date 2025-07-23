@@ -49,7 +49,7 @@ public class RagfairOfferService(
         return ragfairOfferHolder.GetOfferById(offerId);
     }
 
-    public List<RagfairOffer>? GetOffersOfType(MongoId templateId)
+    public IEnumerable<RagfairOffer>? GetOffersOfType(MongoId templateId)
     {
         return ragfairOfferHolder.GetOffersByTemplate(templateId);
     }

@@ -153,7 +153,7 @@ public class RagfairLinkedItemService(
         var result = new HashSet<MongoId>();
 
         var slots = item.Properties?.Slots;
-        if (slots is null || slots.Count == 0)
+        if (slots is null || !slots.Any())
         {
             // No slots, skip
             return result;

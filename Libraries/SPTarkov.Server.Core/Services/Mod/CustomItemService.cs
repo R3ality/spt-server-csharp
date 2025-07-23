@@ -288,7 +288,7 @@ public class CustomItemService(
     protected void AddToWeaponShelf(string newItemId)
     {
         // Ids for wall stashes in db
-        List<string> wallStashIds =
+        List<MongoId> wallStashIds =
         [
             ItemTpl.HIDEOUTAREACONTAINER_WEAPONSTAND_STASH_1,
             ItemTpl.HIDEOUTAREACONTAINER_WEAPONSTAND_STASH_2,
@@ -299,7 +299,7 @@ public class CustomItemService(
             var wall = itemHelper.GetItem(wallId);
             if (wall.Key)
             {
-                wall.Value.Properties.Grids[0].Props.Filters[0].Filter.Add(newItemId);
+                wall.Value.Properties.Grids.First().Props.Filters[0].Filter.Add(newItemId);
             }
         }
     }

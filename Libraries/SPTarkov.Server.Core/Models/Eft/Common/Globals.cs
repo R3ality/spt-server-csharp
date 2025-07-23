@@ -720,7 +720,7 @@ public record PveSettings
     [JsonExtensionData]
     public Dictionary<string, object>? ExtensionData { get; set; }
 
-    public List<string> AvailableVersions { get; set; }
+    public IEnumerable<string> AvailableVersions { get; set; }
 
     public bool ModeEnabled { get; set; }
 }
@@ -730,7 +730,7 @@ public record CoopSettings
     [JsonExtensionData]
     public Dictionary<string, object>? ExtensionData { get; set; }
 
-    public List<string> AvailableVersions { get; set; }
+    public IEnumerable<string> AvailableVersions { get; set; }
 }
 
 public record RunddansSettings
@@ -739,7 +739,7 @@ public record RunddansSettings
     public Dictionary<string, object>? ExtensionData { get; set; }
 
     [JsonPropertyName("accessKeys")]
-    public List<string> AccessKeys { get; set; }
+    public IEnumerable<string> AccessKeys { get; set; }
 
     [JsonPropertyName("active")]
     public bool Active { get; set; }
@@ -751,7 +751,7 @@ public record RunddansSettings
     public double ApplyFrozenEverySec { get; set; }
 
     [JsonPropertyName("consumables")]
-    public List<string> Consumables { get; set; }
+    public IEnumerable<string> Consumables { get; set; }
 
     [JsonPropertyName("drunkImmunitySec")]
     public double DrunkImmunitySec { get; set; }
@@ -772,13 +772,13 @@ public record RunddansSettings
     public double KnifeCritChanceToBreak { get; set; }
 
     [JsonPropertyName("locations")]
-    public List<string> Locations { get; set; }
+    public IEnumerable<string> Locations { get; set; }
 
     [JsonPropertyName("multitoolRepairSec")]
     public double MultitoolRepairSec { get; set; }
 
     [JsonPropertyName("nonExitsLocations")]
-    public List<string> NonExitsLocations { get; set; }
+    public IEnumerable<string> NonExitsLocations { get; set; }
 
     [JsonPropertyName("rainForFrozen")]
     public double RainForFrozen { get; set; }
@@ -790,7 +790,7 @@ public record RunddansSettings
     public XY SecToBreak { get; set; }
 
     [JsonPropertyName("sleighLocations")]
-    public List<string> SleighLocations { get; set; }
+    public IEnumerable<string> SleighLocations { get; set; }
 }
 
 public record SeasonActivity
@@ -1627,7 +1627,7 @@ public record CustomizationVoice
     public string Voice { get; set; }
 
     [JsonPropertyName("side")]
-    public List<string> Side { get; set; }
+    public IEnumerable<string> Side { get; set; }
 
     [JsonPropertyName("isNotRandom")]
     public bool IsNotRandom { get; set; }
@@ -2310,7 +2310,7 @@ public record Buff
     [JsonPropertyName("SkillName")]
     public string SkillName { get; set; }
 
-    public List<string> AppliesTo { get; set; }
+    public IEnumerable<string> AppliesTo { get; set; }
 }
 
 public record Tremor
@@ -3287,7 +3287,7 @@ public record BTRSettings
     public Dictionary<string, object>? ExtensionData { get; set; }
 
     [JsonPropertyName("LocationsWithBTR")]
-    public List<string> LocationsWithBTR { get; set; }
+    public IEnumerable<string> LocationsWithBTR { get; set; }
 
     [JsonPropertyName("BasePriceTaxi")]
     public double BasePriceTaxi { get; set; }
@@ -3422,7 +3422,7 @@ public record PathConfig
     public string ExitPoint { get; set; }
 
     [JsonPropertyName("pathPoints")]
-    public List<string> PathPoints { get; set; }
+    public IEnumerable<string> PathPoints { get; set; }
 
     [JsonPropertyName("once")]
     public bool Once { get; set; }
@@ -3434,7 +3434,7 @@ public record PathConfig
     public double CircleCount { get; set; }
 
     [JsonPropertyName("skinType")]
-    public List<string> SkinType { get; set; }
+    public IEnumerable<string> SkinType { get; set; }
 }
 
 public record SquadSettings
@@ -4927,10 +4927,10 @@ public record RepairStrategy
     public Dictionary<string, object>? ExtensionData { get; set; }
 
     [JsonPropertyName("BuffTypes")]
-    public List<string> BuffTypes { get; set; }
+    public IEnumerable<string> BuffTypes { get; set; }
 
     [JsonPropertyName("Filter")]
-    public List<string> Filter { get; set; }
+    public IEnumerable<string> Filter { get; set; }
 }
 
 public record BotPreset

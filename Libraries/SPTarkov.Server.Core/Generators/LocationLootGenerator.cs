@@ -171,7 +171,7 @@ public class LocationLootGenerator(
         // Find all 100% spawn containers
         var staticLootDist = mapData.StaticLoot;
         var guaranteedContainers = GetGuaranteedContainers(allStaticContainersOnMapClone);
-        staticContainerCount += guaranteedContainers.Count;
+        staticContainerCount += guaranteedContainers.Count();
 
         // Add loot to guaranteed containers and add to result
         foreach (
@@ -188,12 +188,12 @@ public class LocationLootGenerator(
         {
             result.Add(containerWithLoot.Template);
 
-            staticLootItemCount += containerWithLoot.Template.Items.Count;
+            staticLootItemCount += containerWithLoot.Template.Items.Count();
         }
 
         if (_logger.IsLogEnabled(LogLevel.Debug))
         {
-            _logger.Debug($"Added {guaranteedContainers.Count} guaranteed containers");
+            _logger.Debug($"Added {guaranteedContainers.Count()} guaranteed containers");
         }
 
         // Randomisation is turned off for location / globally
@@ -202,7 +202,7 @@ public class LocationLootGenerator(
             if (_logger.IsLogEnabled(LogLevel.Debug))
             {
                 _logger.Debug(
-                    $"Container randomisation disabled, Adding: {staticRandomisableContainersOnMap.Count} containers to: {locationId}"
+                    $"Container randomisation disabled, Adding: {staticRandomisableContainersOnMap.Count()} containers to: {locationId}"
                 );
             }
 
@@ -217,7 +217,7 @@ public class LocationLootGenerator(
                 );
                 result.Add(containerWithLoot.Template);
 
-                staticLootItemCount += containerWithLoot.Template.Items.Count;
+                staticLootItemCount += containerWithLoot.Template.Items.Count();
             }
 
             _logger.Success($"A total of {staticLootItemCount} static items spawned");
@@ -320,7 +320,7 @@ public class LocationLootGenerator(
                 result.Add(containerWithLoot.Template);
                 staticContainerCount++;
 
-                staticLootItemCount += containerWithLoot.Template.Items.Count;
+                staticLootItemCount += containerWithLoot.Template.Items.Count();
             }
         }
 
@@ -346,19 +346,17 @@ public class LocationLootGenerator(
     /// </summary>
     /// <param name="staticContainers"></param>
     /// <returns>StaticContainerData array</returns>
-    protected List<StaticContainerData> GetRandomisableContainersOnMap(
-        List<StaticContainerData> staticContainers
+    protected IEnumerable<StaticContainerData> GetRandomisableContainersOnMap(
+        IEnumerable<StaticContainerData> staticContainers
     )
     {
-        return staticContainers
-            .Where(staticContainer =>
-                staticContainer.Probability != 1
-                && !staticContainer.Template.IsAlwaysSpawn.GetValueOrDefault(false)
-                && !_locationConfig.ContainerRandomisationSettings.ContainerTypesToNotRandomise.Contains(
-                    staticContainer.Template.Items.FirstOrDefault().Template
-                )
+        return staticContainers.Where(staticContainer =>
+            staticContainer.Probability != 1
+            && !staticContainer.Template.IsAlwaysSpawn.GetValueOrDefault(false)
+            && !_locationConfig.ContainerRandomisationSettings.ContainerTypesToNotRandomise.Contains(
+                staticContainer.Template.Items.FirstOrDefault().Template
             )
-            .ToList();
+        );
     }
 
     /// <summary>
@@ -366,19 +364,17 @@ public class LocationLootGenerator(
     /// </summary>
     /// <param name="staticContainersOnMap"></param>
     /// <returns>IStaticContainerData array</returns>
-    protected List<StaticContainerData> GetGuaranteedContainers(
-        List<StaticContainerData> staticContainersOnMap
+    protected IEnumerable<StaticContainerData> GetGuaranteedContainers(
+        IEnumerable<StaticContainerData> staticContainersOnMap
     )
     {
-        return staticContainersOnMap
-            .Where(staticContainer =>
-                staticContainer.Probability == 1
-                || staticContainer.Template.IsAlwaysSpawn.GetValueOrDefault(false)
-                || _locationConfig.ContainerRandomisationSettings.ContainerTypesToNotRandomise.Contains(
-                    staticContainer.Template.Items.FirstOrDefault().Template
-                )
+        return staticContainersOnMap.Where(staticContainer =>
+            staticContainer.Probability == 1
+            || staticContainer.Template.IsAlwaysSpawn.GetValueOrDefault(false)
+            || _locationConfig.ContainerRandomisationSettings.ContainerTypesToNotRandomise.Contains(
+                staticContainer.Template.Items.FirstOrDefault().Template
             )
-            .ToList();
+        );
     }
 
     /// <summary>
@@ -395,7 +391,7 @@ public class LocationLootGenerator(
     {
         var chosenContainerIds = new List<string>();
 
-        var containerIds = containerData.ContainerIdsWithProbability.Keys.ToList();
+        var containerIds = containerData.ContainerIdsWithProbability.Keys;
         if (containerData.ChosenCount > containerIds.Count)
         {
             if (_logger.IsLogEnabled(LogLevel.Debug))
@@ -405,7 +401,7 @@ public class LocationLootGenerator(
                 );
             }
 
-            return containerIds;
+            return containerIds.ToList();
         }
 
         // Create probability array with all possible container ids in this group and their relative probability of spawning
@@ -429,7 +425,7 @@ public class LocationLootGenerator(
     /// <returns>dictionary keyed by groupId</returns>
     protected Dictionary<string, ContainerGroupCount> GetGroupIdToContainerMappings(
         StaticContainer staticContainerGroupData,
-        List<StaticContainerData> staticContainersOnMap
+        IEnumerable<StaticContainerData> staticContainersOnMap
     )
     {
         // Create dictionary of all group ids and choose a count of containers the map will spawn of that group
@@ -532,7 +528,7 @@ public class LocationLootGenerator(
     /// <returns>StaticContainerData</returns>
     protected StaticContainerData AddLootToContainer(
         StaticContainerData staticContainer,
-        List<StaticForced>? staticForced,
+        IEnumerable<StaticForced>? staticForced,
         Dictionary<string, StaticLootDetails> staticLootDist,
         Dictionary<string, List<StaticAmmoDetails>> staticAmmoDist,
         string locationName
@@ -639,9 +635,8 @@ public class LocationLootGenerator(
             };
 
             // Add loot to container before returning
-            containerClone.Template.Items.AddRange(
-                items.Select(item => item.ToLootItem()).ToList() // Convert into correct output type first
-            );
+            var itemsToAdd = items.Select(item => item.ToLootItem()); // Convert into correct output type first
+            containerClone.Template.Items = containerClone.Template.Items.Union(itemsToAdd);
         }
 
         return containerClone;
@@ -776,16 +771,12 @@ public class LocationLootGenerator(
         // Remove christmas items from loot data
         if (!_seasonalEventService.ChristmasEventEnabled())
         {
-            dynamicLootDist.Spawnpoints = dynamicLootDist
-                .Spawnpoints.Where(point =>
-                    !point.Template.Id.StartsWith("christmas", StringComparison.OrdinalIgnoreCase)
-                )
-                .ToList();
-            dynamicLootDist.SpawnpointsForced = dynamicLootDist
-                .SpawnpointsForced.Where(point =>
-                    !point.Template.Id.StartsWith("christmas", StringComparison.OrdinalIgnoreCase)
-                )
-                .ToList();
+            dynamicLootDist.Spawnpoints = dynamicLootDist.Spawnpoints.Where(point =>
+                !point.Template.Id.StartsWith("christmas", StringComparison.OrdinalIgnoreCase)
+            );
+            dynamicLootDist.SpawnpointsForced = dynamicLootDist.SpawnpointsForced.Where(point =>
+                !point.Template.Id.StartsWith("christmas", StringComparison.OrdinalIgnoreCase)
+            );
         }
 
         // Build the list of forced loot from both `SpawnpointsForced` and any point marked `IsAlwaysSpawn`
@@ -929,7 +920,7 @@ public class LocationLootGenerator(
             }
 
             // Spawn point has no items after filtering, skip
-            if (spawnPoint.Template.Items is null || spawnPoint.Template.Items.Count == 0)
+            if (spawnPoint.Template.Items is null || !spawnPoint.Template.Items.Any())
             {
                 if (_logger.IsLogEnabled(LogLevel.Debug))
                 {
@@ -1031,7 +1022,7 @@ public class LocationLootGenerator(
     /// <param name="staticAmmoDist"></param>
     /// <returns>Collection of spawn points with forced loot in them</returns>
     protected List<SpawnpointTemplate> GetForcedDynamicLoot(
-        List<Spawnpoint> forcedSpawnPoints,
+        IEnumerable<Spawnpoint> forcedSpawnPoints,
         string locationName,
         Dictionary<string, List<StaticAmmoDetails>> staticAmmoDist
     )
@@ -1105,7 +1096,7 @@ public class LocationLootGenerator(
     /// <returns> ContainerItem object </returns>
     protected ContainerItem CreateDynamicLootItem(
         SptLootItem chosenItem,
-        List<SptLootItem> lootItems,
+        IEnumerable<SptLootItem> lootItems,
         Dictionary<string, List<StaticAmmoDetails>> staticAmmoDist
     )
     {
@@ -1282,17 +1273,20 @@ public class LocationLootGenerator(
         var defaultPreset = _presetHelper.GetDefaultPreset(chosenTpl);
         if (defaultPreset is not null)
         {
-            var presetAndModsClone = _cloner.Clone(defaultPreset.Items).ReplaceIDs().ToList();
+            var presetAndModsClone = _cloner.Clone(defaultPreset.Items).ReplaceIDs();
             presetAndModsClone.RemapRootItemId();
 
             // Use original items parentId otherwise item doesn't get added to container correctly
             presetAndModsClone.FirstOrDefault().ParentId = rootItem.ParentId;
-            items = presetAndModsClone;
+            items = presetAndModsClone.ToList();
         }
         else
         {
             // We make base item in calling method, no need to do it here
-            if ((armorDbTemplate.Properties.Slots?.Count ?? 0) > 0)
+            if (
+                armorDbTemplate.Properties?.Slots is not null
+                && armorDbTemplate.Properties.Slots.Any()
+            )
             {
                 items = _itemHelper.AddChildSlotItems(
                     items,

@@ -951,7 +951,8 @@ public class FenceService(
                 rootItemBeingAdded.Template,
                 [BaseClasses.ARMORED_EQUIPMENT, BaseClasses.SEARCHABLE_ITEM]
             )
-            && (itemDbDetails.Properties.Slots?.Count ?? 0) > 0;
+            && itemDbDetails?.Properties?.Slots is not null
+            && itemDbDetails.Properties.Slots.Any();
 
         // Only one match and it's not medical or armored gear
         if (matchingItems.Count == 1 && !(isMedical || isGearAndHasSlots))

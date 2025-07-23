@@ -44,7 +44,7 @@ public class BotWeaponGeneratorHelper(
             chamberBulletCount =
                 ammoMaxStackSize == 1
                     ? 1 // Rotating grenade launcher
-                    : magTemplate.Properties.Slots.Count; // Shotguns/revolvers. We count the number of camoras as the _max_count of the magazine is 0
+                    : magTemplate.Properties.Slots.Count(); // Shotguns/revolvers. We count the number of camoras as the _max_count of the magazine is 0
         }
         else if (parentItem.Id == BaseClasses.UBGL)
         {

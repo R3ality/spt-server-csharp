@@ -89,8 +89,8 @@ public class BotEquipmentModPoolService(
                 continue;
             }
 
-            // Skip item without slots
-            if (item.Properties.Slots is null || item.Properties.Slots.Count == 0)
+            // No slots
+            if (item.Properties?.Slots is null || !item.Properties.Slots.Any())
             {
                 continue;
             }
@@ -120,7 +120,9 @@ public class BotEquipmentModPoolService(
                     }
 
                     var subItemDetails = itemHelper.GetItem(itemToAddTpl).Value;
-                    var hasSubItemsToAdd = (subItemDetails?.Properties?.Slots?.Count ?? 0) > 0;
+                    var hasSubItemsToAdd =
+                        subItemDetails.Properties?.Slots is not null
+                        && subItemDetails.Properties.Slots.Any();
 
                     // Item has Slots + pool doesn't have value
                     if (hasSubItemsToAdd && !pool.ContainsKey(subItemDetails.Id))
@@ -221,7 +223,7 @@ public class BotEquipmentModPoolService(
 
         // Get item from db
         var itemDb = itemHelper.GetItem(itemTpl).Value;
-        if (itemDb.Properties.Slots is not null)
+        if (itemDb.Properties?.Slots is not null)
         // Loop over slots flagged as 'required'
         {
             foreach (

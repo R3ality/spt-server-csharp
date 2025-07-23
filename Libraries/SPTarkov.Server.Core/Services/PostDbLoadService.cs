@@ -391,18 +391,21 @@ public class PostDbLoadService(
 
                         if (existingLootPosition is not null)
                         {
-                            existingLootPosition.Template.Items.AddRange(
-                                positionToAdd.Template.Items
-                            );
-                            existingLootPosition.ItemDistribution.AddRange(
-                                positionToAdd.ItemDistribution
-                            );
+                            existingLootPosition.Template.Items =
+                                existingLootPosition.Template.Items.Union(
+                                    positionToAdd.Template.Items
+                                );
+
+                            existingLootPosition.ItemDistribution =
+                                existingLootPosition.ItemDistribution.Union(
+                                    positionToAdd.ItemDistribution
+                                );
 
                             continue;
                         }
 
                         // New position, add entire object
-                        looselootData.Spawnpoints.Add(positionToAdd);
+                        looselootData.Spawnpoints = looselootData.Spawnpoints.Append(positionToAdd);
                     }
 
                     return looselootData;

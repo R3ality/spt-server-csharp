@@ -77,7 +77,7 @@ public class FenceBaseAssortGenerator(
             // Only allow rigs with no slots (carrier rigs)
             if (
                 itemHelper.IsOfBaseclass(itemId, BaseClasses.VEST)
-                && (rootItemDb.Properties?.Slots?.Count ?? 0) > 0
+                && (rootItemDb.Properties?.Slots is not null && rootItemDb.Properties.Slots.Any())
             )
             {
                 continue;
@@ -271,7 +271,8 @@ public class FenceBaseAssortGenerator(
     protected void AddChildrenToArmorModSlots(List<Item> armor, TemplateItem itemDbDetails)
     {
         // Armor has no mods, make no additions
-        var hasMods = itemDbDetails.Properties.Slots.Count > 0;
+        var hasMods =
+            itemDbDetails.Properties?.Slots is not null && itemDbDetails.Properties.Slots.Any();
         if (!hasMods)
         {
             return;

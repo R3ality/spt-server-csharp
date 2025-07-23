@@ -1,7 +1,6 @@
 using MongoIdTplGenerator.Utils;
 using SPTarkov.Common.Extensions;
 using SPTarkov.DI.Annotations;
-using SPTarkov.Server.Core.DI;
 using SPTarkov.Server.Core.Helpers;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
@@ -498,7 +497,7 @@ public class ItemTplMongoIdGenerator(
         // Add grid size for lootable containers
         if (itemHelper.IsOfBaseclass(item.Id, BaseClasses.LOOT_CONTAINER))
         {
-            return $"{item.Properties.Grids[0]?.Props.CellsH}X{item.Properties.Grids[0]?.Props.CellsV}";
+            return $"{item.Properties.Grids.First()?.Props.CellsH}X{item.Properties.Grids.First()?.Props.CellsV}";
         }
 
         // Add ammo caliber to conflicting weapons

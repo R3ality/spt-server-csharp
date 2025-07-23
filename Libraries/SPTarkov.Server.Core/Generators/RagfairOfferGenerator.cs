@@ -343,9 +343,9 @@ public class RagfairOfferGenerator(
     ///     Create multiple offers for items by using a unique list of items we've generated previously
     /// </summary>
     /// <param name="expiredOffers"> Optional, expired offers to regenerate </param>
-    public void GenerateDynamicOffers(List<List<Item>>? expiredOffers = null)
+    public void GenerateDynamicOffers(IEnumerable<List<Item>>? expiredOffers = null)
     {
-        var replacingExpiredOffers = (expiredOffers?.Count ?? 0) > 0;
+        var replacingExpiredOffers = expiredOffers is not null && expiredOffers.Any();
 
         var stopwatch = Stopwatch.StartNew();
         // get assort items from param if they exist, otherwise grab freshly generated assorts
@@ -356,7 +356,7 @@ public class RagfairOfferGenerator(
         if (logger.IsLogEnabled(LogLevel.Debug) && stopwatch.ElapsedMilliseconds > 0)
         {
             logger.Debug(
-                $"Took {stopwatch.ElapsedMilliseconds}ms to GetRagfairAssorts - {assortItemsToProcess.Count} items"
+                $"Took {stopwatch.ElapsedMilliseconds}ms to GetRagfairAssorts - {assortItemsToProcess.Count()} items"
             );
         }
 

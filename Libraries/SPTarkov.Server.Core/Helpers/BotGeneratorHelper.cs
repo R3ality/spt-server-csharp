@@ -596,7 +596,7 @@ public class BotGeneratorHelper(
                 continue;
             }
 
-            if (itemDbDetails?.Properties?.Grids?.Count == 0)
+            if (itemDbDetails?.Properties?.Grids is null || !itemDbDetails.Properties.Grids.Any())
             // Container has no slots to hold items
             {
                 continue;
@@ -611,15 +611,11 @@ public class BotGeneratorHelper(
 
             // Iterate over each grid in the container and look for a big enough space for the item to be placed in
             var currentGridCount = 1;
-            var totalSlotGridCount = itemDbDetails?.Properties?.Grids?.Count;
+            var totalSlotGridCount = itemDbDetails?.Properties?.Grids?.Count();
             foreach (var slotGrid in itemDbDetails?.Properties?.Grids ?? [])
             {
                 // Grid is empty, skip or item size is bigger than grid
-                if (
-                    slotGrid.Props?.CellsH == 0
-                    || slotGrid.Props?.CellsV == 0
-                    || itemWidth * itemHeight > slotGrid.Props?.CellsV * slotGrid.Props?.CellsH
-                )
+                if (IsGridSmallerThanItem(slotGrid, itemWidth, itemHeight))
                 {
                     continue;
                 }
@@ -709,6 +705,13 @@ public class BotGeneratorHelper(
         }
 
         return ItemAddedResult.NO_SPACE;
+    }
+
+    protected static bool IsGridSmallerThanItem(Grid slotGrid, int itemWidth, int itemHeight)
+    {
+        return slotGrid.Props?.CellsH == 0
+            || slotGrid.Props?.CellsV == 0
+            || itemWidth * itemHeight > slotGrid.Props?.CellsV * slotGrid.Props?.CellsH;
     }
 
     /// <summary>
