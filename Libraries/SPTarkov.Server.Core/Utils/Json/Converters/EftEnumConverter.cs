@@ -4,6 +4,27 @@ using System.Text.Json.Serialization;
 
 namespace SPTarkov.Server.Core.Utils.Json.Converters;
 
+
+public class EftEnumConverterFactory : JsonConverterFactory
+{
+    public override bool CanConvert(Type typeToConvert)
+    {
+        return typeToConvert.IsEnum && (typeToConvert.Namespace?.Contains("SPTarkov") ?? false);
+    }
+
+    public override JsonConverter? CreateConverter(
+        Type typeToConvert,
+        JsonSerializerOptions options
+    )
+    {
+        return (JsonConverter)
+            Activator.CreateInstance(
+                typeof(EftEnumConverter<>).MakeGenericType(typeToConvert)
+            );
+    }
+}
+
+
 public class EftEnumConverter<T> : JsonConverter<T>
 {
     private static readonly JsonSerializerOptions _options = new()
