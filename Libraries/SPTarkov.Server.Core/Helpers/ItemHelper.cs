@@ -1462,7 +1462,7 @@ public class ItemHelper(
     public void FillMagazineWithRandomCartridge(
         List<Item> magazine,
         TemplateItem magTemplate,
-        Dictionary<string, List<StaticAmmoDetails>> staticAmmoDist,
+        Dictionary<string, IEnumerable<StaticAmmoDetails>> staticAmmoDist,
         string? caliber = null,
         double minSizePercent = 0.25,
         MongoId? defaultCartridgeTpl = null,
@@ -1629,23 +1629,23 @@ public class ItemHelper(
     /// <returns>Tpl of cartridge</returns>
     protected MongoId? DrawAmmoTpl(
         string caliber,
-        Dictionary<string, List<StaticAmmoDetails>> staticAmmoDist,
+        Dictionary<string, IEnumerable<StaticAmmoDetails>> staticAmmoDist,
         MongoId? fallbackCartridgeTpl = null,
         ICollection<MongoId>? cartridgeWhitelist = null
     )
     {
         var ammos = staticAmmoDist.GetValueOrDefault(caliber, []);
-        if (ammos.Count == 0 && fallbackCartridgeTpl is not null)
+        if (!ammos.Any())
         {
-            logger.Warning(
-                $"Unable to pick a cartridge for caliber: {caliber}, staticAmmoDist has no data. using fallback value of {fallbackCartridgeTpl}"
-            );
+            if (fallbackCartridgeTpl is not null)
+            {
+                logger.Warning(
+                    $"Unable to pick a cartridge for caliber: {caliber}, staticAmmoDist has no data. using fallback value of {fallbackCartridgeTpl}"
+                );
 
-            return fallbackCartridgeTpl;
-        }
+                return fallbackCartridgeTpl;
+            }
 
-        if (ammos.Count == 0 && fallbackCartridgeTpl is null)
-        {
             logger.Warning(
                 $"Unable to pick a cartridge for caliber: {caliber}, staticAmmoDist has no data. No fallback value provided"
             );

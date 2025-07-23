@@ -34,7 +34,7 @@ public record Location
     public LazyLoad<StaticContainerDetails>? StaticContainers { get; set; }
 
     [JsonPropertyName("staticAmmo")]
-    public Dictionary<string, List<StaticAmmoDetails>> StaticAmmo { get; set; }
+    public Dictionary<string, IEnumerable<StaticAmmoDetails>> StaticAmmo { get; set; }
 
     /// <summary>
     ///     All possible static containers on map + their assign groupings
@@ -130,7 +130,7 @@ public record StaticContainerDetails
     public Dictionary<string, object>? ExtensionData { get; set; }
 
     [JsonPropertyName("staticWeapons")]
-    public List<SpawnpointTemplate> StaticWeapons { get; set; }
+    public IEnumerable<SpawnpointTemplate> StaticWeapons { get; set; }
 
     [JsonPropertyName("staticContainers")]
     public IEnumerable<StaticContainerData> StaticContainers { get; set; }

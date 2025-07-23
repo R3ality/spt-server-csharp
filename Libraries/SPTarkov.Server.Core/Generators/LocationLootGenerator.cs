@@ -104,7 +104,7 @@ public class LocationLootGenerator(
     /// <returns>List of container objects</returns>
     public List<SpawnpointTemplate> GenerateStaticContainers(
         string locationId,
-        Dictionary<string, List<StaticAmmoDetails>> staticAmmoDist
+        Dictionary<string, IEnumerable<StaticAmmoDetails>> staticAmmoDist
     )
     {
         var staticLootItemCount = 0;
@@ -530,7 +530,7 @@ public class LocationLootGenerator(
         StaticContainerData staticContainer,
         IEnumerable<StaticForced>? staticForced,
         Dictionary<string, StaticLootDetails> staticLootDist,
-        Dictionary<string, List<StaticAmmoDetails>> staticAmmoDist,
+        Dictionary<string, IEnumerable<StaticAmmoDetails>> staticAmmoDist,
         string locationName
     )
     {
@@ -761,7 +761,7 @@ public class LocationLootGenerator(
     /// <returns>Array of spawn points with loot in them</returns>
     public List<SpawnpointTemplate> GenerateDynamicLoot(
         LooseLoot dynamicLootDist,
-        Dictionary<string, List<StaticAmmoDetails>> staticAmmoDist,
+        Dictionary<string, IEnumerable<StaticAmmoDetails>> staticAmmoDist,
         string locationName
     )
     {
@@ -1024,7 +1024,7 @@ public class LocationLootGenerator(
     protected List<SpawnpointTemplate> GetForcedDynamicLoot(
         IEnumerable<Spawnpoint> forcedSpawnPoints,
         string locationName,
-        Dictionary<string, List<StaticAmmoDetails>> staticAmmoDist
+        Dictionary<string, IEnumerable<StaticAmmoDetails>> staticAmmoDist
     )
     {
         var result = new List<SpawnpointTemplate>();
@@ -1097,7 +1097,7 @@ public class LocationLootGenerator(
     protected ContainerItem CreateDynamicLootItem(
         SptLootItem chosenItem,
         IEnumerable<SptLootItem> lootItems,
-        Dictionary<string, List<StaticAmmoDetails>> staticAmmoDist
+        Dictionary<string, IEnumerable<StaticAmmoDetails>> staticAmmoDist
     )
     {
         var chosenTpl = chosenItem.Template;
@@ -1188,8 +1188,8 @@ public class LocationLootGenerator(
 
     // TODO: rewrite, BIG yikes
     protected ContainerItem? CreateStaticLootItem(
-        string chosenTpl,
-        Dictionary<string, List<StaticAmmoDetails>> staticAmmoDist,
+        MongoId chosenTpl,
+        Dictionary<string, IEnumerable<StaticAmmoDetails>> staticAmmoDist,
         string? parentId = null
     )
     {
@@ -1310,7 +1310,7 @@ public class LocationLootGenerator(
     /// <returns>Root Item</returns>
     protected Item? CreateWeaponRootAndChildren(
         string chosenTpl,
-        Dictionary<string, List<StaticAmmoDetails>> cartridgePool,
+        Dictionary<string, IEnumerable<StaticAmmoDetails>> cartridgePool,
         string? parentId,
         ref List<Item> items
     )
@@ -1427,7 +1427,7 @@ public class LocationLootGenerator(
     }
 
     protected void GenerateStaticMagazineItem(
-        Dictionary<string, List<StaticAmmoDetails>> staticAmmoDist,
+        Dictionary<string, IEnumerable<StaticAmmoDetails>> staticAmmoDist,
         Item? rootItem,
         TemplateItem itemTemplate,
         List<Item> items

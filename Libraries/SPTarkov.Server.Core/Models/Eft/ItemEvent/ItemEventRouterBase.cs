@@ -178,7 +178,7 @@ public record DeletedItem
     public Dictionary<string, object>? ExtensionData { get; set; }
 
     [JsonPropertyName("_id")]
-    public string Id { get; set; }
+    public MongoId Id { get; set; }
 }
 
 /// <summary>

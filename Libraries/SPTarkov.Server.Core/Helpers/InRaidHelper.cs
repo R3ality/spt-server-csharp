@@ -166,7 +166,7 @@ public class InRaidHelper(
     ///     Used post-raid to remove items after death.
     /// </summary>
     /// <param name="pmcData">Player profile</param>
-    /// <param name="sessionId">Session id</param>
+    /// <param name="sessionId">Player/Session id</param>
     public void DeleteInventory(PmcData pmcData, MongoId sessionId)
     {
         // Get inventory item ids to remove from players profile
@@ -179,7 +179,7 @@ public class InRaidHelper(
         }
 
         // Remove contents of fast panel
-        pmcData.Inventory.FastPanel = new Dictionary<string, MongoId>();
+        pmcData.Inventory.FastPanel = new();
     }
 
     /// <summary>

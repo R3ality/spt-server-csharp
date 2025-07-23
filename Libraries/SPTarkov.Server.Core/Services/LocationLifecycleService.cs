@@ -167,15 +167,13 @@ public class LocationLifecycleService(
         }
 
         // Find only scav extracts and overwrite existing exits with them
-        var scavExtracts = mapExtracts
-            .Where(extract =>
-                string.Equals(extract.Side, "scav", StringComparison.OrdinalIgnoreCase)
-            )
-            .ToList();
-        if (scavExtracts.Count > 0)
+        var scavExtracts = mapExtracts.Where(extract =>
+            string.Equals(extract.Side, "scav", StringComparison.OrdinalIgnoreCase)
+        );
+        if (scavExtracts.Any())
         // Scav extracts found, use them
         {
-            locationData.Exits.AddRange(scavExtracts);
+            locationData.Exits = locationData.Exits.Union(scavExtracts);
         }
     }
 
