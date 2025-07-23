@@ -336,7 +336,7 @@ public class TradeController(
     /// <returns>Rouble price</returns>
     protected int GetPriceOfItemAndChildren(
         MongoId parentItemId,
-        List<Item> items,
+        IEnumerable<Item> items,
         Dictionary<MongoId, int?> handbookPrices,
         TraderBase traderDetails
     )

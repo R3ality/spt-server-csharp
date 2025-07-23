@@ -362,13 +362,13 @@ public class RagfairOfferGenerator(
 
         stopwatch.Restart();
         var tasks = new List<Task>();
-        foreach (var assortItem in assortItemsToProcess)
+        foreach (var assortItemWithChildren in assortItemsToProcess)
         {
             tasks.Add(
                 Task.Factory.StartNew(() =>
                 {
                     CreateOffersFromAssort(
-                        assortItem,
+                        assortItemWithChildren,
                         replacingExpiredOffers,
                         ragfairConfig.Dynamic
                     );
@@ -725,12 +725,12 @@ public class RagfairOfferGenerator(
     /// <param name="itemDetails"> DB details of first item</param>
     protected void RandomiseOfferItemUpdProperties(
         MongoId userID,
-        List<Item> itemWithMods,
+        IEnumerable<Item> itemWithMods,
         TemplateItem itemDetails
     )
     {
         // Add any missing properties to first item in array
-        AddMissingConditions(itemWithMods[0]);
+        AddMissingConditions(itemWithMods.First());
 
         if (!(profileHelper.IsPlayer(userID) || ragfairServerHelper.IsTrader(userID)))
         {
@@ -781,11 +781,11 @@ public class RagfairOfferGenerator(
     /// <param name="itemDetails"> DB Item details of first item in list </param>
     protected void RandomiseItemCondition(
         MongoId conditionSettingsId,
-        List<Item> itemWithMods,
+        IEnumerable<Item> itemWithMods,
         TemplateItem itemDetails
     )
     {
-        var rootItem = itemWithMods[0];
+        var rootItem = itemWithMods.First();
 
         var itemConditionValues = ragfairConfig.Dynamic.Condition[conditionSettingsId];
         var maxMultiplier = randomUtil.GetDouble(
@@ -827,7 +827,7 @@ public class RagfairOfferGenerator(
         if (itemHelper.IsOfBaseclass(itemDetails.Id, BaseClasses.WEAPON))
         {
             RandomiseWeaponDurability(
-                itemWithMods[0],
+                itemWithMods.First(),
                 itemDetails,
                 maxMultiplier,
                 currentMultiplier
@@ -924,7 +924,7 @@ public class RagfairOfferGenerator(
     /// <param name="currentMultiplier"> Chosen multiplier to use for current durability value </param>
     /// <param name="maxMultiplier"> Chosen multiplier to use for max durability value </param>
     protected void RandomiseArmorDurabilityValues(
-        List<Item> armorWithMods,
+        IEnumerable<Item> armorWithMods,
         double currentMultiplier,
         double maxMultiplier
     )

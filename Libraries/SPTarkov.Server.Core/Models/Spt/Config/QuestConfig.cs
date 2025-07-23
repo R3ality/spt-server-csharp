@@ -326,13 +326,13 @@ public record TraderWhitelist
     ///     Quest types this trader can provide: Completion/Exploration/Elimination.
     /// </summary>
     [JsonPropertyName("questTypes")]
-    public required List<string> QuestTypes { get; set; }
+    public required HashSet<string> QuestTypes { get; set; }
 
     /// <summary>
     ///     Item categories that the reward can be
     /// </summary>
     [JsonPropertyName("rewardBaseWhitelist")]
-    public required List<MongoId> RewardBaseWhitelist { get; set; }
+    public required IEnumerable<MongoId> RewardBaseWhitelist { get; set; }
 
     /// <summary>
     ///     Can this reward be a weapon?

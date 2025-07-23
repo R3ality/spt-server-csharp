@@ -41,7 +41,7 @@ public class RagfairAssortGenerator(
     ///     Each sub list contains item + children (if any)
     /// </summary>
     /// <returns> List with children lists of items </returns>
-    public List<List<Item>> GetAssortItems()
+    public IEnumerable<List<Item>> GetAssortItems()
     {
         return GenerateRagfairAssortItems();
     }
@@ -50,9 +50,9 @@ public class RagfairAssortGenerator(
     ///     Generate a list of lists (item + children) the flea can sell
     /// </summary>
     /// <returns> List of lists (item + children)</returns>
-    protected List<List<Item>> GenerateRagfairAssortItems()
+    protected IEnumerable<List<Item>> GenerateRagfairAssortItems()
     {
-        List<List<Item>> results = [];
+        IEnumerable<List<Item>> results = [];
 
         // Get cloned items from db
         var dbItems = databaseService
@@ -76,16 +76,16 @@ public class RagfairAssortGenerator(
             // Add presets base item tpl to the processed list so its skipped later on when processing items
             processedArmorItems.Add(preset.Items[0].Template);
 
-            presetAndModsClone[0].ParentId = "hideout";
-            presetAndModsClone[0].SlotId = "hideout";
-            presetAndModsClone[0].Upd = new Upd
+            presetAndModsClone.First().ParentId = "hideout";
+            presetAndModsClone.First().SlotId = "hideout";
+            presetAndModsClone.First().Upd = new Upd
             {
                 StackObjectsCount = 99999999,
                 UnlimitedCount = true,
                 SptPresetId = preset.Id,
             };
 
-            results.Add(presetAndModsClone);
+            results = results.Union([presetAndModsClone]);
         }
 
         foreach (var (id, item) in dbItems)
@@ -105,15 +105,14 @@ public class RagfairAssortGenerator(
                 continue;
             }
 
-            if (processedArmorItems.Contains(id))
             // Already processed
+            if (processedArmorItems.Contains(id))
             {
                 continue;
             }
 
-            var ragfairAssort = CreateRagfairAssortRootItem(id, id); // tpl and id must be the same so hideout recipe rewards work
-
-            results.Add([ragfairAssort]);
+            var assortItemToAdd = new List<Item> { CreateRagfairAssortRootItem(id, id) }; // tpl and id must be the same so hideout recipe rewards work
+            results = results.Union([assortItemToAdd]);
         }
 
         return results;

@@ -40,7 +40,7 @@ public class ScavCaseRewardGenerator(
     /// </summary>
     /// <param name="recipeId">recipe of the scav case craft</param>
     /// <returns>Product array</returns>
-    public List<List<Item>> Generate(MongoId recipeId)
+    public IEnumerable<List<Item>> Generate(MongoId recipeId)
     {
         CacheDbItems();
 
@@ -91,13 +91,9 @@ public class ScavCaseRewardGenerator(
             RewardRarity.SuperRare
         );
 
-        var result = new List<List<Item>>();
-        result = result.Concat(commonRewards).ToList();
-        result = result.Concat(rareRewards).ToList();
-        result = result.Concat(superRareRewards).ToList();
-        // TODO: please make this better, how merge 2d Lists
+        var result = commonRewards.Concat(rareRewards).Concat(superRareRewards);
 
-        return result.ToList();
+        return result;
     }
 
     /// <summary>
@@ -365,7 +361,7 @@ public class ScavCaseRewardGenerator(
     /// <param name="rarity">The rarity desired ammo reward is for</param>
     /// <returns>Product array</returns>
     protected List<List<Item>> RandomiseContainerItemRewards(
-        List<TemplateItem> rewardItems,
+        IEnumerable<TemplateItem> rewardItems,
         string rarity
     )
     {

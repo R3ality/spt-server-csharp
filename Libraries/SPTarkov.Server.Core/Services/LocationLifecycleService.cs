@@ -960,12 +960,12 @@ public class LocationLifecycleService(
         // Must occur AFTER killer messages have been sent
         matchBotDetailsCacheService.ClearCache();
 
-        var roles = new List<string> { "pmcbear", "pmcusec" };
+        var roles = new HashSet<string> { "pmcbear", "pmcusec" };
 
-        var victims = postRaidProfile
-            .Stats.Eft.Victims.Where(victim => roles.Contains(victim.Role.ToLowerInvariant()))
-            .ToList();
-        if (victims?.Count > 0)
+        var victims = postRaidProfile.Stats.Eft.Victims.Where(victim =>
+            roles.Contains(victim.Role.ToLowerInvariant())
+        );
+        if (victims is not null && victims.Any())
         // Player killed PMCs, send some mail responses to them
         {
             pmcChatResponseService.SendVictimResponse(sessionId, victims, serverPmcProfile);
@@ -1233,7 +1233,7 @@ public class LocationLifecycleService(
     ///     Reset the skill points earned in a raid to 0, ready for next raid
     /// </summary>
     /// <param name="commonSkills"> Profile common skills to update </param>
-    protected void ResetSkillPointsEarnedDuringRaid(List<CommonSkill> commonSkills)
+    protected void ResetSkillPointsEarnedDuringRaid(IEnumerable<CommonSkill> commonSkills)
     {
         foreach (var skill in commonSkills)
         {

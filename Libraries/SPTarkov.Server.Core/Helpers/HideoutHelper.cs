@@ -1510,9 +1510,9 @@ public class HideoutHelper(
         );
 
         // Get all slotted dogtag items
-        var activeDogtags = pmcData
-            .Inventory.Items.Where(item => item?.SlotId?.StartsWith("dogtag") ?? false)
-            .ToList();
+        var activeDogtags = pmcData.Inventory.Items.Where(item =>
+            item?.SlotId?.StartsWith("dogtag") ?? false
+        );
 
         // Calculate bonus percent (apply hideoutManagement bonus)
         var hideoutManagementSkill = pmcData.GetSkillFromProfile(SkillTypes.HideoutManagement);
@@ -1534,7 +1534,7 @@ public class HideoutHelper(
     /// <returns>Combat bonus</returns>
     protected static double GetDogtagCombatSkillBonusPercent(
         PmcData pmcData,
-        List<Item> activeDogtags
+        IEnumerable<Item> activeDogtags
     )
     {
         // Not own dogtag
@@ -1542,12 +1542,12 @@ public class HideoutHelper(
         var result = 0D;
         foreach (var dogtag in activeDogtags)
         {
-            if (dogtag.Upd.Dogtag is null)
+            if (dogtag.Upd?.Dogtag?.AccountId is null)
             {
                 continue;
             }
 
-            if (int.Parse(dogtag.Upd.Dogtag?.AccountId) == pmcData.Aid)
+            if (int.Parse(dogtag.Upd.Dogtag.AccountId) == pmcData.Aid)
             {
                 continue;
             }

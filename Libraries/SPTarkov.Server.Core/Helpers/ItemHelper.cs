@@ -67,8 +67,12 @@ public class ItemHelper(
         ItemTpl.BARTER_DOGTAG_USEC_TUE,
         ItemTpl.BARTER_DOGTAG_BEAR_PRESTIGE_1,
         ItemTpl.BARTER_DOGTAG_BEAR_PRESTIGE_2,
+        ItemTpl.BARTER_DOGTAG_BEAR_PRESTIGE_3,
+        ItemTpl.BARTER_DOGTAG_BEAR_PRESTIGE_4,
         ItemTpl.BARTER_DOGTAG_USEC_PRESTIGE_1,
         ItemTpl.BARTER_DOGTAG_USEC_PRESTIGE_2,
+        ItemTpl.BARTER_DOGTAG_USEC_PRESTIGE_3,
+        ItemTpl.BARTER_DOGTAG_USEC_PRESTIGE_4,
     ];
 
     protected static readonly FrozenSet<string> _softInsertIds =
@@ -328,7 +332,7 @@ public class ItemHelper(
     /// <param name="tpl">Item to check base classes of</param>
     /// <param name="baseClassTpls">Base classes to check for</param>
     /// <returns>True if any supplied base classes match</returns>
-    public bool IsOfBaseclasses(MongoId tpl, ICollection<MongoId> baseClassTpls)
+    public bool IsOfBaseclasses(MongoId tpl, IEnumerable<MongoId> baseClassTpls)
     {
         return itemBaseClassService.ItemHasBaseClass(tpl, baseClassTpls);
     }
@@ -729,7 +733,7 @@ public class ItemHelper(
     /// <param name="itemIdToFind">Template id of item to check for</param>
     /// <param name="assort">List of items to check in</param>
     /// <returns>List of children of requested item</returns>
-    public List<Item> FindAndReturnChildrenByAssort(MongoId itemIdToFind, List<Item> assort)
+    public List<Item> FindAndReturnChildrenByAssort(MongoId itemIdToFind, IEnumerable<Item> assort)
     {
         List<Item> list = [];
         var itemIdToFindString = itemIdToFind.ToString();
@@ -901,8 +905,8 @@ public class ItemHelper(
     /// <returns>List of Item objects.</returns>
     public List<Item> FindBarterItems(
         string by,
-        List<Item> itemsToSearch,
-        List<MongoId> desiredBarterItemIds
+        IEnumerable<Item> itemsToSearch,
+        IEnumerable<MongoId> desiredBarterItemIds
     )
     {
         // Find required items to take after buying (handles multiple items)
@@ -933,13 +937,13 @@ public class ItemHelper(
     /// </summary>
     /// <param name="itemWithChildren">Item with mods to update.</param>
     /// <param name="newId">New id to add on children of base item.</param>
-    public void ReplaceRootItemID(List<Item> itemWithChildren, string newId = "")
+    public void ReplaceRootItemID(IEnumerable<Item> itemWithChildren, MongoId newId)
     {
         // original id on base item
-        var oldId = itemWithChildren[0].Id;
+        var oldId = itemWithChildren.First().Id;
 
         // Update base item to use new id
-        itemWithChildren[0].Id = newId;
+        itemWithChildren.First().Id = newId;
 
         // Update all parentIds of items attached to base item to use new id
         foreach (var item in itemWithChildren)
@@ -958,7 +962,7 @@ public class ItemHelper(
     /// <param name="insuredItems"></param>
     public void ReplaceProfileInventoryIds(
         BotBaseInventory inventory,
-        List<InsuredItem>? insuredItems = null
+        IEnumerable<InsuredItem>? insuredItems = null
     )
     {
         // Blacklist
@@ -1028,10 +1032,10 @@ public class ItemHelper(
     /// <param name="insuredItems">Insured items that should not have their IDs replaced</param>
     /// <param name="fastPanel">Quick slot panel</param>
     /// <returns>Items</returns>
-    public List<Item> ReplaceIDs(
-        List<Item> originalItems,
+    public IEnumerable<Item> ReplaceIDs(
+        IEnumerable<Item> originalItems,
         PmcData? pmcData,
-        List<InsuredItem>? insuredItems = null,
+        IEnumerable<InsuredItem>? insuredItems = null,
         Dictionary<string, string>? fastPanel = null
     )
     {
@@ -1090,6 +1094,7 @@ public class ItemHelper(
             }
 
             // Update quickslot id
+            // TODO: i dont think the fast panel key is a mongoid, it should be e.g. "Item4"
             if (pmcData.Inventory.FastPanel.ContainsKey(originalId))
             {
                 pmcData.Inventory.FastPanel[originalId] = newId;
@@ -1105,7 +1110,7 @@ public class ItemHelper(
     ///     Will not flag ammo or currency as FiR
     /// </summary>
     /// <param name="items">The list of items to mark as FiR</param>
-    public void SetFoundInRaid(List<Item> items)
+    public void SetFoundInRaid(IEnumerable<Item> items)
     {
         foreach (var item in items)
         {

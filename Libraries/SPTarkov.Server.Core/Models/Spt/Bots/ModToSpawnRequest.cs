@@ -48,7 +48,7 @@ public record ModToSpawnRequest
     ///     List with only weapon tpl in it, ready for mods to be added
     /// </summary>
     [JsonPropertyName("weapon")]
-    public List<Item>? Weapon { get; set; }
+    public IEnumerable<Item>? Weapon { get; set; }
 
     /// <summary>
     ///     Ammo tpl to use if slot requires a cartridge to be added (e.g. mod_magazine)

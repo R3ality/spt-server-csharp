@@ -130,7 +130,7 @@ public class HandbookHelper(
     /// </summary>
     /// <param name="items">Items to Sum</param>
     /// <returns></returns>
-    public double GetTemplatePriceForItems(List<Item> items)
+    public double GetTemplatePriceForItems(IEnumerable<Item> items)
     {
         var total = 0D;
         foreach (var item in items)

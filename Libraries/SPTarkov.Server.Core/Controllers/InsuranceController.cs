@@ -66,7 +66,7 @@ public class InsuranceController(
         var insuranceDetails = FilterInsuredItems(sessionId);
 
         // Skip profile if no insured items to process
-        if (insuranceDetails.Count == 0)
+        if (!insuranceDetails.Any())
         {
             return;
         }
@@ -80,7 +80,7 @@ public class InsuranceController(
     /// <param name="sessionId">Session/Player id</param>
     /// <param name="time">The time to check ready status against. Current time by default</param>
     /// <returns>All insured items that are ready to be processed</returns>
-    protected List<Insurance> FilterInsuredItems(MongoId sessionId, long? time = null)
+    protected IEnumerable<Insurance> FilterInsuredItems(MongoId sessionId, long? time = null)
     {
         // Use the current time by default.
         var insuranceTime = time ?? timeUtil.GetTimeStamp();
@@ -96,9 +96,7 @@ public class InsuranceController(
             }
         }
 
-        return profileInsuranceDetails
-            .Where(insured => insuranceTime >= insured.ScheduledTime)
-            .ToList();
+        return profileInsuranceDetails.Where(insured => insuranceTime >= insured.ScheduledTime);
     }
 
     /// <summary>
@@ -106,12 +104,12 @@ public class InsuranceController(
     /// </summary>
     /// <param name="insuranceDetails">The insured items to process</param>
     /// <param name="sessionId">session ID that should receive the processed items</param>
-    protected void ProcessInsuredItems(List<Insurance> insuranceDetails, MongoId sessionId)
+    protected void ProcessInsuredItems(IEnumerable<Insurance> insuranceDetails, MongoId sessionId)
     {
         if (logger.IsLogEnabled(LogLevel.Debug))
         {
             logger.Debug(
-                $"Processing {insuranceDetails.Count} insurance packages, which includes a total of: {CountAllInsuranceItems(insuranceDetails)} items, in profile: {sessionId}"
+                $"Processing {insuranceDetails.Count()} insurance packages, which includes a total of: {CountAllInsuranceItems(insuranceDetails)} items, in profile: {sessionId}"
             );
         }
 
@@ -149,7 +147,7 @@ public class InsuranceController(
     /// </summary>
     /// <param name="insuranceDetails"></param>
     /// <returns>Count of insured items</returns>
-    protected int CountAllInsuranceItems(List<Insurance> insuranceDetails)
+    protected int CountAllInsuranceItems(IEnumerable<Insurance> insuranceDetails)
     {
         return insuranceDetails.Select(ins => ins.Items.Count).Count();
     }
@@ -238,13 +236,13 @@ public class InsuranceController(
     /// <param name="insured">The insurance object containing the items to evaluate</param>
     /// <param name="itemsMap">A Dictionary for quick item look-up by item ID</param>
     /// <returns>A dictionary containing parent item IDs to arrays of their attachment items</returns>
-    protected Dictionary<string, List<Item>> PopulateParentAttachmentsMap(
+    protected Dictionary<MongoId, List<Item>> PopulateParentAttachmentsMap(
         string rootItemParentID,
         Insurance insured,
         Dictionary<MongoId, Item> itemsMap
     )
     {
-        var mainParentToAttachmentsMap = new Dictionary<string, List<Item>>();
+        var mainParentToAttachmentsMap = new Dictionary<MongoId, List<Item>>();
         foreach (var insuredItem in insured.Items)
         {
             // Use the parent ID from the item to get the parent item.
@@ -335,12 +333,12 @@ public class InsuranceController(
     /// <param name="parentAttachmentsMap">Dictionary containing parent item IDs to arrays of their attachment items</param>
     /// <param name="itemsMap">Hashset containing parent item IDs to arrays of their attachment items which are not moddable in-raid</param>
     /// <returns></returns>
-    protected Dictionary<string, List<Item>> RemoveNonModdableAttachments(
-        Dictionary<string, List<Item>> parentAttachmentsMap,
+    protected Dictionary<MongoId, List<Item>> RemoveNonModdableAttachments(
+        Dictionary<MongoId, List<Item>> parentAttachmentsMap,
         Dictionary<MongoId, Item> itemsMap
     )
     {
-        var updatedMap = new Dictionary<string, List<Item>>();
+        var updatedMap = new Dictionary<MongoId, List<Item>>();
 
         foreach (var map in parentAttachmentsMap)
         {
@@ -389,7 +387,7 @@ public class InsuranceController(
     protected void ProcessRegularItems(
         Insurance insured,
         HashSet<MongoId> toDelete,
-        Dictionary<string, List<Item>> parentAttachmentsMap
+        Dictionary<MongoId, List<Item>> parentAttachmentsMap
     )
     {
         foreach (var insuredItem in insured.Items)
@@ -436,7 +434,7 @@ public class InsuranceController(
     /// <param name="insuredTraderId">Trader ID from the Insurance object</param>
     /// <param name="toDelete">Tracked attachment ids to be removed</param>
     protected void ProcessAttachments(
-        Dictionary<string, List<Item>> mainParentToAttachmentsMap,
+        Dictionary<MongoId, List<Item>> mainParentToAttachmentsMap,
         Dictionary<MongoId, Item> itemsMap,
         MongoId? insuredTraderId,
         HashSet<MongoId> toDelete
@@ -474,7 +472,7 @@ public class InsuranceController(
     /// <param name="traderId">ID of the trader to that has ensured these items</param>
     /// <param name="toDelete">array that accumulates the IDs of the items to be deleted</param>
     protected void ProcessAttachmentByParent(
-        List<Item> attachments,
+        IEnumerable<Item> attachments,
         MongoId traderId,
         HashSet<MongoId> toDelete
     )
@@ -522,8 +520,8 @@ public class InsuranceController(
     /// <param name="attachments"></param>
     /// <param name="attachmentPrices"></param>
     protected void LogAttachmentsBeingRemoved(
-        List<MongoId> attachmentIdsToRemove,
-        List<Item> attachments,
+        IEnumerable<MongoId> attachmentIdsToRemove,
+        IEnumerable<Item> attachments,
         Dictionary<MongoId, double> attachmentPrices
     )
     {
@@ -547,7 +545,7 @@ public class InsuranceController(
     /// </summary>
     /// <param name="attachments">Item attachments</param>
     /// <returns></returns>
-    protected Dictionary<MongoId, double> WeightAttachmentsByPrice(List<Item> attachments)
+    protected Dictionary<MongoId, double> WeightAttachmentsByPrice(IEnumerable<Item> attachments)
     {
         var result = new Dictionary<MongoId, double>();
 

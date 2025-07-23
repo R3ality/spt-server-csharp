@@ -87,29 +87,29 @@ public class BuildController(
     ///     Handle client/builds/weapon/save
     /// </summary>
     /// <param name="sessionId">Session/Player id</param>
-    /// <param name="body"></param>
-    public void SaveWeaponBuild(MongoId sessionId, PresetBuildActionRequestData body)
+    /// <param name="request"></param>
+    public void SaveWeaponBuild(MongoId sessionId, PresetBuildActionRequestData request)
     {
         var pmcData = profileHelper.GetPmcProfile(sessionId);
 
         // Replace duplicate Id's. The first item is the base item.
         // The root ID and the base item ID need to match.
-        body.Items = itemHelper.ReplaceIDs(body.Items, pmcData);
-        body.Root = body.Items.FirstOrDefault().Id;
+        request.Items = itemHelper.ReplaceIDs(request.Items, pmcData);
+        request.Root = request.Items.FirstOrDefault().Id;
 
         // Create new object ready to save into profile userbuilds.weaponBuilds
         var newBuild = new WeaponBuild
         {
-            Id = body.Id,
-            Name = body.Name,
-            Root = body.Root,
-            Items = body.Items,
+            Id = request.Id,
+            Name = request.Name,
+            Root = request.Root,
+            Items = request.Items.ToList(),
         };
 
         var profile = profileHelper.GetFullProfile(sessionId);
 
         var savedWeaponBuilds = profile.UserBuildData.WeaponBuilds;
-        var existingBuild = savedWeaponBuilds.FirstOrDefault(x => x.Id == body.Id);
+        var existingBuild = savedWeaponBuilds.FirstOrDefault(x => x.Id == request.Id);
         if (existingBuild is not null)
         {
             // exists, replace
@@ -146,8 +146,8 @@ public class BuildController(
             Id = request.Id,
             Name = request.Name,
             BuildType = EquipmentBuildType.Custom,
-            Root = request.Items[0].Id,
-            Items = request.Items,
+            Root = request.Items.First().Id,
+            Items = request.Items.ToList(),
         };
 
         var existingBuild = existingSavedEquipmentBuilds?.FirstOrDefault(build =>

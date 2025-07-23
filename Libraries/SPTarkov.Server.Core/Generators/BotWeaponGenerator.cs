@@ -619,7 +619,7 @@ public class BotWeaponGenerator(
     /// <param name="botRole">The bot type we are getting the magazine for.</param>
     /// <returns>Magazine template string.</returns>
     protected MongoId? GetMagazineTemplateFromWeaponTemplate(
-        List<Item> weaponMods,
+        IEnumerable<Item> weaponMods,
         TemplateItem weaponTemplate,
         string botRole
     )

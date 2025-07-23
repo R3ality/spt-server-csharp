@@ -65,7 +65,8 @@ public class PrestigeHelper(
                 }
                 else
                 {
-                    newProfile.CharacterData.PmcData.Skills.Common.Add(skillToCopy);
+                    newProfile.CharacterData.PmcData.Skills.Common =
+                        newProfile.CharacterData.PmcData.Skills.Common.Union([skillToCopy]);
                 }
             }
 
@@ -84,7 +85,8 @@ public class PrestigeHelper(
                 }
                 else
                 {
-                    newProfile.CharacterData.PmcData.Skills.Mastering.Add(skillToCopy);
+                    newProfile.CharacterData.PmcData.Skills.Mastering =
+                        newProfile.CharacterData.PmcData.Skills.Mastering.Union([skillToCopy]);
                 }
             }
         }

@@ -552,7 +552,7 @@ public class BotLootGenerator(
                 new()
                 {
                     Id = newRootItemId,
-                    Template = itemToAddTemplate?.Id ?? string.Empty,
+                    Template = itemToAddTemplate?.Id ?? MongoId.Empty(),
                     Upd = botGeneratorHelper.GenerateExtraPropertiesForItem(
                         itemToAddTemplate,
                         botRole

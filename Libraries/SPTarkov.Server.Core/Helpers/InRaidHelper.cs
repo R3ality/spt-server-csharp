@@ -110,7 +110,7 @@ public class InRaidHelper(
     ///     Remove FiR status from items.
     /// </summary>
     /// <param name="items">Items to process</param>
-    protected void RemoveFiRStatusFromItems(List<Item> items)
+    protected void RemoveFiRStatusFromItems(IEnumerable<Item> items)
     {
         var dbItems = databaseService.GetItems();
 
@@ -225,40 +225,38 @@ public class InRaidHelper(
     /// </summary>
     /// <param name="pmcProfile">Profile to get items from</param>
     /// <returns>List of items lost on death</returns>
-    protected List<Item> GetInventoryItemsLostOnDeath(PmcData pmcProfile)
+    protected IEnumerable<Item> GetInventoryItemsLostOnDeath(PmcData pmcProfile)
     {
         var inventoryItems = pmcProfile.Inventory.Items ?? [];
         var equipmentRootId = pmcProfile?.Inventory?.Equipment;
         var questRaidItemContainerId = pmcProfile?.Inventory?.QuestRaidItems;
 
-        return inventoryItems
-            .Where(item =>
+        return inventoryItems.Where(item =>
+        {
+            // Keep items flagged as kept after death
+            if (IsItemKeptAfterDeath(pmcProfile, item))
             {
-                // Keep items flagged as kept after death
-                if (IsItemKeptAfterDeath(pmcProfile, item))
-                {
-                    return false;
-                }
-
-                // Remove normal items or quest raid items
-                if (item.ParentId == equipmentRootId || item.ParentId == questRaidItemContainerId)
-                {
-                    return true;
-                }
-
-                // Pocket items are lost on death
-                // Ensure we don't pick up pocket items from mannequins
-                if (
-                    item.SlotId.StartsWith("pocket")
-                    && pmcProfile.DoesItemHaveRootId(item, pmcProfile.Inventory.Equipment)
-                )
-                {
-                    return true;
-                }
-
                 return false;
-            })
-            .ToList();
+            }
+
+            // Remove normal items or quest raid items
+            if (item.ParentId == equipmentRootId || item.ParentId == questRaidItemContainerId)
+            {
+                return true;
+            }
+
+            // Pocket items are lost on death
+            // Ensure we don't pick up pocket items from mannequins
+            if (
+                item.SlotId.StartsWith("pocket")
+                && pmcProfile.DoesItemHaveRootId(item, pmcProfile.Inventory.Equipment)
+            )
+            {
+                return true;
+            }
+
+            return false;
+        });
     }
 
     /// <summary>

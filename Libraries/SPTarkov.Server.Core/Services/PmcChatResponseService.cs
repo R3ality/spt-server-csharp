@@ -35,7 +35,11 @@ public class PmcChatResponseService(
     /// <param name="sessionId"> Session ID </param>
     /// <param name="pmcVictims"> List of bots killed by player </param>
     /// <param name="pmcData"> Player profile </param>
-    public void SendVictimResponse(MongoId sessionId, List<Victim> pmcVictims, PmcData pmcData)
+    public void SendVictimResponse(
+        MongoId sessionId,
+        IEnumerable<Victim> pmcVictims,
+        PmcData pmcData
+    )
     {
         foreach (var victim in pmcVictims)
         {

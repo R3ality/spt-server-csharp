@@ -183,7 +183,7 @@ public class InventoryController(
     {
         // The client sends the full list of favorite items, so clear the current favorites
         pmcData.Inventory.FavoriteItems = [];
-        pmcData.Inventory.FavoriteItems.AddRange(request.Items);
+        pmcData.Inventory.FavoriteItems = pmcData.Inventory.FavoriteItems.Union(request.Items);
     }
 
     /// <summary>

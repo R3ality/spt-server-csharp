@@ -821,7 +821,7 @@ public class RepeatableQuestRewardGenerator(
         MongoId tpl,
         HashSet<MongoId> itemTplBlacklist,
         HashSet<MongoId> itemTypeBlacklist,
-        List<MongoId>? itemBaseWhitelist = null
+        IEnumerable<MongoId>? itemBaseWhitelist = null
     )
     {
         // Return early if not valid item to give as reward

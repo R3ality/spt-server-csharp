@@ -35,7 +35,7 @@ public class FenceBaseAssortGenerator(
     public void GenerateFenceBaseAssorts()
     {
         var blockedSeasonalItems = seasonalEventService.GetInactiveSeasonalEventItems();
-        var baseFenceAssort = databaseService.GetTrader(Traders.FENCE).Assort;
+        var baseFenceAssort = databaseService.GetTrader(Traders.FENCE)?.Assort;
 
         foreach (var (itemId, rootItemDb) in databaseService.GetItems())
         {
@@ -165,7 +165,7 @@ public class FenceBaseAssortGenerator(
             }
 
             // Construct preset + mods
-            var itemAndChildren = _cloner.Clone(defaultPreset.Items).ReplaceIDs().ToList();
+            var itemAndChildren = _cloner.Clone(defaultPreset.Items).ReplaceIDs();
 
             // Find root item and add some properties to it
             var rootItem = itemAndChildren.FirstOrDefault(item =>
@@ -187,7 +187,7 @@ public class FenceBaseAssortGenerator(
             var itemQualityModifier = itemHelper.GetItemQualityModifierForItems(itemAndChildren);
 
             // Multiply weapon+mods rouble price by quality modifier
-            baseFenceAssort.BarterScheme[itemAndChildren[0].Id] =
+            baseFenceAssort.BarterScheme[itemAndChildren.First().Id] =
             [
                 new()
                 {
@@ -199,7 +199,7 @@ public class FenceBaseAssortGenerator(
                 },
             ];
 
-            baseFenceAssort.LoyalLevelItems[itemAndChildren[0].Id] = 1;
+            baseFenceAssort.LoyalLevelItems[itemAndChildren.First().Id] = 1;
         }
     }
 

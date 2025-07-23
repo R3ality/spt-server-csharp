@@ -1364,15 +1364,13 @@ public class FenceService(
             if (!randomUtil.GetChance100(plateExistsChance))
             {
                 // Remove plate from armor
-                armorItemAndMods = armorItemAndMods
-                    .Where(item =>
-                        !string.Equals(
-                            item.SlotId,
-                            plateSlot.Name,
-                            StringComparison.CurrentCultureIgnoreCase
-                        )
+                armorItemAndMods = armorItemAndMods.Where(item =>
+                    !string.Equals(
+                        item.SlotId,
+                        plateSlot.Name,
+                        StringComparison.CurrentCultureIgnoreCase
                     )
-                    .ToList();
+                );
 
                 continue;
             }

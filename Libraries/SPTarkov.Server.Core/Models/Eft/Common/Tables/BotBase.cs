@@ -208,7 +208,7 @@ public record Info
 
     public MemberCategory? SelectedMemberCategory { get; set; }
 
-    public List<Ban>? Bans { get; set; }
+    public IEnumerable<Ban>? Bans { get; set; }
 
     [JsonPropertyName("lockedMoveCommands")]
     public bool? LockedMoveCommands { get; set; }
@@ -425,11 +425,14 @@ public record BotBaseInventory
     // TODO: key should be EAreaType enum
     public Dictionary<string, MongoId>? HideoutAreaStashes { get; set; } // Key = hideout area key as string
 
+    /// <summary>
+    /// key = "Item4", "Item10"
+    /// </summary>
     [JsonPropertyName("fastPanel")]
     public Dictionary<string, MongoId>? FastPanel { get; set; }
 
     [JsonPropertyName("favoriteItems")]
-    public List<MongoId>? FavoriteItems { get; set; }
+    public IEnumerable<MongoId>? FavoriteItems { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     [JsonPropertyName("hideoutCustomizationStashId")]
@@ -441,9 +444,9 @@ public record Skills
     [JsonExtensionData]
     public Dictionary<string, object>? ExtensionData { get; set; }
 
-    public List<CommonSkill> Common { get; set; }
+    public IEnumerable<CommonSkill> Common { get; set; }
 
-    public List<MasterySkill>? Mastering { get; set; }
+    public IEnumerable<MasterySkill>? Mastering { get; set; }
 
     public double? Points { get; set; }
 }
@@ -491,9 +494,9 @@ public record EftStats
     [JsonExtensionData]
     public Dictionary<string, object>? ExtensionData { get; set; }
 
-    public List<string>? CarriedQuestItems { get; set; }
+    public IEnumerable<string>? CarriedQuestItems { get; set; }
 
-    public List<Victim>? Victims { get; set; }
+    public IEnumerable<Victim>? Victims { get; set; }
 
     public double? TotalSessionExperience { get; set; }
 
@@ -510,9 +513,9 @@ public record EftStats
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public Aggressor? Aggressor { get; set; }
 
-    public List<DroppedItem>? DroppedItems { get; set; }
+    public IEnumerable<DroppedItem>? DroppedItems { get; set; }
 
-    public List<FoundInRaidItem>? FoundInRaidItems { get; set; }
+    public IEnumerable<FoundInRaidItem>? FoundInRaidItems { get; set; }
 
     public DamageHistory? DamageHistory { get; set; }
 
@@ -588,7 +591,7 @@ public record SessionCounters
     [JsonExtensionData]
     public Dictionary<string, object>? ExtensionData { get; set; }
 
-    public List<CounterKeyValue>? Items { get; set; }
+    public IEnumerable<CounterKeyValue>? Items { get; set; }
 }
 
 public record OverallCounters
@@ -604,7 +607,7 @@ public record CounterKeyValue
     [JsonExtensionData]
     public Dictionary<string, object>? ExtensionData { get; set; }
 
-    public List<string>? Key { get; set; }
+    public IEnumerable<string>? Key { get; set; }
 
     public double? Value { get; set; }
 }

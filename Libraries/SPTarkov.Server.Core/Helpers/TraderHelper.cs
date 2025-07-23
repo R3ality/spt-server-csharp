@@ -225,8 +225,8 @@ public class TraderHelper(
             else
             {
                 pmcData.Info.Bans ??= [];
-                pmcData.Info.Bans.Add(
-                    new Ban { BanType = BanType.RagFair, DateTime = newBanDateTime }
+                pmcData.Info.Bans = pmcData.Info.Bans.Union(
+                    [new Ban { BanType = BanType.RagFair, DateTime = newBanDateTime }]
                 );
             }
         }

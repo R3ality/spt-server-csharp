@@ -68,7 +68,7 @@ public class ItemBaseClassService(
     /// <param name="itemTpl"> ItemTpl item to check base classes of </param>
     /// <param name="baseClasses"> BaseClass base class to check for </param>
     /// <returns> true if item inherits from base class passed in </returns>
-    public bool ItemHasBaseClass(MongoId itemTpl, ICollection<MongoId> baseClasses)
+    public bool ItemHasBaseClass(MongoId itemTpl, IEnumerable<MongoId> baseClasses)
     {
         if (!_cacheGenerated)
         {

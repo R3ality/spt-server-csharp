@@ -257,10 +257,10 @@ public class InventoryHelper(
     /// <param name="containerFS2D">Container grid</param>
     /// <param name="itemWithChildren">Item to check fits</param>
     /// <returns>True it fits</returns>
-    public bool CanPlaceItemInContainer(int[,] containerFS2D, List<Item> itemWithChildren)
+    public bool CanPlaceItemInContainer(int[,] containerFS2D, IEnumerable<Item> itemWithChildren)
     {
         // Get x/y size of item
-        var rootItem = itemWithChildren[0];
+        var rootItem = itemWithChildren.First();
         var (sizeX, sizeY) = GetItemSize(rootItem.Template, rootItem.Id, itemWithChildren);
 
         // Look for a place to slot item into

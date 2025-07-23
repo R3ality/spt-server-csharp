@@ -624,8 +624,8 @@ public class LocationLootGenerator(
             );
 
             // Update root item properties with result of position finder
-            items[0].SlotId = "main";
-            items[0].Location = new ItemLocation
+            items.First().SlotId = "main";
+            items.First().Location = new ItemLocation
             {
                 X = result.X,
                 Y = result.Y,
@@ -1460,7 +1460,7 @@ public record ContainerGroupCount
 public class ContainerItem
 {
     [JsonPropertyName("items")]
-    public List<Item>? Items { get; set; }
+    public IEnumerable<Item>? Items { get; set; }
 
     [JsonPropertyName("width")]
     public int? Width { get; set; }

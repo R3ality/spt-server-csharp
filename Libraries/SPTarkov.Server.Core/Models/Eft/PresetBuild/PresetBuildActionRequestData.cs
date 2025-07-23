@@ -26,5 +26,5 @@ public record PresetBuildActionRequestData : IRequestData
     public string? Root { get; set; }
 
     [JsonPropertyName("Items")]
-    public List<Item>? Items { get; set; }
+    public IEnumerable<Item>? Items { get; set; }
 }
