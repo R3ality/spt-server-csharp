@@ -197,8 +197,7 @@ public class BotEquipmentModGenerator(
                 );
                 switch (plateSlotFilteringOutcome.Result)
                 {
-                    case Result.UNKNOWN_FAILURE
-                    or Result.NO_DEFAULT_FILTER:
+                    case Result.UNKNOWN_FAILURE or Result.NO_DEFAULT_FILTER:
                         if (logger.IsLogEnabled(LogLevel.Debug))
                         {
                             logger.Debug(
