@@ -2,7 +2,6 @@ using System.Text.Json.Serialization;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Enums;
 using SPTarkov.Server.Core.Utils.Json;
-using SPTarkov.Server.Core.Utils.Json.Converters;
 
 namespace SPTarkov.Server.Core.Models.Eft.Common;
 
@@ -1137,8 +1136,6 @@ public record Area
     public XYZ? Size { get; set; }
 }
 
-[EftEnumConverter]
-[EftListEnumConverter]
 public enum WildSpawnType
 {
     marksman,

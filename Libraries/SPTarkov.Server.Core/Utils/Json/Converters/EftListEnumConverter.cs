@@ -58,9 +58,3 @@ public class EftListEnumConverter<T> : JsonConverter<List<T>>
         writer.WriteEndArray();
     }
 }
-
-/// <summary>
-/// This attribute should be applied to enums which should be added as a converter to the json converter
-/// </summary>
-[AttributeUsage(AttributeTargets.Enum)]
-public class EftListEnumConverterAttribute : Attribute { }

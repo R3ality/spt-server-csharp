@@ -302,7 +302,6 @@ public record Ban
     public long? DateTime { get; set; }
 }
 
-[EftEnumConverter]
 public enum BanType
 {
     Chat,

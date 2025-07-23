@@ -204,7 +204,6 @@ public record LockableComponent
     public LockableKeyComponent? KeyComponent { get; set; }
 }
 
-[EftEnumConverter]
 public enum PinLockState
 {
     Free,
