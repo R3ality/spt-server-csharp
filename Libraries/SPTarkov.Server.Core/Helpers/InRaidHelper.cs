@@ -171,7 +171,8 @@ public class InRaidHelper(
     {
         // Get inventory item ids to remove from players profile
         var itemIdsToDeleteFromProfile = GetInventoryItemsLostOnDeath(pmcData)
-            .Select(item => item.Id);
+            .Select(item => item.Id)
+            .ToList();
         foreach (var itemIdToDelete in itemIdsToDeleteFromProfile)
         // Items inside containers are handled as part of function
         {
