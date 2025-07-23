@@ -7,9 +7,10 @@ public class EftListEnumConverterFactory : JsonConverterFactory
 {
     public override bool CanConvert(Type typeToConvert)
     {
-        return typeToConvert.IsGenericType && typeToConvert.GetGenericTypeDefinition() == typeof(List<>) &&
-               typeToConvert.GenericTypeArguments[0].IsEnum &&
-               (typeToConvert.GenericTypeArguments[0].Namespace?.Contains("SPTarkov") ?? false);
+        return typeToConvert.IsGenericType
+            && typeToConvert.GetGenericTypeDefinition() == typeof(List<>)
+            && typeToConvert.GenericTypeArguments[0].IsEnum
+            && (typeToConvert.GenericTypeArguments[0].Namespace?.Contains("SPTarkov") ?? false);
     }
 
     public override JsonConverter? CreateConverter(
@@ -19,7 +20,9 @@ public class EftListEnumConverterFactory : JsonConverterFactory
     {
         return (JsonConverter)
             Activator.CreateInstance(
-                typeof(EftListEnumConverter<>).MakeGenericType(typeToConvert.GenericTypeArguments[0])
+                typeof(EftListEnumConverter<>).MakeGenericType(
+                    typeToConvert.GenericTypeArguments[0]
+                )
             );
     }
 }

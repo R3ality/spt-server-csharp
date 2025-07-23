@@ -36,7 +36,9 @@ public class EnumerableConverter<T> : JsonConverter<IEnumerable<T>?>
             case JsonTokenType.String:
             case JsonTokenType.Number:
             case JsonTokenType.StartObject:
-                throw new Exception($"Error attempting to deserialize object, its not a valid array. Type {reader.TokenType}");
+                throw new Exception(
+                    $"Error attempting to deserialize object, its not a valid array. Type {reader.TokenType}"
+                );
 
             case JsonTokenType.StartArray:
                 var list = JsonSerializer.Deserialize<List<T>>(ref reader, options);
