@@ -303,7 +303,7 @@ public class InventoryHelper(
     /// <param name="itemWithChildren">Item to add to grid</param>
     /// <param name="containerId">Id of the container we're fitting item into</param>
     /// <param name="desiredSlotId">Slot id value to use, default is "hideout"</param>
-    public void PlaceItemInContainer(
+    public FindSlotResult PlaceItemInContainer(
         int[,] containerFS2D,
         List<Item> itemWithChildren,
         string containerId,
@@ -338,7 +338,7 @@ public class InventoryHelper(
                     serverLocalisationService.GetText("inventory-fill_container_failed", ex.Message)
                 );
 
-                return;
+                return findSlotResult;
             }
 
             // Store details for object, including container item will be placed in
@@ -354,8 +354,10 @@ public class InventoryHelper(
                 Rotation = findSlotResult.Rotation,
             };
 
-            // Success! exit
+            // Success!
         }
+
+        return findSlotResult;
     }
 
     /// <summary>
@@ -1041,7 +1043,7 @@ public class InventoryHelper(
     /// </summary>
     /// <param name="containerTpl">Container to get data for</param>
     /// <returns>blank two-dimensional array</returns>
-    public int[,] GetContainerSlotMap(string containerTpl)
+    public int[,] GetContainerSlotMap(MongoId containerTpl)
     {
         var containerTemplate = itemHelper.GetItem(containerTpl).Value;
 

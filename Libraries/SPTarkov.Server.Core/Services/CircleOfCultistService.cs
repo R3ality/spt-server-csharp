@@ -128,7 +128,7 @@ public class CircleOfCultistService(
         }
 
         var rewards = hasDirectReward
-            ? GetDirectRewards(sessionId, directRewardSettings, cultistCircleStashId)
+            ? GetDirectRewards(sessionId, directRewardSettings, cultistCircleStashId.Value)
             : GetRewardsWithinBudget(
                 GetCultistCircleRewardPool(
                     sessionId,
@@ -161,7 +161,7 @@ public class CircleOfCultistService(
     }
 
     /// <summary>
-    ///     Get the reward amount multiple value based on players hideout management skill + configs rewardPriceMultiplerMinMax values
+    ///     Get the reward amount multiple value based on players hideout management skill + configs rewardPriceMultiplierMinMax values
     /// </summary>
     /// <param name="pmcData"> Player profile </param>
     /// <param name="cultistCircleSettings"> Circle config settings </param>
@@ -198,7 +198,7 @@ public class CircleOfCultistService(
     protected void RegisterCircleOfCultistProduction(
         MongoId sessionId,
         PmcData pmcData,
-        string recipeId,
+        MongoId recipeId,
         List<Item> sacrificedItems,
         double craftingTime
     )
@@ -459,7 +459,7 @@ public class CircleOfCultistService(
     protected List<List<Item>> GetDirectRewards(
         MongoId sessionId,
         DirectRewardSettings directReward,
-        string cultistCircleStashId
+        MongoId cultistCircleStashId
     )
     {
         // Prep rewards array (reward can be item with children, hence array of arrays)
@@ -1023,12 +1023,19 @@ public class CircleOfCultistService(
 
         foreach (var itemToAdd in rewards)
         {
-            inventoryHelper.PlaceItemInContainer(
+            var result = inventoryHelper.PlaceItemInContainer(
                 containerGrid,
                 itemToAdd,
                 cultistCircleStashId,
                 CircleOfCultistSlotId
             );
+
+            if (!result.Success.GetValueOrDefault())
+            {
+                logger.Warning("Failed to place sacrifice reward");
+                continue;
+            }
+
             // Add item + mods to output and profile inventory
             pmcData.Inventory.Items.AddRange(itemToAdd);
         }
