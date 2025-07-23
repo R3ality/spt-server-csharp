@@ -3,6 +3,27 @@ using System.Text.Json.Serialization;
 
 namespace SPTarkov.Server.Core.Utils.Json.Converters;
 
+public class EftListEnumConverterFactory : JsonConverterFactory
+{
+    public override bool CanConvert(Type typeToConvert)
+    {
+        return typeToConvert.IsGenericType && typeToConvert.GetGenericTypeDefinition() == typeof(List<>) &&
+               typeToConvert.GenericTypeArguments[0].IsEnum &&
+               (typeToConvert.GenericTypeArguments[0].Namespace?.Contains("SPTarkov") ?? false);
+    }
+
+    public override JsonConverter? CreateConverter(
+        Type typeToConvert,
+        JsonSerializerOptions options
+    )
+    {
+        return (JsonConverter)
+            Activator.CreateInstance(
+                typeof(EftListEnumConverter<>).MakeGenericType(typeToConvert.GenericTypeArguments[0])
+            );
+    }
+}
+
 public class EftListEnumConverter<T> : JsonConverter<List<T>>
 {
     private static readonly JsonSerializerOptions _options = new()
