@@ -290,7 +290,7 @@ public class FenceBaseAssortGenerator(
                     .GetItem(requiredSlot.Props.Filters[0].Plate.Value)
                     .Value;
                 var plateTpl = requiredSlot.Props.Filters[0].Plate; // `Plate` property appears to be the 'default' item for slot
-                if (plateTpl is null)
+                if (plateTpl is null || plateTpl.Value.IsEmpty())
                 // Some bsg plate properties are empty, skip mod
                 {
                     continue;
