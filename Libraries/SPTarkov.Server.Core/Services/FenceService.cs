@@ -1291,7 +1291,7 @@ public class FenceService(
                 traderConfig.Fence.ArmorMaxDurabilityPercentMinMax
             );
             var plateTpl = requiredSlot.Props.Filters[0].Plate ?? string.Empty; // "Plate" property appears to be the 'default' item for slot
-            if (plateTpl == "")
+            if (plateTpl.IsEmpty())
             // Some bsg plate properties are empty, skip mod
             {
                 continue;
