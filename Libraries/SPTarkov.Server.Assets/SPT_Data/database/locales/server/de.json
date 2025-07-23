@@ -685,7 +685,7 @@
   "server_start_meme_8": "Es ist Morbin-Zeit",
   "server_start_meme_9": "S-step scav? W-was machst du?",
   "server_start_player_active_botreload_skill": "Bei deinem Charakter ist die Fertigkeit 'BotReload' aktiviert. Dies führt dazu, dass deine Waffen unnatürlich schnell nachladen. Ignoriere diese Meldung, wenn dies beabsichtigt ist",
-  "started_webserver_success": "Webserver bei %s gestartet",
+  "started_webserver_success": "Webserver unter %s gestartet",
   "trader-missing_durability_threshold_value": "Der Haltbarkeitsschwellenwert für Händler: {{traderId}} konnte nicht gefunden werden, es wird auf den Standardwert zurückgegriffen: {{value}}",
   "trader-missing_repair_property_using_default": "Händler {{traderId}} {{nickname}} fehlt ein Reparaturobjekt, Standardwerte werden hinzufügt",
   "trader-missing_repair_quality_property_using_default": "Händler: {{traderId}} {{nickname}} fehlt eine Reparatur-Qualitätseigenschaft, der Standardwert wird hinzufügt",
