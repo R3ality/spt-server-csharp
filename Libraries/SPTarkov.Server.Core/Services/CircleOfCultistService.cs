@@ -1032,7 +1032,9 @@ public class CircleOfCultistService(
 
             if (!result.Success.GetValueOrDefault())
             {
-                logger.Warning("Failed to place sacrifice reward");
+                logger.Warning(
+                    $"Failed to place sacrifice reward: {itemToAdd.FirstOrDefault()?.Template}"
+                );
                 continue;
             }
 
