@@ -15,7 +15,6 @@ public class SptJsonConverterRegistrator : IJsonConverterRegistrator
             new BaseSptLoggerReferenceConverter(),
             new ListOrTConverterFactory(),
             new DictionaryOrListConverter(),
-            new EftEnumConverter<LogLevel>(), // Special case, this belongs to a lib.
             new BaseInteractionRequestDataConverter(),
             new StringToMongoIdConverter(),
             new EftEnumConverterFactory(),

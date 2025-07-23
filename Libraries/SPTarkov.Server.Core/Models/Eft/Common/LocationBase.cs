@@ -605,7 +605,6 @@ public record BossSupport
     public string? BossEscortAmount { get; set; }
 
     [JsonPropertyName("BossEscortDifficult")]
-    [JsonConverter(typeof(ListOrTConverterFactory))]
     public ListOrT<string> BossEscortDifficulty { get; set; }
 
     [JsonPropertyName("BossEscortType")]

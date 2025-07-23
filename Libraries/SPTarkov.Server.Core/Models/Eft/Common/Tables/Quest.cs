@@ -203,7 +203,6 @@ public record QuestCondition
     ///     Can be mongoId or string e.g. event_labyrinth_06_mech_place_01
     /// </summary>
     [JsonPropertyName("target")]
-    [JsonConverter(typeof(ListOrTConverterFactory))]
     public ListOrT<string>? Target { get; set; }
 
     [JsonPropertyName("value")]
@@ -338,7 +337,6 @@ public record QuestConditionCounterCondition
     public bool? DynamicLocale { get; set; }
 
     [JsonPropertyName("target")]
-    [JsonConverter(typeof(ListOrTConverterFactory))]
     public ListOrT<string>? Target { get; set; }
 
     [JsonPropertyName("completeInSeconds")]

@@ -8,7 +8,7 @@ public class EftEnumConverterFactory : JsonConverterFactory
 {
     public override bool CanConvert(Type typeToConvert)
     {
-        return typeToConvert.IsEnum && (typeToConvert.Namespace?.Contains("SPTarkov") ?? false);
+        return typeToConvert.IsEnum;
     }
 
     public override JsonConverter? CreateConverter(
