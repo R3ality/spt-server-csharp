@@ -172,7 +172,7 @@ public class InventoryHelper(
     /// </summary>
     /// <param name="itemWithChildren">An item</param>
     /// <param name="foundInRaid">Item was found in raid</param>
-    protected void SetFindInRaidStatusForItem(List<Item> itemWithChildren, bool foundInRaid)
+    protected void SetFindInRaidStatusForItem(IEnumerable<Item> itemWithChildren, bool foundInRaid)
     {
         foreach (var item in itemWithChildren)
         {
@@ -214,7 +214,10 @@ public class InventoryHelper(
     /// <param name="sessionId">Player id</param>
     /// <param name="itemsWithChildren">Array of items with children to try and fit</param>
     /// <returns>True all items fit</returns>
-    public bool CanPlaceItemsInInventory(MongoId sessionId, List<List<Item>> itemsWithChildren)
+    public bool CanPlaceItemsInInventory(
+        MongoId sessionId,
+        IEnumerable<List<Item>> itemsWithChildren
+    )
     {
         var pmcData = profileHelper.GetPmcProfile(sessionId);
 
@@ -238,7 +241,10 @@ public class InventoryHelper(
     /// <param name="containerFS2D">Container grid to fit items into</param>
     /// <param name="itemsWithChildren">Items to try and fit into grid</param>
     /// <returns>True all fit</returns>
-    public bool CanPlaceItemsInContainer(int[,] containerFS2D, List<List<Item>> itemsWithChildren)
+    public bool CanPlaceItemsInContainer(
+        int[,] containerFS2D,
+        IEnumerable<List<Item>> itemsWithChildren
+    )
     {
         return itemsWithChildren.All(itemWithChildren =>
             CanPlaceItemInContainer(containerFS2D, itemWithChildren)
@@ -665,7 +671,7 @@ public class InventoryHelper(
     /// <param name="itemId">Items id to get size of</param>
     /// <param name="inventoryItems"></param>
     /// <returns>[width, height]</returns>
-    public (int, int) GetItemSize(MongoId itemTpl, MongoId itemId, List<Item> inventoryItems)
+    public (int, int) GetItemSize(MongoId itemTpl, MongoId itemId, IEnumerable<Item> inventoryItems)
     {
         // -> Prepares item Width and height returns [sizeX, sizeY]
         return GetSizeByInventoryItemHash(itemTpl, itemId, inventoryItems.GetInventoryItemHash());
@@ -859,7 +865,7 @@ public class InventoryHelper(
     public int[,] GetContainerMap(
         int containerSizeHorizontalX,
         int containerSizeVerticalY,
-        List<Item> itemList,
+        IEnumerable<Item> itemList,
         MongoId containerId
     )
     {
@@ -1179,7 +1185,7 @@ public class InventoryHelper(
     /// <returns>True if move was successful</returns>
     public bool MoveItemInternal(
         PmcData pmcData,
-        List<Item> inventoryItems,
+        IEnumerable<Item> inventoryItems,
         InventoryMoveRequestData moveRequest,
         out string errorMessage
     )
@@ -1193,18 +1199,18 @@ public class InventoryHelper(
         );
         if (matchingInventoryItem is null)
         {
-            var noMatchingItemMesage =
+            var noMatchingItemMessage =
                 $"Unable to move item: {moveRequest.Item}, cannot find in inventory";
-            logger.Error(noMatchingItemMesage);
+            logger.Error(noMatchingItemMessage);
 
-            errorMessage = noMatchingItemMesage;
+            errorMessage = noMatchingItemMessage;
             return false;
         }
 
         if (logger.IsLogEnabled(LogLevel.Debug))
         {
             logger.Debug(
-                $"{moveRequest.Action} item: {moveRequest.Item} from slotid: {matchingInventoryItem.SlotId} to container: {moveRequest.To.Container}"
+                $"{moveRequest.Action} item: {moveRequest.Item} from slotId: {matchingInventoryItem.SlotId} to container: {moveRequest.To.Container}"
             );
         }
 
@@ -1291,7 +1297,7 @@ public class InventoryHelper(
     /// </summary>
     /// <param name="items"></param>
     /// <param name="request"></param>
-    protected void HandleCartridgeMove(List<Item> items, InventoryMoveRequestData request)
+    protected void HandleCartridgeMove(IEnumerable<Item> items, InventoryMoveRequestData request)
     {
         // Not moving item into a cartridge slot, skip
         if (request.To.Container != "cartridges")
@@ -1326,7 +1332,7 @@ public class InventoryHelper(
         return _inventoryConfig;
     }
 
-    public void ValidateInventoryUsesMongoIds(List<Item> itemsToValidate)
+    public void ValidateInventoryUsesMongoIds(IEnumerable<Item> itemsToValidate)
     {
         var errors = itemsToValidate
             .Where(item => !item.Id.IsValidMongoId())

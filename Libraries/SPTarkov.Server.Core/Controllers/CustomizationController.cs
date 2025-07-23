@@ -40,13 +40,11 @@ public class CustomizationController(
         var clothing = databaseService.GetCustomization();
         var suits = databaseService.GetTrader(traderId).Suits;
 
-        var matchingSuits = suits?.Where(s => clothing.ContainsKey(s.SuiteId)).ToList();
-        matchingSuits = matchingSuits
-            ?.Where(s =>
-                clothing[s.SuiteId]?.Properties?.Side?.Contains(pmcData?.Info?.Side ?? string.Empty)
-                ?? false
-            )
-            .ToList();
+        var matchingSuits = suits?.Where(s => clothing.ContainsKey(s.SuiteId));
+        matchingSuits = matchingSuits?.Where(s =>
+            clothing[s.SuiteId]?.Properties?.Side?.Contains(pmcData?.Info?.Side ?? string.Empty)
+            ?? false
+        );
 
         if (matchingSuits == null)
         {
@@ -58,7 +56,7 @@ public class CustomizationController(
             );
         }
 
-        return matchingSuits;
+        return matchingSuits.ToList();
     }
 
     /// <summary>

@@ -12,7 +12,7 @@ namespace SPTarkov.Server.Core.Extensions
         /// </summary>
         /// <param name="profile">Profile to get quest items from</param>
         /// <returns>List of item objects</returns>
-        public static List<Item> GetQuestItemsInProfile(this PmcData profile)
+        public static IEnumerable<Item> GetQuestItemsInProfile(this PmcData profile)
         {
             return profile
                 ?.Inventory?.Items.Where(i => i.ParentId == profile.Inventory.QuestRaidItems)

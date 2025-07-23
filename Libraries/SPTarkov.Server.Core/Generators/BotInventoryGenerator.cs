@@ -732,7 +732,7 @@ public class BotInventoryGenerator(
     /// </summary>
     /// <param name="equipmentChances">Chances bot has certain equipment</param>
     /// <returns>What slots bot should have weapons generated for</returns>
-    public List<DesiredWeapons> GetDesiredWeaponsForBot(Chances equipmentChances)
+    public IEnumerable<DesiredWeapons> GetDesiredWeaponsForBot(Chances equipmentChances)
     {
         var shouldSpawnPrimary = randomUtil.GetChance100(
             equipmentChances.EquipmentChances["FirstPrimaryWeapon"]

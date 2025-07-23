@@ -187,7 +187,7 @@ public class FenceService(
     /// <param name="itemTpl"> The item tpl to calculate the fence price for </param>
     /// <param name="items"> The items (with its children) to calculate fence price for </param>
     /// <returns> Price of the item for Fence </returns>
-    public double? GetItemPrice(MongoId itemTpl, List<Item> items)
+    public double? GetItemPrice(MongoId itemTpl, IEnumerable<Item> items)
     {
         return itemHelper.IsOfBaseclass(itemTpl, BaseClasses.AMMO_BOX)
             ? GetAmmoBoxPrice(items) * traderConfig.Fence.ItemPriceMult
@@ -200,7 +200,7 @@ public class FenceService(
     /// </summary>
     /// <param name="items"> The ammo box (and all its children ammo items) </param>
     /// <returns> The price of the ammo box </returns>
-    protected double? GetAmmoBoxPrice(List<Item> items)
+    protected double? GetAmmoBoxPrice(IEnumerable<Item> items)
     {
         double? total = 0D;
         foreach (var item in items)
@@ -478,7 +478,7 @@ public class FenceService(
     /// <param name="generationValues"> Base counts assorts should be adjusted to </param>
     /// <returns> GenerationAssortValues object with adjustments needed to reach desired state </returns>
     protected GenerationAssortValues GetItemCountsToGenerate(
-        List<Item> assortItems,
+        IEnumerable<Item> assortItems,
         GenerationAssortValues generationValues
     )
     {
@@ -546,7 +546,7 @@ public class FenceService(
     /// </summary>
     /// <param name="assort"> Trader assort to remove item from </param>
     /// <param name="rootItems"> Pool of root items to pick from to remove </param>
-    protected void RemoveRandomItemFromAssorts(TraderAssort assort, List<Item> rootItems)
+    protected void RemoveRandomItemFromAssorts(TraderAssort assort, IEnumerable<Item> rootItems)
     {
         // Pick a random root item to remove from Fence
         var rootItemToAdjust = randomUtil.GetArrayValue(rootItems);
@@ -923,7 +923,7 @@ public class FenceService(
     protected Item? GetMatchingItem(
         Item rootItemBeingAdded,
         TemplateItem itemDbDetails,
-        List<List<Item>> itemsWithChildren
+        IEnumerable<List<Item>> itemsWithChildren
     )
     {
         // Get matching root items
@@ -967,7 +967,7 @@ public class FenceService(
                 && rootItemBeingAdded.Upd?.MedKit?.HpResource == item.Upd?.MedKit?.HpResource
             )
             // e.g. bandages with multiple use
-            // Both undefined === both max resoruce left
+            // Both undefined === both max resource left
             {
                 return item;
             }
@@ -1243,7 +1243,7 @@ public class FenceService(
     /// </summary>
     /// <param name="armor"> Armor item array to add mods into </param>
     /// <param name="itemDbDetails"> Armor items db template </param>
-    protected void RandomiseArmorModDurability(List<Item> armor, TemplateItem itemDbDetails)
+    protected void RandomiseArmorModDurability(IEnumerable<Item> armor, TemplateItem itemDbDetails)
     {
         // Armor has no mods, nothing to randomise
         if (itemDbDetails.Properties.Slots == null)
@@ -1251,20 +1251,18 @@ public class FenceService(
             return;
         }
 
-        // Check for and adjust soft insert durability values
-        var requiredSlots = itemDbDetails
-            .Properties.Slots?.Where(slot => slot.Required ?? false)
-            .ToList();
-        if ((requiredSlots?.Count ?? 0) > 1)
+        var requiredSlots = itemDbDetails.Properties.Slots?.Where(slot => slot.Required ?? false);
+        if (requiredSlots is not null && requiredSlots.Any())
         {
+            // Has soft inserts, randomise
             RandomiseArmorSoftInsertDurabilities(requiredSlots, armor);
         }
 
         // Check for and adjust plate durability values
-        var plateSlots = itemDbDetails
-            .Properties.Slots?.Where(slot => itemHelper.IsRemovablePlateSlot(slot.Name))
-            .ToList();
-        if ((plateSlots?.Count ?? 0) > 1)
+        var plateSlots = itemDbDetails.Properties.Slots?.Where(slot =>
+            itemHelper.IsRemovablePlateSlot(slot.Name)
+        );
+        if (plateSlots is not null && plateSlots.Any())
         {
             RandomiseArmorInsertsDurabilities(plateSlots, armor);
         }
@@ -1276,8 +1274,8 @@ public class FenceService(
     /// <param name="softInsertSlots"> Slots of items to randomise </param>
     /// <param name="armorItemAndMods"> Array of armor + inserts to get items from </param>
     protected void RandomiseArmorSoftInsertDurabilities(
-        List<Slot> softInsertSlots,
-        List<Item> armorItemAndMods
+        IEnumerable<Slot> softInsertSlots,
+        IEnumerable<Item> armorItemAndMods
     )
     {
         foreach (var requiredSlot in softInsertSlots)
@@ -1308,7 +1306,7 @@ public class FenceService(
 
             itemHelper.AddUpdObjectToItem(modItemToAdjust);
 
-            // Ensure property isn't null
+            // Fence assorts can be null, ensure they have defaults
             modItemToAdjust.Upd.Repairable ??= new UpdRepairable
             {
                 Durability = modItemDbDetails.Properties.MaxDurability,
@@ -1343,8 +1341,8 @@ public class FenceService(
     /// <param name="plateSlots"> Slots of items to randomise </param>
     /// <param name="armorItemAndMods"> Array of armor + inserts to get items from </param>
     protected void RandomiseArmorInsertsDurabilities(
-        List<Slot> plateSlots,
-        List<Item> armorItemAndMods
+        IEnumerable<Slot> plateSlots,
+        IEnumerable<Item> armorItemAndMods
     )
     {
         foreach (var plateSlot in plateSlots)
@@ -1355,8 +1353,6 @@ public class FenceService(
             {
                 continue;
             }
-
-            var armorWithMods = armorItemAndMods;
 
             var modItemDbDetails = itemHelper.GetItem(plateTpl.Value).Value;
 
@@ -1386,14 +1382,14 @@ public class FenceService(
             );
 
             // Find items mod to apply durability changes to
-            var modItemToAdjust = armorWithMods.FirstOrDefault(mod =>
+            var modItemToAdjust = armorItemAndMods.FirstOrDefault(mod =>
                 string.Equals(mod.SlotId, plateSlot.Name, StringComparison.OrdinalIgnoreCase)
             );
 
             if (modItemToAdjust == null)
             {
                 logger.Warning(
-                    $"Unable to randomise armor items {armorWithMods[0].Template} {plateSlot.Name} slot as it cannot be found, skipping"
+                    $"Unable to randomise armor items {armorItemAndMods.First().Template} {plateSlot.Name} slot as it cannot be found, skipping"
                 );
                 continue;
             }

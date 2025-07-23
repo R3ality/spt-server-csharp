@@ -234,7 +234,7 @@ namespace SPTarkov.Server.Core.Extensions
         ///     Gets the identifier for a child using slotId, locationX and locationY.
         /// </summary>
         /// <param name="item">Item.</param>
-        /// <returns>SlotId OR slotid, locationX, locationY.</returns>
+        /// <returns>SlotId OR slotId, locationX, locationY.</returns>
         public static string GetChildId(this Item item)
         {
             if (item.Location is null)
@@ -365,7 +365,7 @@ namespace SPTarkov.Server.Core.Extensions
         /// </summary>
         /// <param name="items">Inventory items to look for secure container in</param>
         /// <returns>List of ids</returns>
-        public static List<MongoId> GetSecureContainerItems(this List<Item> items)
+        public static List<MongoId> GetSecureContainerItems(this IEnumerable<Item> items)
         {
             var secureContainer = items.First(x => x.SlotId == "SecuredContainer");
 
@@ -417,7 +417,7 @@ namespace SPTarkov.Server.Core.Extensions
         /// <param name="newId">Optional: new id to use</param>
         /// <returns>New root id</returns>
         public static MongoId RemapRootItemId(
-            this List<Item> itemWithChildren,
+            this IEnumerable<Item> itemWithChildren,
             MongoId? newId = null
         )
         {
@@ -450,7 +450,7 @@ namespace SPTarkov.Server.Core.Extensions
         /// </summary>
         /// <param name="inventoryItems">Items to hash</param>
         /// <returns>InventoryItemHash</returns>
-        public static InventoryItemHash GetInventoryItemHash(this List<Item> inventoryItems)
+        public static InventoryItemHash GetInventoryItemHash(this IEnumerable<Item> inventoryItems)
         {
             // Group by parentId + turn value into mongoId as we've filtered out non-mongoId values
             var byParentId = inventoryItems

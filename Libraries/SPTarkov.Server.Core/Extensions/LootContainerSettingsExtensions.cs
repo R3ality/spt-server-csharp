@@ -44,7 +44,7 @@ namespace SPTarkov.Server.Core.Extensions
         /// <returns>rouble amount</returns>
         private static double GetContainerRoubleTotalByLevel(
             int botLevel,
-            List<MinMaxLootValue> containerLootValuesPool
+            IEnumerable<MinMaxLootValue> containerLootValuesPool
         )
         {
             var matchingValue = containerLootValuesPool.FirstOrDefault(minMaxValue =>

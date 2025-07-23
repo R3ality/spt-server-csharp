@@ -12,7 +12,10 @@ namespace SPTarkov.Server.Core.Extensions
         /// </summary>
         /// <param name="fullProfile">Profile to add clothing to</param>
         /// <param name="clothingIds">Clothing Ids to add to profile</param>
-        public static void AddSuitsToProfile(this SptProfile fullProfile, List<MongoId> clothingIds)
+        public static void AddSuitsToProfile(
+            this SptProfile fullProfile,
+            IEnumerable<MongoId> clothingIds
+        )
         {
             fullProfile.CustomisationUnlocks ??= [];
 

@@ -566,13 +566,13 @@ public class ItemHelper(
     /// <param name="skipArmorItemsWithoutDurability">Skip over armor items without durability</param>
     /// <returns>% quality modifier between 0 and 1</returns>
     public double GetItemQualityModifierForItems(
-        List<Item> itemWithChildren,
+        IEnumerable<Item> itemWithChildren,
         bool skipArmorItemsWithoutDurability = false
     )
     {
-        if (IsOfBaseclass(itemWithChildren[0].Template, BaseClasses.WEAPON))
+        if (IsOfBaseclass(itemWithChildren.First().Template, BaseClasses.WEAPON))
         {
-            return Math.Round(GetItemQualityModifier(itemWithChildren[0]), 5);
+            return Math.Round(GetItemQualityModifier(itemWithChildren.First()), 5);
         }
 
         var qualityModifier = 0D;
@@ -1712,13 +1712,12 @@ public class ItemHelper(
     /// </summary>
     /// <param name="desiredBaseType">Item base type wanted</param>
     /// <returns>Array of tpls</returns>
-    public List<MongoId> GetItemTplsOfBaseType(string desiredBaseType)
+    public IEnumerable<MongoId> GetItemTplsOfBaseType(string desiredBaseType)
     {
         return databaseService
             .GetItems()
             .Values.Where(item => item.Parent == desiredBaseType)
-            .Select(item => item.Id)
-            .ToList();
+            .Select(item => item.Id);
     }
 
     /// <summary>

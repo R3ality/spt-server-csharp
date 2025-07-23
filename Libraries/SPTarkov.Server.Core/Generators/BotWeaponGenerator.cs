@@ -156,12 +156,13 @@ public class BotWeaponGenerator(
 
         // Create with just base weapon item
         var weaponWithModsArray = ConstructWeaponBaseList(
-            weaponTpl,
-            weaponParentId,
-            slotName,
-            weaponItemTemplate,
-            botRole
-        );
+                weaponTpl,
+                weaponParentId,
+                slotName,
+                weaponItemTemplate,
+                botRole
+            )
+            .ToList();
 
         // Chance to add randomised weapon enhancement
         if (isPmc && randomUtil.GetChance100(_pmcConfig.WeaponHasEnhancementChancePercent))
@@ -276,7 +277,7 @@ public class BotWeaponGenerator(
     protected void AddCartridgeToChamber(
         List<Item> weaponWithModsList,
         MongoId ammoTemplate,
-        List<string> chamberSlotIds
+        IEnumerable<string> chamberSlotIds
     )
     {
         foreach (var slotId in chamberSlotIds)
@@ -315,7 +316,7 @@ public class BotWeaponGenerator(
     /// <param name="weaponItemTemplate">Database template for weapon</param>
     /// <param name="botRole">For durability values</param>
     /// <returns>Base weapon item in a list</returns>
-    protected List<Item> ConstructWeaponBaseList(
+    protected IEnumerable<Item> ConstructWeaponBaseList(
         MongoId weaponTemplate,
         string weaponParentId,
         string equipmentSlot,
@@ -405,7 +406,7 @@ public class BotWeaponGenerator(
     /// <param name="weaponItemList">Weapon + mods</param>
     /// <param name="botRole">Role of bot weapon is for</param>
     /// <returns>True if valid</returns>
-    protected bool IsWeaponValid(List<Item> weaponItemList, string botRole)
+    protected bool IsWeaponValid(IEnumerable<Item> weaponItemList, string botRole)
     {
         foreach (var mod in weaponItemList)
         {
@@ -878,12 +879,12 @@ public class BotWeaponGenerator(
         }
 
         // Magazine, usually
-        var parentItem = itemHelper.GetItem(magazineTemplate.Parent).Value;
+        var parentDbItem = itemHelper.GetItem(magazineTemplate.Parent).Value;
 
         // Revolver shotgun (MTs-255-12) uses a magazine with chambers, not cartridges ("camora_xxx")
         // Exchange of the camora ammo is not necessary we could also just check for stackSize > 0 here
         // and remove the else
-        if (botWeaponGeneratorHelper.MagazineIsCylinderRelated(parentItem.Name))
+        if (botWeaponGeneratorHelper.MagazineIsCylinderRelated(parentDbItem.Name))
         {
             FillCamorasWithAmmo(weaponMods, magazine.Id, cartridgeTemplate);
         }
@@ -904,9 +905,9 @@ public class BotWeaponGenerator(
     /// <param name="weaponMods">Weapon with children.</param>
     /// <param name="ubglMod">Underbarrrel grenade launcher item.</param>
     /// <param name="ubglAmmoTpl">Grenade ammo template.</param>
-    protected void FillUbgl(List<Item> weaponMods, Item ubglMod, MongoId ubglAmmoTpl)
+    protected void FillUbgl(IEnumerable<Item> weaponMods, Item ubglMod, MongoId ubglAmmoTpl)
     {
-        weaponMods.Add(
+        weaponMods.Append(
             new Item
             {
                 Id = new MongoId(),
@@ -975,7 +976,11 @@ public class BotWeaponGenerator(
     /// <param name="weaponMods">Weapon mods to find and update camora mod(s) from</param>
     /// <param name="magazineId">Magazine id to find and add to</param>
     /// <param name="ammoTpl">Ammo template id to hydrate with</param>
-    protected void FillCamorasWithAmmo(List<Item> weaponMods, MongoId magazineId, MongoId ammoTpl)
+    protected void FillCamorasWithAmmo(
+        IEnumerable<Item> weaponMods,
+        MongoId magazineId,
+        MongoId ammoTpl
+    )
     {
         // for CylinderMagazine we exchange the ammo in the "camoras".
         // This might not be necessary since we already filled the camoras with a random whitelisted and compatible ammo type,

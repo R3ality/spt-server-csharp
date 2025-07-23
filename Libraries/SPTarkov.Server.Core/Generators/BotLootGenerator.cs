@@ -667,7 +667,7 @@ public class BotLootGenerator(
     /// </summary>
     /// <param name="walletId"> Wallet to add loot to</param>
     /// <returns>Generated list of currency stacks with the wallet as their parent</returns>
-    public List<List<Item>> CreateWalletLoot(string walletId)
+    public List<List<Item>> CreateWalletLoot(MongoId walletId)
     {
         List<List<Item>> result = [];
 

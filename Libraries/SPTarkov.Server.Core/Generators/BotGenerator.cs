@@ -631,9 +631,9 @@ public class BotGenerator(
     /// </summary>
     /// <param name="bodyParts">Body parts</param>
     /// <returns>Part with the lowest hp</returns>
-    protected BodyPart? GetLowestHpBodyPart(List<BodyPart> bodyParts)
+    protected BodyPart? GetLowestHpBodyPart(IEnumerable<BodyPart> bodyParts)
     {
-        if (bodyParts.Count == 0)
+        if (!bodyParts.Any())
         {
             return null;
         }

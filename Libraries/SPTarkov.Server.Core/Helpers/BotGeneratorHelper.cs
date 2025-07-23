@@ -318,7 +318,7 @@ public class BotGeneratorHelper(
     /// <param name="equipmentSlot">Slot the item will be placed into</param>
     /// <returns>false if no incompatibilities, also has incompatibility reason</returns>
     public ChooseRandomCompatibleModResult IsItemIncompatibleWithCurrentItems(
-        List<Item> itemsEquipped,
+        IEnumerable<Item> itemsEquipped,
         MongoId tplToCheck,
         string equipmentSlot
     )
@@ -335,9 +335,10 @@ public class BotGeneratorHelper(
         }
 
         // TODO: Can probably be optimized to cache itemTemplates as items are added to inventory
-        var equippedItemsDb = itemsEquipped
-            .Select(equippedItem => itemHelper.GetItem(equippedItem.Template).Value)
-            .ToList();
+        var equippedItemsDb = itemsEquipped.Select(equippedItem =>
+            itemHelper.GetItem(equippedItem.Template).Value
+        );
+
         var (itemIsValid, itemToEquip) = itemHelper.GetItem(tplToCheck);
 
         if (!itemIsValid)
@@ -380,7 +381,7 @@ public class BotGeneratorHelper(
         }
 
         // Does an equipped item have a property that blocks the desired item - check for prop "BlocksX" .e.g BlocksEarpiece / BlocksFaceCover
-        var templateItems = equippedItemsDb.ToList();
+        var templateItems = equippedItemsDb;
         var blockingItem = templateItems.FirstOrDefault(item =>
             HasBlockingProperty(item, equipmentSlot)
         );
@@ -542,7 +543,7 @@ public class BotGeneratorHelper(
         HashSet<EquipmentSlots> equipmentSlots,
         MongoId rootItemId,
         MongoId rootItemTplId,
-        List<Item> itemWithChildren,
+        IEnumerable<Item> itemWithChildren,
         BotBaseInventory inventory,
         HashSet<string>? containersIdFull = null
     )
@@ -718,7 +719,7 @@ public class BotGeneratorHelper(
     /// <returns></returns>
     protected List<Item> GetContainerItemsWithChildren(
         IEnumerable<Item> containerRootItems,
-        List<Item> inventoryItems
+        IEnumerable<Item> inventoryItems
     )
     {
         var result = new List<Item>();
@@ -729,7 +730,7 @@ public class BotGeneratorHelper(
         }
 
         // Filter out all items without location prop, (child items)
-        var itemsWithoutLocation = inventoryItems.Where(item => item.Location is null).ToList();
+        var itemsWithoutLocation = inventoryItems.Where(item => item.Location is null);
         foreach (var rootItem in containerRootItems)
         {
             // Check item in container for children, store for later insertion into `containerItemsToCheck`

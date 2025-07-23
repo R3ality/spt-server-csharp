@@ -117,7 +117,7 @@ public class MailSendService(
         MongoId? trader,
         MessageType messageType,
         string messageLocaleId,
-        List<Item>? items,
+        IEnumerable<Item>? items,
         long? maxStorageTimeSeconds = 172800,
         SystemData? systemData = null,
         MessageContentRagfair? ragfair = null
@@ -145,9 +145,8 @@ public class MailSendService(
             Items = [],
         };
 
-        // add items to message
-
-        if (items?.Count > 0)
+        // Add items to message
+        if (items is not null && items.Any())
         {
             details.Items.AddRange(items);
             details.ItemsMaxStorageLifetimeSeconds =

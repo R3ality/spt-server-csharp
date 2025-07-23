@@ -926,7 +926,7 @@ public class LocationLifecycleService(
 
         if (isDead)
         {
-            if (lostQuestItems.Count > 0)
+            if (lostQuestItems.Any())
             // MUST occur AFTER quests have post raid quest data has been merged "processPostRaidQuests()"
             // Player is dead + had quest items, check and fix any broken find item quests
             {
@@ -981,8 +981,8 @@ public class LocationLifecycleService(
     /// <param name="profileQuests"> Quest status data from player profile </param>
     protected void CheckForAndFixPickupQuestsAfterDeath(
         MongoId sessionId,
-        List<Item> lostQuestItems,
-        List<QuestStatus> profileQuests
+        IEnumerable<Item> lostQuestItems,
+        IEnumerable<QuestStatus> profileQuests
     )
     {
         // Exclude completed quests

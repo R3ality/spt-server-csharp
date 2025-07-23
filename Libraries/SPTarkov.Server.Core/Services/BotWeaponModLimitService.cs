@@ -68,7 +68,7 @@ public class BotWeaponModLimitService(
         TemplateItem modTemplate,
         BotModLimits modLimits,
         TemplateItem modsParent,
-        List<Item> weapon
+        IEnumerable<Item> weapon
     )
     {
         // If mod or mods parent is the NcSTAR MPR45 Backup mount, allow it as it looks cool
@@ -115,11 +115,11 @@ public class BotWeaponModLimitService(
             );
         }
 
-        // Don't allow multple mounts on a weapon (except when mount is on another mount)
+        // Don't allow multiple mounts on a weapon (except when mount is on another mount)
         // Fail when:
         // Over or at scope limit on weapon
         // Item being added is a mount but the parent item is NOT a mount (Allows red dot sub-mounts on mounts)
-        // Mount has one slot and its for a mod_scope
+        // Mount has one slot and it is for a mod_scope
         if (
             modLimits.Scope.Count >= modLimits.ScopeMax
             && modTemplate.Properties.Slots?.Count == 1
