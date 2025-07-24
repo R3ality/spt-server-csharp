@@ -45,7 +45,9 @@ public class InRaidHelperTests
         Assert.LessOrEqual(pmcData.Inventory.Items.Count, initialItemCount);
 
         // Verify that the method completed without throwing collection modification exception
-        Assert.Pass("DeleteInventory completed successfully without collection modification exception");
+        Assert.Pass(
+            "DeleteInventory completed successfully without collection modification exception"
+        );
     }
 
     private static PmcData CreateTestPmcData()
@@ -61,21 +63,21 @@ public class InRaidHelperTests
                 Id = new MongoId(),
                 Template = new MongoId("507f1f77bcf86cd799439011"), // weapon_ak74
                 ParentId = equipmentId.ToString(),
-                SlotId = "FirstPrimaryWeapon"
+                SlotId = "FirstPrimaryWeapon",
             },
             new()
             {
                 Id = new MongoId(),
                 Template = new MongoId("507f1f77bcf86cd799439012"), // ammo_545x39
                 ParentId = equipmentId.ToString(),
-                SlotId = "pocket1"
+                SlotId = "pocket1",
             },
             new()
             {
                 Id = new MongoId(),
                 Template = new MongoId("507f1f77bcf86cd799439013"), // medkit
                 ParentId = equipmentId.ToString(),
-                SlotId = "pocket2"
+                SlotId = "pocket2",
             },
             // Quest raid items (should be removed)
             new()
@@ -83,7 +85,7 @@ public class InRaidHelperTests
                 Id = new MongoId(),
                 Template = new MongoId("507f1f77bcf86cd799439014"), // quest_item
                 ParentId = questRaidItemsId.ToString(),
-                SlotId = "quest"
+                SlotId = "quest",
             },
             // Stash items (should be kept) - these have ParentId = null
             new()
@@ -91,22 +93,22 @@ public class InRaidHelperTests
                 Id = new MongoId(),
                 Template = new MongoId("507f1f77bcf86cd799439015"), // money
                 ParentId = null,
-                SlotId = "hideout"
+                SlotId = "hideout",
             },
             new()
             {
                 Id = new MongoId(),
                 Template = new MongoId("507f1f77bcf86cd799439016"), // another stash item
                 ParentId = null,
-                SlotId = "hideout"
+                SlotId = "hideout",
             },
             new()
             {
                 Id = new MongoId(),
                 Template = new MongoId("507f1f77bcf86cd799439017"), // third stash item
                 ParentId = null,
-                SlotId = "hideout"
-            }
+                SlotId = "hideout",
+            },
         };
 
         return new PmcData
@@ -117,9 +119,9 @@ public class InRaidHelperTests
                 Items = items,
                 Equipment = equipmentId,
                 QuestRaidItems = questRaidItemsId,
-                FastPanel = new Dictionary<string, MongoId>()
+                FastPanel = new Dictionary<string, MongoId>(),
             },
-            InsuredItems = []
+            InsuredItems = [],
         };
     }
 }
