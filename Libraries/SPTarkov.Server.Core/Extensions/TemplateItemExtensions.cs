@@ -63,5 +63,23 @@ namespace SPTarkov.Server.Core.Extensions
 
             return relatedItemDbModSlot?.Props?.Filters?.FirstOrDefault()?.Plate;
         }
+
+        /// <summary>
+        ///     Does the passed in <see cref="TemplateItem"/> lack slots, cartridges or chambers
+        /// </summary>
+        /// <param name="item">Item to check</param>
+        /// <returns>True if it lacks cartridges/chamber slots, False if not</returns>
+        public static bool HasNoSlotsCartridgesOrChambers(this TemplateItem item)
+        {
+            if (item.Properties is null)
+            {
+                return true;
+            }
+
+            return item.Properties.Slots is null
+                || !item.Properties.Slots.Any()
+                    && (item.Properties.Cartridges is null || !item.Properties.Cartridges.Any())
+                    && (item.Properties.Chambers is null || !item.Properties.Chambers.Any());
+        }
     }
 }
