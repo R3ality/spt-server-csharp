@@ -18,10 +18,10 @@ public record Globals
     public LocationInfection LocationInfection { get; set; }
 
     [JsonPropertyName("bot_presets")]
-    public List<BotPreset> BotPresets { get; set; }
+    public IEnumerable<BotPreset> BotPresets { get; set; }
 
     [JsonPropertyName("BotWeaponScatterings")]
-    public List<BotWeaponScattering> BotWeaponScatterings { get; set; }
+    public IEnumerable<BotWeaponScattering> BotWeaponScatterings { get; set; }
 
     [JsonPropertyName("ItemPresets")]
     public Dictionary<MongoId, Preset> ItemPresets { get; set; }
@@ -48,7 +48,7 @@ public record PlayerSettings
     public double MinStepSoundVolumeMultiplier { get; set; }
 
     [JsonPropertyName("MovementRolloffMultipliers")]
-    public List<MovementRolloffMultiplier> MovementRolloffMultipliers { get; set; }
+    public IEnumerable<MovementRolloffMultiplier> MovementRolloffMultipliers { get; set; }
 
     [JsonPropertyName("OutdoorRolloffMult")]
     public double OutdoorRolloffMultiplier { get; set; }
@@ -88,7 +88,7 @@ public record RadioBroadcastSettings
     public bool EnabledBroadcast { get; set; }
 
     [JsonPropertyName("RadioStations")]
-    public List<RadioStation> RadioStations { get; set; }
+    public IEnumerable<RadioStation> RadioStations { get; set; }
 }
 
 public record RadioStation
@@ -181,10 +181,10 @@ public record ArtilleryMapSettings
     public double InitCalledShellingTime { get; set; }
 
     [JsonPropertyName("ShellingZones")]
-    public List<ShellingZone> ShellingZones { get; set; }
+    public IEnumerable<ShellingZone> ShellingZones { get; set; }
 
     [JsonPropertyName("Brigades")]
-    public List<Brigade> Brigades { get; set; }
+    public IEnumerable<Brigade> Brigades { get; set; }
 
     [JsonPropertyName("ArtilleryShellingAirDropSettings")]
     public ArtilleryShellingAirDropSettings ArtilleryShellingAirDropSettings { get; set; }
@@ -235,7 +235,7 @@ public record ShellingZone
     public XYZ ExplosionDistanceRange { get; set; }
 
     [JsonPropertyName("AlarmStages")]
-    public List<AlarmStage> AlarmStages { get; set; }
+    public IEnumerable<AlarmStage> AlarmStages { get; set; }
 
     [JsonPropertyName("BeforeShellingSignalTime")]
     public double BeforeShellingSignalTime { get; set; }
@@ -268,7 +268,7 @@ public record Brigade
     public double Id { get; set; }
 
     [JsonPropertyName("ArtilleryGuns")]
-    public List<ArtilleryGun> ArtilleryGuns { get; set; }
+    public IEnumerable<ArtilleryGun> ArtilleryGuns { get; set; }
 }
 
 public record ArtilleryGun
@@ -1329,7 +1329,7 @@ public record Exp
     public Level Level { get; set; }
 
     [JsonPropertyName("loot_attempts")]
-    public List<LootAttempt> LootAttempts { get; set; }
+    public IEnumerable<LootAttempt> LootAttempts { get; set; }
 
     // Confirmed in client
     [JsonPropertyName("expForLevelOneDogtag")]
@@ -1408,7 +1408,7 @@ public record MatchEnd
     public double TransitExperienceReward { get; set; }
 
     [JsonPropertyName("transit_mult")]
-    public List<Dictionary<string, double>> TransitMultiplier { get; set; }
+    public IEnumerable<Dictionary<string, double>> TransitMultiplier { get; set; }
 }
 
 public record Kill
@@ -1507,7 +1507,7 @@ public record Armor
     public Dictionary<string, object>? ExtensionData { get; set; }
 
     [JsonPropertyName("class")]
-    public List<Class> Classes { get; set; }
+    public IEnumerable<Class> Classes { get; set; }
 }
 
 public record Class
@@ -1529,7 +1529,7 @@ public record Mastering
     public string Name { get; set; }
 
     [JsonPropertyName("Templates")]
-    public List<MongoId> Templates { get; set; }
+    public IEnumerable<MongoId> Templates { get; set; }
 
     [JsonPropertyName("Progress")]
     public double Progress { get; set; }
@@ -1558,7 +1558,7 @@ public record Customization
     public Dictionary<string, WildFeet> Feet { get; set; }
 
     [JsonPropertyName("CustomizationVoice")]
-    public List<CustomizationVoice> VoiceOptions { get; set; }
+    public IEnumerable<CustomizationVoice> VoiceOptions { get; set; }
 
     [JsonPropertyName("BodyParts")]
     public BodyParts BodyParts { get; set; }
@@ -2281,7 +2281,7 @@ public record Stimulator
 
     public double BuffLoopTime { get; set; }
 
-    public Dictionary<string, List<Buff>> Buffs { get; set; }
+    public Dictionary<string, IEnumerable<Buff>> Buffs { get; set; }
 }
 
 public record Buff
@@ -2762,7 +2762,7 @@ public record RagFair
     public float RenewPricePerHour { get; set; }
 
     [JsonPropertyName("maxActiveOfferCount")]
-    public List<MaxActiveOfferCount> MaxActiveOfferCount { get; set; }
+    public IEnumerable<MaxActiveOfferCount> MaxActiveOfferCount { get; set; }
 
     [JsonPropertyName("balancerRemovePriceCoefficient")]
     public float BalancerRemovePriceCoefficient { get; set; }
@@ -2810,7 +2810,7 @@ public record RagFair
     public double ChangePriceCoef { get; set; }
 
     [JsonPropertyName("ItemRestrictions")]
-    public List<ItemGlobalRestrictions> ItemRestrictions { get; set; }
+    public IEnumerable<ItemGlobalRestrictions> ItemRestrictions { get; set; }
 
     [JsonPropertyName("balancerUserItemSaleCooldownEnabled")]
     public bool BalancerUserItemSaleCooldownEnabled { get; set; }
@@ -3117,7 +3117,7 @@ public record RequirementReferences
     public Dictionary<string, object>? ExtensionData { get; set; }
 
     [JsonPropertyName("Alpinist")]
-    public List<Alpinist> Alpinists { get; set; }
+    public IEnumerable<Alpinist> Alpinists { get; set; }
 }
 
 public record Alpinist
@@ -3398,7 +3398,7 @@ public record BtrMapConfig
     public string MapID { get; set; }
 
     [JsonPropertyName("pathsConfigurations")]
-    public List<PathConfig> PathsConfigurations { get; set; }
+    public IEnumerable<PathConfig> PathsConfigurations { get; set; }
 }
 
 public record PathConfig
@@ -3542,7 +3542,7 @@ public record SkillsSettings
     public WeaponSkills Revolver { get; set; }
 
     [JsonPropertyName("SMG")]
-    public List<object> SMG { get; set; }
+    public IEnumerable<object> SMG { get; set; }
 
     [JsonPropertyName("Assault")]
     public WeaponSkills Assault { get; set; }
@@ -3554,16 +3554,16 @@ public record SkillsSettings
     public WeaponSkills Sniper { get; set; }
 
     [JsonPropertyName("LMG")]
-    public List<object> LMG { get; set; }
+    public IEnumerable<object> LMG { get; set; }
 
     [JsonPropertyName("HMG")]
-    public List<object> HMG { get; set; }
+    public IEnumerable<object> HMG { get; set; }
 
     [JsonPropertyName("Launcher")]
-    public List<object> Launcher { get; set; }
+    public IEnumerable<object> Launcher { get; set; }
 
     [JsonPropertyName("AttachedLauncher")]
-    public List<object> AttachedLauncher { get; set; }
+    public IEnumerable<object> AttachedLauncher { get; set; }
 
     [JsonPropertyName("Melee")]
     public MeleeSkill Melee { get; set; }
@@ -3572,58 +3572,58 @@ public record SkillsSettings
     public WeaponSkills DMR { get; set; }
 
     [JsonPropertyName("BearAssaultoperations")]
-    public List<object> BearAssaultoperations { get; set; }
+    public IEnumerable<object> BearAssaultoperations { get; set; }
 
     [JsonPropertyName("BearAuthority")]
-    public List<object> BearAuthority { get; set; }
+    public IEnumerable<object> BearAuthority { get; set; }
 
     [JsonPropertyName("BearAksystems")]
-    public List<object> BearAksystems { get; set; }
+    public IEnumerable<object> BearAksystems { get; set; }
 
     [JsonPropertyName("BearHeavycaliber")]
-    public List<object> BearHeavycaliber { get; set; }
+    public IEnumerable<object> BearHeavycaliber { get; set; }
 
     [JsonPropertyName("BearRawpower")]
-    public List<object> BearRawpower { get; set; }
+    public IEnumerable<object> BearRawpower { get; set; }
 
     [JsonPropertyName("BipodErgonomicsBonusPerLevel")]
     public double BipodErgonomicsBonusPerLevel { get; set; }
 
     [JsonPropertyName("UsecArsystems")]
-    public List<object> UsecArsystems { get; set; }
+    public IEnumerable<object> UsecArsystems { get; set; }
 
     [JsonPropertyName("UsecDeepweaponmodding_Settings")]
-    public List<object> UsecDeepweaponmodding_Settings { get; set; }
+    public IEnumerable<object> UsecDeepweaponmodding_Settings { get; set; }
 
     [JsonPropertyName("UsecLongrangeoptics_Settings")]
-    public List<object> UsecLongrangeoptics_Settings { get; set; }
+    public IEnumerable<object> UsecLongrangeoptics_Settings { get; set; }
 
     [JsonPropertyName("UsecNegotiations")]
-    public List<object> UsecNegotiations { get; set; }
+    public IEnumerable<object> UsecNegotiations { get; set; }
 
     [JsonPropertyName("UsecTactics")]
-    public List<object> UsecTactics { get; set; }
+    public IEnumerable<object> UsecTactics { get; set; }
 
     [JsonPropertyName("BotReload")]
-    public List<object> BotReload { get; set; }
+    public IEnumerable<object> BotReload { get; set; }
 
     [JsonPropertyName("CovertMovement")]
     public CovertMovement CovertMovement { get; set; }
 
     [JsonPropertyName("FieldMedicine")]
-    public List<object> FieldMedicine { get; set; }
+    public IEnumerable<object> FieldMedicine { get; set; }
 
     [JsonPropertyName("Search")]
     public Search Search { get; set; }
 
     [JsonPropertyName("Sniping")]
-    public List<object> Sniping { get; set; }
+    public IEnumerable<object> Sniping { get; set; }
 
     [JsonPropertyName("ProneMovement")]
-    public List<object> ProneMovement { get; set; }
+    public IEnumerable<object> ProneMovement { get; set; }
 
     [JsonPropertyName("FirstAid")]
-    public List<object> FirstAid { get; set; }
+    public IEnumerable<object> FirstAid { get; set; }
 
     [JsonPropertyName("LightVests")]
     public ArmorSkills LightVests { get; set; }
@@ -3632,19 +3632,19 @@ public record SkillsSettings
     public ArmorSkills HeavyVests { get; set; }
 
     [JsonPropertyName("WeaponModding")]
-    public List<object> WeaponModding { get; set; }
+    public IEnumerable<object> WeaponModding { get; set; }
 
     [JsonPropertyName("AdvancedModding")]
-    public List<object> AdvancedModding { get; set; }
+    public IEnumerable<object> AdvancedModding { get; set; }
 
     [JsonPropertyName("NightOps")]
-    public List<object> NightOps { get; set; }
+    public IEnumerable<object> NightOps { get; set; }
 
     [JsonPropertyName("SilentOps")]
-    public List<object> SilentOps { get; set; }
+    public IEnumerable<object> SilentOps { get; set; }
 
     [JsonPropertyName("Lockpicking")]
-    public List<object> Lockpicking { get; set; }
+    public IEnumerable<object> Lockpicking { get; set; }
 
     [JsonPropertyName("WeaponTreatment")]
     public WeaponTreatment WeaponTreatment { get; set; }
@@ -3653,22 +3653,22 @@ public record SkillsSettings
     public MagDrills MagDrills { get; set; }
 
     [JsonPropertyName("Freetrading")]
-    public List<object> Freetrading { get; set; }
+    public IEnumerable<object> Freetrading { get; set; }
 
     [JsonPropertyName("Auctions")]
-    public List<object> Auctions { get; set; }
+    public IEnumerable<object> Auctions { get; set; }
 
     [JsonPropertyName("Cleanoperations")]
-    public List<object> Cleanoperations { get; set; }
+    public IEnumerable<object> Cleanoperations { get; set; }
 
     [JsonPropertyName("Barter")]
-    public List<object> Barter { get; set; }
+    public IEnumerable<object> Barter { get; set; }
 
     [JsonPropertyName("Shadowconnections")]
-    public List<object> Shadowconnections { get; set; }
+    public IEnumerable<object> Shadowconnections { get; set; }
 
     [JsonPropertyName("Taskperformance")]
-    public List<object> Taskperformance { get; set; }
+    public IEnumerable<object> Taskperformance { get; set; }
 
     [JsonPropertyName("Perception")]
     public Perception Perception { get; set; }
@@ -3692,7 +3692,7 @@ public record SkillsSettings
     public AimDrills AimDrills { get; set; }
 
     [JsonPropertyName("BotSound")]
-    public List<object> BotSound { get; set; }
+    public IEnumerable<object> BotSound { get; set; }
 
     [JsonPropertyName("TroubleShooting")]
     public TroubleShooting TroubleShooting { get; set; }
@@ -3823,7 +3823,7 @@ public record Crafting
     public Dictionary<string, object>? ExtensionData { get; set; }
 
     [JsonPropertyName("DependentSkillRatios")]
-    public List<DependentSkillRatio> DependentSkillRatios { get; set; }
+    public IEnumerable<DependentSkillRatio> DependentSkillRatios { get; set; }
 
     [JsonPropertyName("PointsPerCraftingCycle")]
     public double PointsPerCraftingCycle { get; set; }
@@ -3908,7 +3908,7 @@ public record Endurance
     public double GainPerFatigueStack { get; set; }
 
     [JsonPropertyName("DependentSkillRatios")]
-    public List<DependentSkillRatio> DependentSkillRatios { get; set; }
+    public IEnumerable<DependentSkillRatio> DependentSkillRatios { get; set; }
 
     [JsonPropertyName("QTELevelMultipliers")]
     public Dictionary<string, Dictionary<string, double>> QTELevelMultipliers { get; set; }
@@ -3920,7 +3920,7 @@ public record Strength
     public Dictionary<string, object>? ExtensionData { get; set; }
 
     [JsonPropertyName("DependentSkillRatios")]
-    public List<DependentSkillRatio> DependentSkillRatios { get; set; }
+    public IEnumerable<DependentSkillRatio> DependentSkillRatios { get; set; }
 
     [JsonPropertyName("SprintActionMin")]
     public double SprintActionMin { get; set; }
@@ -3941,7 +3941,7 @@ public record Strength
     public double PushUpMax { get; set; }
 
     [JsonPropertyName("QTELevelMultipliers")]
-    public List<QTELevelMultiplier> QTELevelMultipliers { get; set; }
+    public IEnumerable<QTELevelMultiplier> QTELevelMultipliers { get; set; }
 
     [JsonPropertyName("FistfightAction")]
     public double FistfightAction { get; set; }
@@ -4088,7 +4088,7 @@ public record WeaponTreatment
     public double SkillPointsPerRepair { get; set; }
 
     [JsonPropertyName("Filter")]
-    public List<object> Filter { get; set; }
+    public IEnumerable<object> Filter { get; set; }
 
     [JsonPropertyName("WearAmountRepairGunsReducePerLevel")]
     public double WearAmountRepairGunsReducePerLevel { get; set; }
@@ -4151,7 +4151,7 @@ public record Perception
     public Dictionary<string, object>? ExtensionData { get; set; }
 
     [JsonPropertyName("DependentSkillRatios")]
-    public List<SkillRatio> DependentSkillRatios { get; set; }
+    public IEnumerable<SkillRatio> DependentSkillRatios { get; set; }
 
     [JsonPropertyName("OnlineAction")]
     public double OnlineAction { get; set; }

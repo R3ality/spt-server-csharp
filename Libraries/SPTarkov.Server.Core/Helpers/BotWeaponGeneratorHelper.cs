@@ -37,7 +37,7 @@ public class BotWeaponGeneratorHelper(
             var firstSlotAmmoTpl =
                 magTemplate
                     .Properties.Cartridges.FirstOrDefault()
-                    ?.Props.Filters[0]
+                    ?.Props.Filters.First()
                     .Filter.FirstOrDefault() ?? new MongoId(null);
             var ammoMaxStackSize =
                 itemHelper.GetItem(firstSlotAmmoTpl).Value?.Properties?.StackMaxSize ?? 1;
@@ -53,7 +53,7 @@ public class BotWeaponGeneratorHelper(
         }
         else
         {
-            chamberBulletCount = magTemplate.Properties.Cartridges?[0].MaxCount;
+            chamberBulletCount = magTemplate.Properties.Cartridges?.First().MaxCount;
         }
 
         // Get the amount of bullets that would fit in the internal magazine

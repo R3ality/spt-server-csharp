@@ -251,7 +251,7 @@ public class InsuranceService(
     /// <returns>InsuranceEquipmentPkg list</returns>
     public List<InsuranceEquipmentPkg> MapInsuredItemsToTrader(
         MongoId sessionId,
-        List<Item> lostInsuredItems,
+        IEnumerable<Item> lostInsuredItems,
         PmcData pmcProfile
     )
     {

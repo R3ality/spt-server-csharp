@@ -1168,7 +1168,7 @@ public class LocationLifecycleService(
         string locationName
     )
     {
-        if (request.LostInsuredItems?.Count > 0)
+        if (request.LostInsuredItems is not null && request.LostInsuredItems.Any())
         {
             var mappedItems = insuranceService.MapInsuredItemsToTrader(
                 sessionId,

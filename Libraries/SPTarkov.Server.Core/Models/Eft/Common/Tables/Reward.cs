@@ -49,7 +49,7 @@ public record Reward
     public bool? FindInRaid { get; set; }
 
     [JsonPropertyName("gameMode")]
-    public List<string>? GameMode { get; set; }
+    public IEnumerable<string>? GameMode { get; set; }
 
     /// <summary>
     ///     Game editions whitelisted to get reward

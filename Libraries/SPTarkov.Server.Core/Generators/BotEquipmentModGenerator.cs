@@ -197,7 +197,8 @@ public class BotEquipmentModGenerator(
                 );
                 switch (plateSlotFilteringOutcome.Result)
                 {
-                    case Result.UNKNOWN_FAILURE or Result.NO_DEFAULT_FILTER:
+                    case Result.UNKNOWN_FAILURE
+                    or Result.NO_DEFAULT_FILTER:
                         if (logger.IsLogEnabled(LogLevel.Debug))
                         {
                             logger.Debug(
@@ -844,8 +845,8 @@ public class BotEquipmentModGenerator(
 
         return item.Properties.Slots is null
             || !item.Properties.Slots.Any()
-                && item.Properties.Cartridges?.Count == 0
-                && item.Properties.Chambers?.Count == 0;
+                && !item.Properties.Cartridges.Any()
+                && !item.Properties.Chambers.Any();
     }
 
     /// <summary>
@@ -1342,7 +1343,7 @@ public class BotEquipmentModGenerator(
 
         // Filter modpool to only items that appear in parents allowed list
         preFilteredModPool = preFilteredModPool
-            .Where(tpl => parentSlot.Props.Filters[0].Filter.Contains(tpl))
+            .Where(tpl => parentSlot.Props.Filters.First().Filter.Contains(tpl))
             .ToHashSet();
         if (preFilteredModPool.Count == 0)
         {
@@ -1554,7 +1555,8 @@ public class BotEquipmentModGenerator(
                     StringComparison.Ordinal
                 )
             )
-            ?.Props.Filters?[0].Filter;
+            ?.Props.Filters?.First()
+            .Filter;
 
         // Mod isn't in existing pool, only add if it has no children and exists inside parent filter
         if (
@@ -1721,7 +1723,7 @@ public class BotEquipmentModGenerator(
     )
     {
         // Find compatible mods and make an array of them
-        var allowedItems = parentSlot.Props.Filters[0].Filter;
+        var allowedItems = parentSlot.Props.Filters.First().Filter;
 
         // Find mod item that fits slot from sorted mod array
         var exhaustableModPool = CreateExhaustableArray(allowedItems);
@@ -1964,9 +1966,9 @@ public class BotEquipmentModGenerator(
             modPool[cylinderMagTemplate.Id] = new Dictionary<string, HashSet<MongoId>>();
             foreach (var camora in camoraSlots)
             {
-                modPool[cylinderMagTemplate.Id][camora.Name] = camora.Props.Filters?[
-                    0
-                ].Filter.ToHashSet();
+                modPool[cylinderMagTemplate.Id][camora.Name] = camora
+                    .Props.Filters.First()
+                    .Filter.ToHashSet();
             }
 
             itemModPool = modPool[cylinderMagTemplate.Id];

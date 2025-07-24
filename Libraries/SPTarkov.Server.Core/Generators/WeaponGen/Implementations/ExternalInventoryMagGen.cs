@@ -190,7 +190,7 @@ public class ExternalInventoryMagGen(
 
         // All possible mags that fit into the weapon excluding blacklisted
         var magazinePool = magSlot
-            .Props.Filters[0]
+            .Props.Filters.First()
             .Filter.Where(x => !magazineBlacklist.Contains(x))
             .Select(x => itemHelper.GetItem(x).Value);
         if (magazinePool is null)

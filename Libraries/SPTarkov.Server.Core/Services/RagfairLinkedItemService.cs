@@ -130,7 +130,7 @@ public class RagfairLinkedItemService(
 
         // Get the first cylinder filter tpl
         var cylinderTpl =
-            cylinderMod.Props?.Filters?[0].Filter?.FirstOrDefault() ?? new MongoId(null);
+            cylinderMod.Props?.Filters?.First().Filter?.FirstOrDefault() ?? new MongoId(null);
 
         if (!cylinderTpl.IsValidMongoId())
         {
@@ -181,7 +181,7 @@ public class RagfairLinkedItemService(
         var result = new HashSet<MongoId>();
 
         var chambers = item.Properties?.Chambers;
-        if (chambers is null || chambers.Count == 0)
+        if (chambers is null || !chambers.Any())
         {
             return result;
         }
@@ -207,7 +207,7 @@ public class RagfairLinkedItemService(
         var result = new HashSet<MongoId>();
 
         var cartridges = item.Properties?.Cartridges;
-        if (cartridges is null || cartridges.Count == 0)
+        if (cartridges is null || !cartridges.Any())
         {
             return result;
         }

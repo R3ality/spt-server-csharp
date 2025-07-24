@@ -361,25 +361,25 @@ public record QuestConditionCounterCondition
     public object? Value { get; set; }
 
     [JsonPropertyName("weapon")]
-    public List<string>? Weapon { get; set; }
+    public HashSet<string>? Weapon { get; set; }
 
     [JsonPropertyName("distance")]
     public CounterConditionDistance? Distance { get; set; }
 
     [JsonPropertyName("equipmentInclusive")]
-    public List<List<string>>? EquipmentInclusive { get; set; }
+    public IEnumerable<List<string>>? EquipmentInclusive { get; set; }
 
     [JsonPropertyName("weaponModsInclusive")]
-    public List<List<string>>? WeaponModsInclusive { get; set; }
+    public IEnumerable<List<string>>? WeaponModsInclusive { get; set; }
 
     [JsonPropertyName("weaponModsExclusive")]
-    public List<List<string>>? WeaponModsExclusive { get; set; }
+    public IEnumerable<List<string>>? WeaponModsExclusive { get; set; }
 
     [JsonPropertyName("enemyEquipmentInclusive")]
-    public List<List<string>>? EnemyEquipmentInclusive { get; set; }
+    public IEnumerable<List<string>>? EnemyEquipmentInclusive { get; set; }
 
     [JsonPropertyName("enemyEquipmentExclusive")]
-    public List<List<string>>? EnemyEquipmentExclusive { get; set; }
+    public IEnumerable<List<string>>? EnemyEquipmentExclusive { get; set; }
 
     [JsonPropertyName("weaponCaliber")]
     public List<string>? WeaponCaliber { get; set; }

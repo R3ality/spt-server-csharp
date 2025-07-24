@@ -25,7 +25,7 @@ public record EndLocalRaidRequestData : IRequestData
     ///     Insured items left in raid by player
     /// </summary>
     [JsonPropertyName("lostInsuredItems")]
-    public List<Item>? LostInsuredItems { get; set; }
+    public IEnumerable<Item>? LostInsuredItems { get; set; }
 
     /// <summary>
     ///     Items sent via traders to player, keyed to service e.g. BTRTransferStash

@@ -1387,10 +1387,10 @@ public class ItemHelper(
     /// <param name="ammoBoxDetails">Item template from items db</param>
     public void AddCartridgesToAmmoBox(List<Item> ammoBox, TemplateItem ammoBoxDetails)
     {
-        var ammoBoxMaxCartridgeCount = ammoBoxDetails.Properties.StackSlots[0].MaxCount;
+        var ammoBoxMaxCartridgeCount = ammoBoxDetails.Properties.StackSlots.First().MaxCount;
         var cartridgeTpl = ammoBoxDetails
-            .Properties.StackSlots[0]
-            .Props.Filters[0]
+            .Properties.StackSlots.First()
+            .Props.Filters.First()
             .Filter.FirstOrDefault();
         var cartridgeDetails = GetItem(cartridgeTpl);
         var cartridgeMaxStackSize = cartridgeDetails.Value.Properties.StackMaxSize;
@@ -1440,10 +1440,11 @@ public class ItemHelper(
     /// <param name="ammoBoxDetails">Item template from items db</param>
     public void AddSingleStackCartridgesToAmmoBox(List<Item> ammoBox, TemplateItem ammoBoxDetails)
     {
-        var ammoBoxMaxCartridgeCount = ammoBoxDetails.Properties?.StackSlots?[0].MaxCount ?? 0;
-        var cartridgeTpl = ammoBoxDetails.Properties?.StackSlots?[0].Props?.Filters?[
-            0
-        ].Filter?.FirstOrDefault();
+        var ammoBoxMaxCartridgeCount = ammoBoxDetails.Properties?.StackSlots?.First().MaxCount ?? 0;
+        var cartridgeTpl = ammoBoxDetails
+            .Properties?.StackSlots?.First()
+            .Props?.Filters?.First()
+            .Filter?.FirstOrDefault();
         ammoBox.Add(
             CreateCartridges(ammoBox[0].Id, cartridgeTpl.Value, (int)ammoBoxMaxCartridgeCount, 0)
         );
@@ -1610,7 +1611,7 @@ public class ItemHelper(
     /// <returns>Tpl of cartridge</returns>
     protected string? GetRandomValidCaliber(TemplateItem magTemplate)
     {
-        var ammoTpls = magTemplate.Properties.Cartridges[0].Props.Filters[0].Filter;
+        var ammoTpls = magTemplate.Properties.Cartridges.First().Props.Filters.First().Filter;
         var calibers = ammoTpls
             .Where(x => GetItem(x).Key)
             .Select(x => GetItem(x).Value.Properties.Caliber)

@@ -358,12 +358,12 @@ public class ItemTplMongoIdGenerator(
         // Add mag size for magazines
         if (itemHelper.IsOfBaseclass(item.Id, BaseClasses.MAGAZINE))
         {
-            suffix = $"{item.Properties?.Cartridges?[0].MaxCount?.ToString()}RND";
+            suffix = $"{item.Properties?.Cartridges?.First().MaxCount?.ToString()}RND";
         }
         // Add pack size for ammo boxes
         else if (itemHelper.IsOfBaseclass(item.Id, BaseClasses.AMMO_BOX))
         {
-            suffix = $"{item.Properties.StackSlots[0]?.MaxCount.ToString()}RND";
+            suffix = $"{item.Properties.StackSlots.First()?.MaxCount.ToString()}RND";
         }
 
         // Add "DAMAGED" for damaged items
@@ -404,14 +404,20 @@ public class ItemTplMongoIdGenerator(
 
     private string GetAmmoBoxPrefix(TemplateItem item)
     {
-        var ammoTpl = item.Properties?.StackSlots?[0]?.Props?.Filters?[0]?.Filter?.FirstOrDefault();
+        var ammoTpl = item
+            .Properties?.StackSlots?.First()
+            ?.Props?.Filters?.First()
+            ?.Filter?.FirstOrDefault();
 
         return GetAmmoPrefix(_items[ammoTpl.Value]);
     }
 
     private string GetMagazinePrefix(TemplateItem item)
     {
-        var ammoTpl = item.Properties?.Cartridges?[0]?.Props?.Filters?[0]?.Filter?.FirstOrDefault();
+        var ammoTpl = item
+            .Properties?.Cartridges?.First()
+            ?.Props?.Filters?.First()
+            ?.Filter?.FirstOrDefault();
 
         return GetAmmoPrefix(_items[ammoTpl.Value]);
     }

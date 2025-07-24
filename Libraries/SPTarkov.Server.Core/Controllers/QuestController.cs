@@ -209,7 +209,7 @@ public class QuestController(
     )
     {
         var quest = questHelper.GetQuestFromDb(request.QuestId, pmcData);
-        List<string> handoverQuestTypes = ["HandoverItem", "WeaponAssembly"];
+        HashSet<string> handoverQuestTypes = ["HandoverItem", "WeaponAssembly"];
         var output = eventOutputHolder.GetOutput(sessionID);
 
         var isItemHandoverQuest = true;

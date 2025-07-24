@@ -236,8 +236,8 @@ public class FenceBaseAssortGenerator(
         {
             // Get the cartridge tpl found inside ammo box
             var cartridgeTplInBox = rootItemDb
-                .Properties.StackSlots[0]
-                .Props.Filters[0]
+                .Properties.StackSlots.First()
+                .Props.Filters.First()
                 .Filter.FirstOrDefault();
 
             // Look up cartridge tpl in db
@@ -288,9 +288,9 @@ public class FenceBaseAssortGenerator(
             foreach (var requiredSlot in requiredSlots)
             {
                 var modItemDbDetails = itemHelper
-                    .GetItem(requiredSlot.Props.Filters[0].Plate.Value)
+                    .GetItem(requiredSlot.Props.Filters.First().Plate.Value)
                     .Value;
-                var plateTpl = requiredSlot.Props.Filters[0].Plate; // `Plate` property appears to be the 'default' item for slot
+                var plateTpl = requiredSlot.Props.Filters.First().Plate; // `Plate` property appears to be the 'default' item for slot
                 if (plateTpl is null || plateTpl.Value.IsEmpty())
                 // Some bsg plate properties are empty, skip mod
                 {
@@ -325,7 +325,7 @@ public class FenceBaseAssortGenerator(
         {
             foreach (var plateSlot in plateSlots)
             {
-                var plateTpl = plateSlot.Props.Filters[0].Plate;
+                var plateTpl = plateSlot.Props.Filters.First().Plate;
                 if (string.IsNullOrEmpty(plateTpl))
                 // Bsg data lacks a default plate, skip adding mod
                 {
@@ -337,7 +337,7 @@ public class FenceBaseAssortGenerator(
                     new Item
                     {
                         Id = new MongoId(),
-                        Template = plateSlot.Props.Filters[0].Plate.Value, // `Plate` property appears to be the 'default' item for slot
+                        Template = plateSlot.Props.Filters.First().Plate.Value, // `Plate` property appears to be the 'default' item for slot
                         ParentId = armor[0].Id,
                         SlotId = plateSlot.Name,
                         Upd = new Upd

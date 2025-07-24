@@ -1282,14 +1282,14 @@ public class FenceService(
         foreach (var requiredSlot in softInsertSlots)
         {
             var modItemDbDetails = itemHelper
-                .GetItem(requiredSlot.Props.Filters[0].Plate.Value)
+                .GetItem(requiredSlot.Props.Filters.First().Plate.Value)
                 .Value;
 
             var durabilityValues = GetRandomisedArmorDurabilityValues(
                 modItemDbDetails,
                 traderConfig.Fence.ArmorMaxDurabilityPercentMinMax
             );
-            var plateTpl = requiredSlot.Props.Filters[0].Plate ?? string.Empty; // "Plate" property appears to be the 'default' item for slot
+            var plateTpl = requiredSlot.Props.Filters.First().Plate ?? string.Empty; // "Plate" property appears to be the 'default' item for slot
             if (plateTpl.IsEmpty())
             // Some bsg plate properties are empty, skip mod
             {
@@ -1348,7 +1348,7 @@ public class FenceService(
     {
         foreach (var plateSlot in plateSlots)
         {
-            var plateTpl = plateSlot.Props.Filters[0].Plate;
+            var plateTpl = plateSlot.Props.Filters.First().Plate;
             if (plateTpl == null || plateTpl.Value.IsEmpty())
             // Bsg data lacks a default plate, skip randomising for this mod
             {

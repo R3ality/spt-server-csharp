@@ -299,7 +299,7 @@ public class CustomItemService(
             var wall = itemHelper.GetItem(wallId);
             if (wall.Key)
             {
-                wall.Value.Properties.Grids.First().Props.Filters[0].Filter.Add(newItemId);
+                wall.Value.Properties.Grids.First().Props.Filters.First().Filter.Add(newItemId);
             }
         }
     }
@@ -328,7 +328,7 @@ public class CustomItemService(
         var weaponSlots = weapon.Value.Properties.Slots;
         foreach (var slot in weaponSlots)
         {
-            baseWeaponModObject[slot.Name] = [.. slot.Props.Filters[0].Filter];
+            baseWeaponModObject[slot.Name] = [.. slot.Props.Filters.First().Filter];
         }
 
         // Get PMCs

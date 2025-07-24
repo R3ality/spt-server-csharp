@@ -228,7 +228,7 @@ public class BotWeaponGenerator(
 
         // Add cartridge(s) to gun chamber(s)
         if (
-            weaponItemTemplate.Properties?.Chambers?.Count > 0
+            (weaponItemTemplate.Properties?.Chambers).Any()
             && weaponItemTemplate
                 .Properties.Chambers.FirstOrDefault()
                 .Props.Filters.FirstOrDefault()
@@ -768,7 +768,8 @@ public class BotWeaponGenerator(
 
         var cartridges = weaponTemplate
             .Properties?.Chambers?.FirstOrDefault()
-            ?.Props?.Filters?[0].Filter;
+            ?.Props?.Filters?.First()
+            .Filter;
         if (cartridges is not null)
         {
             return cartridges;
@@ -845,7 +846,10 @@ public class BotWeaponGenerator(
         if (!string.IsNullOrEmpty(weaponTemplate.Properties.LinkedWeapon))
         {
             var ammoInChamber = itemHelper.GetItem(
-                weaponTemplate.Properties.Chambers[0].Props.Filters[0].Filter.FirstOrDefault()
+                weaponTemplate
+                    .Properties.Chambers.First()
+                    .Props.Filters.First()
+                    .Filter.FirstOrDefault()
             );
             return !ammoInChamber.Key ? null : ammoInChamber.Value.Properties.Caliber;
         }

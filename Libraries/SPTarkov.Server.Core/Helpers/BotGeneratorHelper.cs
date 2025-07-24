@@ -758,7 +758,7 @@ public class BotGeneratorHelper(
         var excludedFilter = propFilters?.FirstOrDefault()?.ExcludedFilter ?? [];
         var filter = propFilters?.FirstOrDefault()?.Filter ?? [];
 
-        if (propFilters?.Count == 0)
+        if (!propFilters.Any())
         // no filters, item is fine to add
         {
             return true;
