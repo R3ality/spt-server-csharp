@@ -36,9 +36,10 @@ public class LootGenerator(
     /// </summary>
     /// <param name="options">parameters to adjust how loot is generated</param>
     /// <returns>An array of loot items</returns>
-    public List<List<Item>> CreateRandomLoot(LootRequest options)
+    public IEnumerable<List<Item>> CreateRandomLoot(LootRequest options)
     {
         var result = new List<List<Item>>();
+
         var itemTypeCounts = InitItemLimitCounter(options.ItemLimits);
 
         // Handle sealed weapon containers
@@ -81,7 +82,7 @@ public class LootGenerator(
         );
 
         // Pool has items we could add as loot, proceed
-        if (rewardPoolResults.ItemPool.Count > 0)
+        if (rewardPoolResults.ItemPool.Any())
         {
             var randomisedItemCount = randomUtil.GetInt(
                 options.ItemCount.Min,
@@ -113,11 +114,9 @@ public class LootGenerator(
         );
         if (randomisedWeaponPresetCount > 0)
         {
-            var weaponDefaultPresets = globalDefaultPresets
-                .Where(preset =>
-                    itemHelper.IsOfBaseclass(preset.Encyclopedia.Value, BaseClasses.WEAPON)
-                )
-                .ToList();
+            var weaponDefaultPresets = globalDefaultPresets.Where(preset =>
+                itemHelper.IsOfBaseclass(preset.Encyclopedia.Value, BaseClasses.WEAPON)
+            );
 
             if (weaponDefaultPresets.Any())
             {
@@ -149,9 +148,9 @@ public class LootGenerator(
             var armorDefaultPresets = globalDefaultPresets.Where(preset =>
                 itemHelper.ArmorItemCanHoldMods(preset.Encyclopedia.Value)
             );
-            var levelFilteredArmorPresets = armorDefaultPresets
-                .Where(armor => IsArmorOfDesiredProtectionLevel(armor, options))
-                .ToList();
+            var levelFilteredArmorPresets = armorDefaultPresets.Where(armor =>
+                IsArmorOfDesiredProtectionLevel(armor, options)
+            );
 
             // Add some armors to rewards
             if (levelFilteredArmorPresets.Any())
@@ -245,7 +244,7 @@ public class LootGenerator(
     /// <returns>results of filtering + blacklist used</returns>
     protected ItemRewardPoolResults GetItemRewardPool(
         HashSet<MongoId> itemTplBlacklist,
-        List<MongoId> itemTypeWhitelist,
+        HashSet<MongoId> itemTypeWhitelist,
         bool useRewardItemBlacklist,
         bool allowBossItems,
         bool blockSeasonalItemsOutOfSeason
@@ -281,14 +280,12 @@ public class LootGenerator(
             itemBlacklist.UnionWith(seasonalEventService.GetInactiveSeasonalEventItems());
         }
 
-        var items = itemsDb
-            .Where(item =>
-                !itemBlacklist.Contains(item.Id)
-                && string.Equals(item.Type, "item", StringComparison.OrdinalIgnoreCase)
-                && !item.Properties.QuestItem.GetValueOrDefault(false)
-                && itemTypeWhitelist.Contains(item.Parent)
-            )
-            .ToList();
+        var items = itemsDb.Where(item =>
+            !itemBlacklist.Contains(item.Id)
+            && string.Equals(item.Type, "item", StringComparison.OrdinalIgnoreCase)
+            && !item.Properties.QuestItem.GetValueOrDefault(false)
+            && itemTypeWhitelist.Contains(item.Parent)
+        );
 
         return new ItemRewardPoolResults { ItemPool = items, Blacklist = itemBlacklist };
     }
@@ -348,7 +345,7 @@ public class LootGenerator(
     /// <param name="result">array to add found item to</param>
     /// <returns>true if item was valid and added to pool</returns>
     protected bool FindAndAddRandomItemToLoot(
-        List<TemplateItem> items,
+        IEnumerable<TemplateItem> items,
         Dictionary<MongoId, ItemLimit> itemTypeCounts,
         LootRequest options,
         List<List<Item>> result
@@ -426,13 +423,13 @@ public class LootGenerator(
     /// <param name="result">List to add chosen preset to</param>
     /// <returns>true if preset was valid and added to pool</returns>
     protected bool FindAndAddRandomPresetToLoot(
-        List<Preset> presetPool,
+        IEnumerable<Preset> presetPool,
         Dictionary<MongoId, ItemLimit> itemTypeCounts,
         HashSet<MongoId> itemBlacklist,
         List<List<Item>> result
     )
     {
-        if (presetPool.Count == 0)
+        if (!presetPool.Any())
         {
             logger.Warning(serverLocalisationService.GetText("loot-preset_pool_is_empty"));
 
@@ -732,10 +729,10 @@ public class LootGenerator(
             // Find a random item of the desired type and add as reward
             for (var index = 0; index < rewardCount; index++)
             {
-                var chosenItem = randomUtil.DrawRandomFromList(relatedItems.ToList());
+                var chosenItem = randomUtil.GetArrayValue(relatedItems);
                 var reward = new List<Item>
                 {
-                    new() { Id = new MongoId(), Template = chosenItem[0].Id },
+                    new() { Id = new MongoId(), Template = chosenItem.Id },
                 };
 
                 modRewards.Add(reward);
@@ -785,7 +782,7 @@ public class LootGenerator(
     /// </summary>
     /// <param name="rewardContainerDetails"></param>
     /// <returns>Single tpl</returns>
-    protected string PickRewardItem(RewardDetails rewardContainerDetails)
+    protected MongoId PickRewardItem(RewardDetails rewardContainerDetails)
     {
         if (
             rewardContainerDetails.RewardTplPool is not null
@@ -803,7 +800,7 @@ public class LootGenerator(
 
     protected record ItemRewardPoolResults
     {
-        public List<TemplateItem> ItemPool { get; set; }
+        public IEnumerable<TemplateItem> ItemPool { get; set; }
 
         public HashSet<MongoId> Blacklist { get; set; }
     }

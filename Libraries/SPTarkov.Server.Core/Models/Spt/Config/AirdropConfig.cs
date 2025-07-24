@@ -68,7 +68,7 @@ public record AirdropLoot
     ///     Item type (parentId) to allow inside crate
     /// </summary>
     [JsonPropertyName("itemTypeWhitelist")]
-    public required List<MongoId> ItemTypeWhitelist { get; set; }
+    public required HashSet<MongoId> ItemTypeWhitelist { get; set; }
 
     /// <summary>
     ///     Item type/ item tpls to limit count of inside crate - key: item base type: value: max count

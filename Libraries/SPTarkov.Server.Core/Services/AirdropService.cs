@@ -16,8 +16,8 @@ namespace SPTarkov.Server.Core.Services;
 
 [Injectable]
 public class AirdropService(
-    ConfigServer configServer,
     ISptLogger<AirdropService> _logger,
+    ConfigServer configServer,
     LootGenerator _lootGenerator,
     DatabaseService databaseService,
     WeightedRandomHelper _weightedRandomHelper,
@@ -80,14 +80,12 @@ public class AirdropService(
         // Filter loot pool to just items that fit crate
         var crateLoot = GetLootThatFitsContainer(airdropCrateItem, crateLootPool);
 
-        // Flatten loot into single array ready to be returned
-        var flattenedCrateLoot = crateLoot.SelectMany(x => x).ToList();
+        // Create new array with crate at front + loot behind
+        var containerWithLoot = Enumerable.Empty<Item>().Append(airdropCrateItem);
+        containerWithLoot = containerWithLoot.Union(crateLoot.SelectMany(x => x));
 
-        // Add crate to front of loot rewards
-        flattenedCrateLoot.Insert(0, airdropCrateItem);
-
-        // Re-parent loot items to crate we just added
-        foreach (var item in flattenedCrateLoot)
+        // Re-parent root loot items to have crate as parent
+        foreach (var item in containerWithLoot)
         {
             if (item.Id == airdropCrateItem.Id)
             // Crate itself, skip
@@ -105,8 +103,8 @@ public class AirdropService(
 
         return new GetAirdropLootResponse
         {
-            Icon = airdropConfig.Icon,
-            Container = flattenedCrateLoot,
+            Icon = airdropConfig.Icon.Value,
+            Container = containerWithLoot,
         };
     }
 
@@ -116,9 +114,9 @@ public class AirdropService(
     /// <param name="container">Crate item to fit items into</param>
     /// <param name="crateLootPool">Item pool to try and fit into container</param>
     /// <returns>Items that will fit container</returns>
-    protected List<List<Item>> GetLootThatFitsContainer(
+    protected IEnumerable<List<Item>> GetLootThatFitsContainer(
         Item container,
-        List<List<Item>> crateLootPool
+        IEnumerable<List<Item>> crateLootPool
     )
     {
         // list of root item + children in list

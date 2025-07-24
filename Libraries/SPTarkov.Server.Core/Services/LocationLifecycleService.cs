@@ -447,7 +447,7 @@ public class LocationLifecycleService(
         }
 
         // Flatten
-        List<Item> mailableLoot = [.. loot.SelectMany(x => x)];
+        IEnumerable<Item> mailableLoot = [.. loot.SelectMany(x => x)];
 
         // Send message from fence giving player reward generated above
         mailSendService.SendLocalisedNpcMessageToPlayer(

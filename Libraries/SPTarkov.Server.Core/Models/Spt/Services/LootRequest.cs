@@ -43,7 +43,7 @@ public record LootRequest
     ///     Item tpl whitelist to pick from
     /// </summary>
     [JsonPropertyName("itemTypeWhitelist")]
-    public List<MongoId>? ItemTypeWhitelist { get; set; }
+    public HashSet<MongoId>? ItemTypeWhitelist { get; set; }
 
     /// <summary>
     ///     key: item base type: value: max count
