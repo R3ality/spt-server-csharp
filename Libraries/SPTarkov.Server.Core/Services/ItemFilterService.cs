@@ -14,8 +14,8 @@ public class ItemFilterService(ISptLogger<ItemFilterService> logger, ConfigServe
 {
     protected readonly ItemConfig _itemConfig = configServer.GetConfig<ItemConfig>();
 
-    protected readonly HashSet<MongoId>? _itemBlacklistCache = [];
-    protected readonly HashSet<MongoId>? _lootableItemBlacklistCache = [];
+    protected readonly HashSet<MongoId> _itemBlacklistCache = [];
+    protected readonly HashSet<MongoId> _lootableItemBlacklistCache = [];
 
     /// <summary>
     ///     Get an HashSet of items that should never be given as a reward to player
