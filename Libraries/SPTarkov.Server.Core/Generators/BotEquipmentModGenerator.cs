@@ -509,7 +509,7 @@ public class BotEquipmentModGenerator(
     /// <returns>Weapon + mods array</returns>
     public List<Item> GenerateModsForWeapon(MongoId sessionId, GenerateWeaponRequest request)
     {
-        if (ItemLacksSlotsCartridgesAndChambers(request.ParentTemplate))
+        if (request.ParentTemplate.HasNoSlotsCartridgesOrChambers())
         {
             logger.Error(
                 serverLocalisationService.GetText(
@@ -828,24 +828,6 @@ public class BotEquipmentModGenerator(
         }
 
         return request.Weapon;
-    }
-
-    /// <summary>
-    ///     Does the passed in db item lack slot cartridges or chambers
-    /// </summary>
-    /// <param name="item">Item to check</param>
-    /// <returns>True it lacks cartridges/chamber slots</returns>
-    protected bool ItemLacksSlotsCartridgesAndChambers(TemplateItem item)
-    {
-        if (item.Properties is null)
-        {
-            return true;
-        }
-
-        return item.Properties.Slots is null
-            || !item.Properties.Slots.Any()
-                && !item.Properties.Cartridges.Any()
-                && !item.Properties.Chambers.Any();
     }
 
     /// <summary>
