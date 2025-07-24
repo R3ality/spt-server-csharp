@@ -197,7 +197,8 @@ public class BotEquipmentModGenerator(
                 );
                 switch (plateSlotFilteringOutcome.Result)
                 {
-                    case Result.UNKNOWN_FAILURE or Result.NO_DEFAULT_FILTER:
+                    case Result.UNKNOWN_FAILURE
+                    or Result.NO_DEFAULT_FILTER:
                         if (logger.IsLogEnabled(LogLevel.Debug))
                         {
                             logger.Debug(
@@ -1910,7 +1911,8 @@ public class BotEquipmentModGenerator(
         }
 
         // Get item blacklist and mod equipment blacklist as one Set
-        var blacklist = itemFilterService.GetBlacklistedItems();
+        var blacklist = new HashSet<MongoId>();
+        blacklist.UnionWith(itemFilterService.GetBlacklistedItems());
         if (
             botEquipBlacklist?.Equipment is not null
             && botEquipBlacklist.Equipment.TryGetValue(modSlot, out var equipmentBlacklistValues)
