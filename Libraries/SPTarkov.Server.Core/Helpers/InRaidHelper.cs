@@ -169,14 +169,13 @@ public class InRaidHelper(
     /// <param name="sessionId">Player/Session id</param>
     public void DeleteInventory(PmcData pmcData, MongoId sessionId)
     {
-        // Get inventory item ids to remove from players profile
-        var itemIdsToDeleteFromProfile = GetInventoryItemsLostOnDeath(pmcData)
-            .Select(item => item.Id)
-            .ToList();
-        foreach (var itemIdToDelete in itemIdsToDeleteFromProfile)
-        // Items inside containers are handled as part of function
+        // Get inventory items to remove from players profile
+        var itemsToDeleteFromProfile = GetInventoryItemsLostOnDeath(pmcData).ToList();
+
+        foreach (var itemToDelete in itemsToDeleteFromProfile)
         {
-            inventoryHelper.RemoveItem(pmcData, itemIdToDelete, sessionId);
+            // Items inside containers are handled as part of function
+            inventoryHelper.RemoveItem(pmcData, itemToDelete.Id, sessionId);
         }
 
         // Remove contents of fast panel
