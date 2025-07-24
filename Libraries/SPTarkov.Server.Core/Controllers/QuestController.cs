@@ -136,38 +136,42 @@ public class QuestController(
     }
 
     /// <summary>
-    ///     Add a quests condition counters to chosen profile
+    ///     Add a quest condition counters to chosen profile
+    ///     Currently only used to add `SellItemToTrader` conditions
     /// </summary>
-    /// <param name="questConditions">Conditions to iterate over and possibly add to profile</param>
+    /// <param name="questConditionsToAdd">Conditions to iterate over and possibly add to profile</param>
     /// <param name="pmcData">Players PMC profile</param>
     /// <param name="questId">Quest where conditions originated</param>
     protected void AddTaskConditionCountersToProfile(
-        List<QuestCondition> questConditions,
+        IEnumerable<QuestCondition> questConditionsToAdd,
         PmcData pmcData,
         MongoId questId
     )
     {
-        foreach (var condition in questConditions)
+        foreach (
+            var condition in questConditionsToAdd.Where(condition =>
+                condition.ConditionType == "SellItemToTrader"
+            )
+        )
         {
             if (pmcData.TaskConditionCounters.TryGetValue(condition.Id, out _))
             {
-                logger.Warning(
-                    $"Unable to add new task condition counter: {condition.ConditionType} for quest: {questId} to profile: {pmcData.SessionId} as it already exists"
+                logger.Debug(
+                    $"Condition counter: {condition.ConditionType} already exists for quest: {questId} in profile: {pmcData.SessionId}, skipping"
                 );
+                continue;
             }
 
-            switch (condition.ConditionType)
-            {
-                case "SellItemToTrader":
-                    pmcData.TaskConditionCounters[condition.Id] = new TaskConditionCounter
-                    {
-                        Id = condition.Id,
-                        SourceId = questId,
-                        Type = condition.ConditionType,
-                        Value = 0,
-                    };
-                    break;
-            }
+            pmcData.TaskConditionCounters.Add(
+                condition.Id,
+                new TaskConditionCounter
+                {
+                    Id = condition.Id,
+                    SourceId = questId,
+                    Type = condition.ConditionType,
+                    Value = 0,
+                }
+            );
         }
     }
 
