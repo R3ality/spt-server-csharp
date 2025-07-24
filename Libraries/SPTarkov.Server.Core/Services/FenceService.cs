@@ -142,28 +142,25 @@ public class FenceService(
     /// </summary>
     /// <param name="items"> The items to add with all its children </param>
     /// <param name="mainItem"> The most parent item of the array </param>
-    public void AddItemsToFenceAssort(List<Item> items, Item mainItem)
+    public void AddItemsToFenceAssort(IEnumerable<Item> items, Item mainItem)
     {
-        // HUGE THANKS TO LACYWAY AND LEAVES FOR PROVIDING THIS SOLUTION FOR SPT TO IMPLEMENT!!
         // Copy the item and its children
         var clonedItems = _cloner.Clone(items.GetItemWithChildren(mainItem.Id));
-        // I BLAME LACY FOR THIS ISSUE, I SPENT HOURS FIXING IT /s
-        // i think on node the one with hideout usually came first
-        var root = clonedItems.FirstOrDefault(x => x.SlotId == "hideout");
+        var rootItem = clonedItems.FirstOrDefault(x => x.Id == mainItem.Id);
 
-        var cost = GetItemPrice(root.Template, clonedItems);
+        var cost = GetItemPrice(rootItem.Template, clonedItems);
 
         // Fix IDs
-        clonedItems = itemHelper.ReparentItemAndChildren(root, clonedItems);
-        root.ParentId = "hideout";
-        if (root.Upd?.SpawnedInSession != null)
+        clonedItems = itemHelper.ReparentItemAndChildren(rootItem, clonedItems);
+        rootItem.ParentId = "hideout"; // Reset root parent now it's an assort
+        if (rootItem.Upd?.SpawnedInSession != null)
         {
-            root.Upd.SpawnedInSession = false;
+            rootItem.Upd.SpawnedInSession = false;
         }
 
         // Clean up the items
         // We may need to find an alternative to nodes: delete root.location;
-        root.Location = null;
+        rootItem.Location = null;
 
         var createAssort = new CreateFenceAssortsResult
         {
@@ -171,12 +168,12 @@ public class FenceService(
             BarterScheme = new Dictionary<MongoId, List<List<BarterScheme>>>(),
             LoyalLevelItems = new Dictionary<MongoId, int>(),
         };
-        createAssort.BarterScheme[root.Id] =
+        createAssort.BarterScheme[rootItem.Id] =
         [
             [new BarterScheme { Count = cost, Template = Money.ROUBLES }],
         ];
         createAssort.SptItems.Add(clonedItems);
-        createAssort.LoyalLevelItems[root.Id] = 1;
+        createAssort.LoyalLevelItems[rootItem.Id] = 1;
 
         UpdateFenceAssorts(createAssort, fenceAssort);
     }
