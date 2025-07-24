@@ -45,13 +45,13 @@ public record BotGenerationDetails
     ///     Delta of highest level of bot e.g. 50 means 50 levels above player
     /// </summary>
     [JsonPropertyName("botRelativeLevelDeltaMax")]
-    public int? BotRelativeLevelDeltaMax { get; set; }
+    public int BotRelativeLevelDeltaMax { get; set; }
 
     /// <summary>
     ///     Delta of lowest level of bot e.g. 50 means 50 levels below player
     /// </summary>
     [JsonPropertyName("botRelativeLevelDeltaMin")]
-    public int? BotRelativeLevelDeltaMin { get; set; }
+    public int BotRelativeLevelDeltaMin { get; set; }
 
     /// <summary>
     ///     How many to create and store

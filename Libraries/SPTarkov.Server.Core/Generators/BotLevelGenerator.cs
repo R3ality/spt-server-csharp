@@ -81,6 +81,7 @@ public class BotLevelGenerator(
     )
     {
         var levelOverride = botGenerationDetails.LocationSpecificPmcLevelOverride;
+        var playerLevel = botGenerationDetails.PlayerLevel ?? 1;
 
         // Create a min limit PMCs level cannot fall below
         var minPossibleLevel = levelOverride is not null
@@ -95,19 +96,14 @@ public class BotLevelGenerator(
             ? Math.Min(levelOverride.Max, maxAvailableLevel) // Is PMC and have a level override
             : Math.Min(levelDetails.Max, maxAvailableLevel); // Not pmc with override or non-pmc
 
-        // Get min level relative to player if value exists
-        var minLevel = botGenerationDetails.PlayerLevel.HasValue
-            ? botGenerationDetails.PlayerLevel.Value
-                - botGenerationDetails.BotRelativeLevelDeltaMin.Value
-            : 1 - botGenerationDetails.BotRelativeLevelDeltaMin.Value;
+        // Get min level relative to player level
+        // May be negative, is clamped to 1 below
+        var minLevel = playerLevel - botGenerationDetails.BotRelativeLevelDeltaMin;
 
-        // Get max level relative to player if value exists
-        var maxLevel = botGenerationDetails.PlayerLevel.HasValue
-            ? botGenerationDetails.PlayerLevel.Value
-                + botGenerationDetails.BotRelativeLevelDeltaMax.Value
-            : 1 + botGenerationDetails.BotRelativeLevelDeltaMin.Value;
+        // Get max level relative to player level
+        var maxLevel = playerLevel + botGenerationDetails.BotRelativeLevelDeltaMax;
 
-        // Bound the level to the min/max possible
+        // Clamp the level to the min/max possible
         maxLevel = Math.Clamp(maxLevel, minPossibleLevel, maxPossibleLevel);
         minLevel = Math.Clamp(minLevel, minPossibleLevel, maxPossibleLevel);
 
