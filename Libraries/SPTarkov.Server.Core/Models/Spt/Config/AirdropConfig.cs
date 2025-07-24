@@ -86,7 +86,7 @@ public record AirdropLoot
     ///     Armor levels to allow inside crate e.g. [4,5,6]
     /// </summary>
     [JsonPropertyName("armorLevelWhitelist")]
-    public List<int>? ArmorLevelWhitelist { get; set; }
+    public HashSet<int>? ArmorLevelWhitelist { get; set; }
 
     /// <summary>
     ///     Should boss items be added to airdrop crate

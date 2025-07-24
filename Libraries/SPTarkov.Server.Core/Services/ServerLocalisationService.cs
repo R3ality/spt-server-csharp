@@ -131,9 +131,9 @@ public class ServerLocalisationService(
     /// <returns> Locale text </returns>
     public string GetRandomTextThatMatchesPartialKey(string partialKey)
     {
-        var matchingKeys = GetLocaleKeys().Where(x => x.Contains(partialKey)).ToList();
+        var matchingKeys = GetLocaleKeys().Where(x => x.Contains(partialKey));
 
-        if (matchingKeys.Count == 0)
+        if (!matchingKeys.Any())
         {
             logger.Warning($"No locale keys found for: {partialKey}");
 

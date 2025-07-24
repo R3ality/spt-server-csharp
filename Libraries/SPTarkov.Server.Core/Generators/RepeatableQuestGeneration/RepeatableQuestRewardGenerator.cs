@@ -64,7 +64,7 @@ public class RepeatableQuestRewardGenerator(
         MongoId traderId,
         RepeatableQuestConfig repeatableConfig,
         BaseQuestConfig eliminationConfig,
-        List<MongoId>? rewardTplBlacklist = null
+        HashSet<MongoId>? rewardTplBlacklist = null
     )
     {
         // Get vars to configure rewards with

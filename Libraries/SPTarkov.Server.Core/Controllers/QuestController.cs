@@ -226,7 +226,7 @@ public class QuestController(
             }
 
             handedInCount = int.Parse(condition.Value.ToString());
-            isItemHandoverQuest = condition.ConditionType == handoverQuestTypes.FirstOrDefault();
+            isItemHandoverQuest = condition.ConditionType == handoverQuestTypes.FirstOrDefault(); // TODO: there's 2 values, why does it only check for the first
             handoverRequirements = condition;
 
             if (pmcData.TaskConditionCounters.TryGetValue("ConditionId", out var counter))
@@ -312,7 +312,9 @@ public class QuestController(
             else
             {
                 // Remove item with children
-                var toRemove = pmcData.Inventory.Items.GetItemWithChildrenTpls(itemHandover.Id);
+                var toRemove = pmcData
+                    .Inventory.Items.GetItemWithChildrenTpls(itemHandover.Id)
+                    .ToHashSet();
                 var index = pmcData.Inventory.Items.Count;
 
                 // Important: don't tell the client to remove the attachments, it will handle it

@@ -1725,7 +1725,7 @@ public record GridFilter
     public HashSet<string>? Filter { get; set; }
 
     [JsonPropertyName("ExcludedFilter")]
-    public List<string>? ExcludedFilter { get; set; }
+    public HashSet<string>? ExcludedFilter { get; set; }
 
     [JsonPropertyName("locked")]
     public bool? Locked { get; set; }

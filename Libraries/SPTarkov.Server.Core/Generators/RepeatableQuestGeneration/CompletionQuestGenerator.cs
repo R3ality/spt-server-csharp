@@ -119,7 +119,7 @@ public class CompletionQuestGenerator(
             traderId,
             repeatableConfig,
             completionConfig,
-            selectedItems
+            selectedItems.ToHashSet()
         );
 
         return quest;

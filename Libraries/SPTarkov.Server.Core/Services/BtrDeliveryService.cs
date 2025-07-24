@@ -66,7 +66,7 @@ public class BtrDeliveryService(
 
         // Remove any items that were returned by the item delivery, but also insured, from the player's insurance list
         // This is to stop items being duplicated by being returned from both item delivery and insurance
-        var deliveredItemIds = items.Select(item => item.Id);
+        var deliveredItemIds = items.Select(item => item.Id).ToHashSet();
         pmcData.InsuredItems = pmcData
             .InsuredItems.Where(insuredItem => !deliveredItemIds.Contains(insuredItem.ItemId.Value))
             .ToList();

@@ -612,9 +612,9 @@ public class RagfairOfferHelper(
         return false;
     }
 
-    protected HashSet<string> GetLoyaltyLockedOffers(List<RagfairOffer> offers, PmcData pmcProfile)
+    protected HashSet<MongoId> GetLoyaltyLockedOffers(List<RagfairOffer> offers, PmcData pmcProfile)
     {
-        var loyaltyLockedOffers = new HashSet<string>();
+        var loyaltyLockedOffers = new HashSet<MongoId>();
         foreach (var offer in offers.Where(x => x.IsTraderOffer()))
         {
             if (

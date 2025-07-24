@@ -54,7 +54,7 @@ public record GenerateEquipmentProperties
     ///     OPTIONAL - Do not generate mods for tpls in this array
     /// </summary>
     [JsonPropertyName("generateModsBlacklist")]
-    public HashSet<string>? GenerateModsBlacklist { get; set; }
+    public HashSet<MongoId>? GenerateModsBlacklist { get; set; }
 
     [JsonPropertyName("generatingPlayerLevel")]
     public double? GeneratingPlayerLevel { get; set; }

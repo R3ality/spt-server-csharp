@@ -17,13 +17,13 @@ public record InRaidConfig : BaseConfig
     ///     Names of car extracts
     /// </summary>
     [JsonPropertyName("carExtracts")]
-    public required List<string> CarExtracts { get; set; }
+    public required HashSet<string> CarExtracts { get; set; }
 
     /// <summary>
     ///     Names of coop extracts
     /// </summary>
     [JsonPropertyName("coopExtracts")]
-    public required List<string> CoopExtracts { get; set; }
+    public required HashSet<string> CoopExtracts { get; set; }
 
     /// <summary>
     ///     Fence rep gain from a single car extract

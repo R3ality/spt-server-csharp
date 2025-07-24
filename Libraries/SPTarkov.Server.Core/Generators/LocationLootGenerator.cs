@@ -154,11 +154,9 @@ public class LocationLootGenerator(
         // Remove christmas items from loot data
         if (!_seasonalEventService.ChristmasEventEnabled())
         {
-            allStaticContainersOnMapClone = allStaticContainersOnMapClone
-                .Where(item =>
-                    !_seasonalEventConfig.ChristmasContainerIds.Contains(item.Template.Id)
-                )
-                .ToList();
+            allStaticContainersOnMapClone = allStaticContainersOnMapClone.Where(item =>
+                !_seasonalEventConfig.ChristmasContainerIds.Contains(item.Template.Id)
+            );
         }
 
         var staticRandomisableContainersOnMap = GetRandomisableContainersOnMap(
@@ -561,7 +559,8 @@ public class LocationLootGenerator(
         // Some containers need to have items forced into it (quest keys etc.)
         var tplsForced = staticForced
             .Where(forcedStaticProp => forcedStaticProp.ContainerId == containerClone.Template.Id)
-            .Select(x => x.ItemTpl);
+            .Select(x => x.ItemTpl)
+            .ToHashSet();
 
         // Draw random loot
         // Allow money to spawn more than once in container
@@ -914,9 +913,9 @@ public class LocationLootGenerator(
             // Ensure no seasonal items are in pool if not in-season
             if (!seasonalEventActive)
             {
-                spawnPoint.Template.Items = spawnPoint
-                    .Template.Items.Where(item => !seasonalItemTplBlacklist.Contains(item.Template))
-                    .ToList();
+                spawnPoint.Template.Items = spawnPoint.Template.Items.Where(item =>
+                    !seasonalItemTplBlacklist.Contains(item.Template)
+                );
             }
 
             // Spawn point has no items after filtering, skip

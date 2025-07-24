@@ -197,7 +197,8 @@ public class BotEquipmentModGenerator(
                 );
                 switch (plateSlotFilteringOutcome.Result)
                 {
-                    case Result.UNKNOWN_FAILURE or Result.NO_DEFAULT_FILTER:
+                    case Result.UNKNOWN_FAILURE
+                    or Result.NO_DEFAULT_FILTER:
                         if (logger.IsLogEnabled(LogLevel.Debug))
                         {
                             logger.Debug(
@@ -1535,7 +1536,10 @@ public class BotEquipmentModGenerator(
         // Filtering mod pool to item that wasn't already there can have problems;
         // You'd have a mod being picked without any sub-mods in its chain, possibly resulting in missing required mods not being added
         // Mod is in existing mod pool
-        if (request.ItemModPool[request.ModSlot].Contains(matchingModFromPreset.Template))
+        if (
+            request.ItemModPool.TryGetValue(request.ModSlot, out var ids)
+            && ids.Contains(matchingModFromPreset.Template)
+        )
         // Found mod on preset + it already exists in mod pool
         {
             return [matchingModFromPreset.Template];
@@ -2056,7 +2060,7 @@ public class BotEquipmentModGenerator(
     public HashSet<MongoId> FilterSightsByWeaponType(
         Item weapon,
         HashSet<MongoId> scopes,
-        Dictionary<MongoId, List<MongoId>> botWeaponSightWhitelist
+        Dictionary<MongoId, HashSet<MongoId>> botWeaponSightWhitelist
     )
     {
         var weaponDetails = itemHelper.GetItem(weapon.Template);

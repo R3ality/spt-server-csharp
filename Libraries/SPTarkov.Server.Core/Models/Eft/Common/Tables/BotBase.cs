@@ -606,7 +606,7 @@ public record CounterKeyValue
     [JsonExtensionData]
     public Dictionary<string, object>? ExtensionData { get; set; }
 
-    public IEnumerable<string>? Key { get; set; }
+    public HashSet<string>? Key { get; set; }
 
     public double? Value { get; set; }
 }

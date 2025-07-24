@@ -40,7 +40,7 @@ public class ExternalInventoryMagGen(
         var magTemplate = inventoryMagGen.GetMagazineTemplate();
         var magazineTpl = magTemplate.Id;
         var weapon = inventoryMagGen.GetWeaponTemplate();
-        List<MongoId> attemptedMagBlacklist = [];
+        HashSet<MongoId> attemptedMagBlacklist = [];
         var defaultMagazineTpl = weapon.GetWeaponsDefaultMagazineTpl();
         var isShotgun = itemHelper.IsOfBaseclass(weapon.Id, BaseClasses.SHOTGUN);
 
@@ -176,7 +176,7 @@ public class ExternalInventoryMagGen(
     /// <returns> Item of chosen magazine </returns>
     public TemplateItem? GetRandomExternalMagazineForInternalMagazineGun(
         MongoId weaponTpl,
-        List<MongoId> magazineBlacklist
+        HashSet<MongoId> magazineBlacklist
     )
     {
         // The mag Slot data for the weapon

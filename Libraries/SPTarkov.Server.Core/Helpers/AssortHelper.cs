@@ -28,7 +28,7 @@ public class AssortHelper(
         PmcData pmcProfile,
         MongoId traderId,
         TraderAssort traderAssorts,
-        Dictionary<string, Dictionary<string, string>> mergedQuestAssorts,
+        Dictionary<string, Dictionary<MongoId, string>> mergedQuestAssorts,
         bool isFlea = false
     )
     {
@@ -71,15 +71,15 @@ public class AssortHelper(
     /// <param name="mergedQuestAssorts">quest assorts to search for assort id</param>
     /// <param name="assortId">Assort to look for linked quest id</param>
     /// <returns>quest id + array of quest status the assort should show for</returns>
-    protected KeyValuePair<string, List<QuestStatusEnum>>? GetQuestIdAndStatusThatShowAssort(
-        Dictionary<string, Dictionary<string, string>> mergedQuestAssorts,
-        string assortId
+    protected KeyValuePair<MongoId, HashSet<QuestStatusEnum>>? GetQuestIdAndStatusThatShowAssort(
+        Dictionary<string, Dictionary<MongoId, string>> mergedQuestAssorts,
+        MongoId assortId
     )
     {
         if (mergedQuestAssorts.TryGetValue("started", out var dict1) && dict1.ContainsKey(assortId))
         // Assort unlocked by starting quest, assort is visible to player when : started or ready to hand in + handed in
         {
-            return new KeyValuePair<string, List<QuestStatusEnum>>(
+            return new KeyValuePair<MongoId, HashSet<QuestStatusEnum>>(
                 mergedQuestAssorts["started"][assortId],
                 [
                     QuestStatusEnum.Started,
@@ -91,7 +91,7 @@ public class AssortHelper(
 
         if (mergedQuestAssorts.TryGetValue("success", out var dict2) && dict2.ContainsKey(assortId))
         {
-            return new KeyValuePair<string, List<QuestStatusEnum>>(
+            return new KeyValuePair<MongoId, HashSet<QuestStatusEnum>>(
                 mergedQuestAssorts["success"][assortId],
                 [QuestStatusEnum.Success]
             );
@@ -99,7 +99,7 @@ public class AssortHelper(
 
         if (mergedQuestAssorts.TryGetValue("fail", out var dict3) && dict3.ContainsKey(assortId))
         {
-            return new KeyValuePair<string, List<QuestStatusEnum>>(
+            return new KeyValuePair<MongoId, HashSet<QuestStatusEnum>>(
                 mergedQuestAssorts["fail"][assortId],
                 [QuestStatusEnum.Fail]
             );

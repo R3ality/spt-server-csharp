@@ -109,7 +109,7 @@ public class LocaleService(
     ///     Get array of languages supported for localisation
     /// </summary>
     /// <returns> List of locales e.g. en/fr/cn </returns>
-    public List<string> GetServerSupportedLocales()
+    public HashSet<string> GetServerSupportedLocales()
     {
         return _localeConfig.ServerSupportedLocales;
     }

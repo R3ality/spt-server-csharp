@@ -365,7 +365,7 @@ namespace SPTarkov.Server.Core.Extensions
         /// </summary>
         /// <param name="items">Inventory items to look for secure container in</param>
         /// <returns>List of ids</returns>
-        public static List<MongoId> GetSecureContainerItems(this IEnumerable<Item> items)
+        public static HashSet<MongoId> GetSecureContainerItems(this IEnumerable<Item> items)
         {
             var secureContainer = items.First(x => x.SlotId == "SecuredContainer");
 
@@ -378,7 +378,7 @@ namespace SPTarkov.Server.Core.Extensions
             var itemsInSecureContainer = items.GetItemWithChildrenTpls(secureContainer.Id);
 
             // Return all items returned and exclude the secure container item itself
-            return itemsInSecureContainer.Where(x => x != secureContainer.Id).ToList();
+            return itemsInSecureContainer.Where(x => x != secureContainer.Id).ToHashSet();
         }
 
         /// <summary>

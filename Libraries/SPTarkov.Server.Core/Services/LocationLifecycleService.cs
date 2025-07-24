@@ -601,7 +601,7 @@ public class LocationLifecycleService(
     /// </summary>
     /// <param name="extractName"> Name of extract player took </param>
     /// <returns> True if coop extract </returns>
-    protected bool ExtractTakenWasCoop(string extractName)
+    protected bool ExtractTakenWasCoop(string? extractName)
     {
         // No extract name, not a coop extract
         if (extractName is null)
@@ -990,7 +990,8 @@ public class LocationLifecycleService(
                     is not QuestStatusEnum.AvailableForStart
                         and not QuestStatusEnum.Success
             )
-            .Select(status => status.QId);
+            .Select(status => status.QId)
+            .ToHashSet();
 
         // Get db details of quests we found above
         var questDb = databaseService

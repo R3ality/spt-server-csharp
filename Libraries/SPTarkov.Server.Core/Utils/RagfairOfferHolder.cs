@@ -21,7 +21,7 @@ public class RagfairOfferHolder(
     /// <summary>
     /// Expired offer Ids
     /// </summary>
-    private readonly HashSet<string> _expiredOfferIds = [];
+    private readonly HashSet<MongoId> _expiredOfferIds = [];
 
     /// <summary>
     /// Ragfair offer cache, keyed by offer Id
@@ -55,7 +55,7 @@ public class RagfairOfferHolder(
     ///     Get a ragfair offer by its id
     /// </summary>
     /// <returns>RagfairOffer</returns>
-    public HashSet<string> GetStaleOfferIds()
+    public HashSet<MongoId> GetStaleOfferIds()
     {
         lock (_expiredOfferIdsLock)
         {

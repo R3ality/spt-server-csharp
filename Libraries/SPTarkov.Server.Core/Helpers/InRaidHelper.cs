@@ -250,7 +250,7 @@ public class InRaidHelper(
             // Ensure we don't pick up pocket items from mannequins
             if (
                 item.SlotId.StartsWith("pocket")
-                && pmcProfile.DoesItemHaveRootId(item, pmcProfile.Inventory.Equipment)
+                && pmcProfile.DoesItemHaveRootId(item, pmcProfile.Inventory.Equipment.Value)
             )
             {
                 return true;

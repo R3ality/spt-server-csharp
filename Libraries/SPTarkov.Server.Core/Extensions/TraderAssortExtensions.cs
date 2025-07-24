@@ -34,7 +34,7 @@ namespace SPTarkov.Server.Core.Extensions
             assort.LoyalLevelItems.Remove(itemId);
 
             // The item being removed may have children linked to it, find and remove them too
-            var idsToRemove = assort.Items.GetItemWithChildrenTpls(itemId);
+            var idsToRemove = assort.Items.GetItemWithChildrenTpls(itemId).ToHashSet();
             assort.Items.RemoveAll(item => idsToRemove.Contains(item.Id));
 
             return assort;
@@ -47,7 +47,7 @@ namespace SPTarkov.Server.Core.Extensions
         /// <param name="itemsTplsToRemove">Item TPLs the assort should not have</param>
         public static void RemoveItemsFromAssort(
             this TraderAssort assortToFilter,
-            HashSet<string> itemsTplsToRemove
+            HashSet<MongoId> itemsTplsToRemove
         )
         {
             assortToFilter.Items = assortToFilter

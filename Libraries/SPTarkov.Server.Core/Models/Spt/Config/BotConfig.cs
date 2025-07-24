@@ -188,7 +188,7 @@ public record WalletLootSettings
     ///     What wallets will have money in them
     /// </summary>
     [JsonPropertyName("walletTplPool")]
-    public required List<MongoId> WalletTplPool { get; set; }
+    public required HashSet<MongoId> WalletTplPool { get; set; }
 }
 
 public record EquipmentFilters
@@ -206,7 +206,7 @@ public record EquipmentFilters
     ///     Whitelist for weapon sight types allowed per gun
     /// </summary>
     [JsonPropertyName("weaponSightWhitelist")]
-    public Dictionary<MongoId, List<MongoId>>? WeaponSightWhitelist { get; set; }
+    public Dictionary<MongoId, HashSet<MongoId>>? WeaponSightWhitelist { get; set; }
 
     [JsonPropertyName("forceOnlyArmoredRigWhenNoArmor")]
     public bool? ForceOnlyArmoredRigWhenNoArmor { get; set; }
@@ -332,13 +332,13 @@ public record RandomisationDetails
     ///     Mod slots that should be fully randomised -ignores mods from bottype.json and instead creates a pool using items.json
     /// </summary>
     [JsonPropertyName("randomisedWeaponModSlots")]
-    public List<string>? RandomisedWeaponModSlots { get; set; }
+    public HashSet<string>? RandomisedWeaponModSlots { get; set; }
 
     /// <summary>
     ///     Armor slots that should be randomised e.g. 'Headwear, Armband'
     /// </summary>
     [JsonPropertyName("randomisedArmorSlots")]
-    public List<string>? RandomisedArmorSlots { get; set; }
+    public HashSet<string>? RandomisedArmorSlots { get; set; }
 
     /// <summary>
     ///     Equipment chances

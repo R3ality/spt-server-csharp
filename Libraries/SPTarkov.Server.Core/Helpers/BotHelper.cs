@@ -127,21 +127,6 @@ public class BotHelper(
     }
 
     /// <summary>
-    ///     is the provided role a PMC, case-agnostic
-    /// </summary>
-    /// <param name="botRole">Role to check</param>
-    /// <returns>True if role is PMC</returns>
-    public bool BotRoleIsPmc(string botRole)
-    {
-        HashSet<string> listToCheck =
-        [
-            _pmcConfig.UsecType.ToLowerInvariant(),
-            _pmcConfig.BearType.ToLowerInvariant(),
-        ];
-        return listToCheck.Contains(botRole.ToLowerInvariant());
-    }
-
-    /// <summary>
     ///     Get randomization settings for bot from config/bot.json
     /// </summary>
     /// <param name="botLevel">level of bot</param>

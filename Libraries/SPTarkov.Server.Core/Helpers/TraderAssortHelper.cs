@@ -24,8 +24,8 @@ public class TraderAssortHelper(
     ICloner cloner
 )
 {
-    private Dictionary<string, Dictionary<string, string>>? _mergedQuestAssorts;
-    protected virtual Dictionary<string, Dictionary<string, string>> MergedQuestAssorts
+    private Dictionary<string, Dictionary<MongoId, string>>? _mergedQuestAssorts;
+    protected virtual Dictionary<string, Dictionary<MongoId, string>> MergedQuestAssorts
     {
         get { return _mergedQuestAssorts ??= HydrateMergedQuestAssorts(); }
     }
@@ -148,9 +148,9 @@ public class TraderAssortHelper(
     /// Create a dictionary keyed by quest status (started/success) with every assortId to QuestId from every trader
     /// </summary>
     /// <returns>Dictionary</returns>
-    protected Dictionary<string, Dictionary<string, string>> HydrateMergedQuestAssorts()
+    protected Dictionary<string, Dictionary<MongoId, string>> HydrateMergedQuestAssorts()
     {
-        var result = new Dictionary<string, Dictionary<string, string>>();
+        var result = new Dictionary<string, Dictionary<MongoId, string>>();
 
         // Loop every trader
         var traders = databaseService.GetTraders();
@@ -171,7 +171,7 @@ public class TraderAssortHelper(
                 }
 
                 // Null guard - ensure Started/Success/fail exists
-                result.TryAdd(unlockStatus, new Dictionary<string, string>());
+                result.TryAdd(unlockStatus, new Dictionary<MongoId, string>());
 
                 foreach (var (assortId, questId) in assortToQuestDict)
                 {

@@ -161,16 +161,13 @@ public class BotEquipmentFilterService(
     /// </summary>
     /// <param name="botEquipmentRole">equipment role of bot to look up</param>
     /// <returns>Dictionary of weapon type and their whitelisted scope types</returns>
-    public Dictionary<MongoId, List<MongoId>> GetBotWeaponSightWhitelist(string botEquipmentRole)
+    public Dictionary<MongoId, HashSet<MongoId>>? GetBotWeaponSightWhitelist(
+        string botEquipmentRole
+    )
     {
-        var botEquipmentSettings = _botConfig.Equipment[botEquipmentRole];
-
-        if (botEquipmentSettings is null)
-        {
-            return null;
-        }
-
-        return botEquipmentSettings.WeaponSightWhitelist;
+        return _botConfig.Equipment.TryGetValue(botEquipmentRole, out var botEquipmentSettings)
+            ? botEquipmentSettings.WeaponSightWhitelist
+            : null;
     }
 
     /// <summary>

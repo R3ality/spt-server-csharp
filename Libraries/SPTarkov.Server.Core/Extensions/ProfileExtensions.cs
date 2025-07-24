@@ -209,7 +209,7 @@ namespace SPTarkov.Server.Core.Extensions
         /// <param name="item">Item to check</param>
         /// <param name="rootId">Root item id to check for</param>
         /// <returns>True when item has rootId, false when not</returns>
-        public static bool DoesItemHaveRootId(this PmcData pmcData, Item item, string rootId)
+        public static bool DoesItemHaveRootId(this PmcData pmcData, Item item, MongoId rootId)
         {
             var currentItem = item;
             while (currentItem is not null)
@@ -235,7 +235,7 @@ namespace SPTarkov.Server.Core.Extensions
         /// <param name="pmcData">Profile to search</param>
         /// <param name="questId">Quest id to look up</param>
         /// <returns>QuestStatus enum</returns>
-        public static QuestStatusEnum GetQuestStatus(this PmcData pmcData, string questId)
+        public static QuestStatusEnum GetQuestStatus(this PmcData pmcData, MongoId questId)
         {
             var quest = pmcData.Quests?.FirstOrDefault(q => q.QId == questId);
 

@@ -103,7 +103,7 @@ public class QuestHelper(
     /// <param name="before">List of quests #1</param>
     /// <param name="after">List of quests #2</param>
     /// <returns>quests not in before</returns>
-    public List<Quest> GetDeltaQuests(List<Quest> before, List<Quest> after)
+    public IEnumerable<Quest> GetDeltaQuests(List<Quest> before, List<Quest> after)
     {
         // Nothing to compare against, return after
         if (before.Count == 0)
@@ -115,7 +115,7 @@ public class QuestHelper(
         var beforeQuests = before.Select(quest => quest.Id).ToHashSet();
 
         // Return quests found in after but not before
-        return after.Where(quest => !beforeQuests.Contains(quest.Id)).ToList();
+        return after.Where(quest => !beforeQuests.Contains(quest.Id));
     }
 
     /// <summary>
@@ -586,7 +586,7 @@ public class QuestHelper(
                 var acceptedQuestCondition = q.Conditions.AvailableForStart.FirstOrDefault(c =>
                     c.ConditionType == "Quest"
                     && (c.Target.IsList ? c.Target.List : [c.Target.Item]).Contains(failedQuestId)
-                    && c.Status[0] == QuestStatusEnum.Fail
+                    && c.Status.First() == QuestStatusEnum.Fail
                 );
 
                 if (acceptedQuestCondition is null)
@@ -1586,7 +1586,7 @@ public class QuestHelper(
     /// <param name="completedQuestId">Quest just completed</param>
     protected void AddTimeLockedQuestsToProfile(
         PmcData pmcData,
-        List<Quest> quests,
+        IEnumerable<Quest> quests,
         MongoId completedQuestId
     )
     {

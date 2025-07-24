@@ -213,7 +213,7 @@ public record QuestCondition
     public string? Type { get; set; }
 
     [JsonPropertyName("status")]
-    public List<QuestStatusEnum>? Status { get; set; }
+    public HashSet<QuestStatusEnum>? Status { get; set; }
 
     [JsonPropertyName("availableAfter")]
     public int? AvailableAfter { get; set; }

@@ -372,13 +372,13 @@ public class ProfileHelper(
         var secureContainer = items.FirstOrDefault(i => i.SlotId == "SecuredContainer");
         if (secureContainer is not null)
         {
-            // Find and remove container + children
-            var childItemsInSecureContainer = items.GetItemWithChildrenTpls(secureContainer.Id);
+            // Find secure container + children
+            var secureContainerAndChildrenIds = items
+                .GetItemWithChildrenTpls(secureContainer.Id)
+                .ToHashSet();
 
-            // Remove child items + secure container
-            profile.Inventory.Items = items
-                .Where(i => !childItemsInSecureContainer.Contains(i.Id))
-                .ToList();
+            // Remove secure container + its children
+            items.RemoveAll(x => secureContainerAndChildrenIds.Contains(x.Id));
         }
 
         return profile;

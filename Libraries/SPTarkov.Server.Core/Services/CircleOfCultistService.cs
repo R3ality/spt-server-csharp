@@ -468,6 +468,7 @@ public class CircleOfCultistService(
         // Handle special case of tagilla helmets - only one reward is allowed
         if (directReward.Reward.Contains(ItemTpl.FACECOVER_TAGILLAS_WELDING_MASK_GORILLA))
         {
+            // TODO: this is likely redundant with direct reward system in config?
             directReward.Reward = [randomUtil.GetArrayValue(directReward.Reward)];
         }
 
@@ -598,7 +599,7 @@ public class CircleOfCultistService(
     /// </summary>
     /// <param name="rewardTpl">Item being rewarded to get stack size of</param>
     /// <returns>stack size of item</returns>
-    protected int GetDirectRewardBaseTypeStackSize(string rewardTpl)
+    protected int GetDirectRewardBaseTypeStackSize(MongoId rewardTpl)
     {
         var itemDetails = itemHelper.GetItem(rewardTpl);
         if (!itemDetails.Key)

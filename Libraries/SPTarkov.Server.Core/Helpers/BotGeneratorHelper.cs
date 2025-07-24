@@ -37,7 +37,7 @@ public class BotGeneratorHelper(
         nameof(EquipmentSlots.ArmBand),
     ];
 
-    private static readonly string[] _pmcTypes =
+    private static readonly FrozenSet<string> _pmcTypes =
     [
         Sides.PmcBear.ToLowerInvariant(),
         Sides.PmcUsec.ToLowerInvariant(),
@@ -524,9 +524,7 @@ public class BotGeneratorHelper(
     /// <returns>Equipment role (e.g. pmc / assault / bossTagilla)</returns>
     public string GetBotEquipmentRole(string botRole)
     {
-        return _pmcTypes.Contains(botRole, StringComparer.OrdinalIgnoreCase)
-            ? Sides.PmcEquipmentRole
-            : botRole;
+        return _pmcTypes.Contains(botRole.ToLower()) ? Sides.PmcEquipmentRole : botRole;
     }
 
     /// <summary>
@@ -775,13 +773,13 @@ public class BotGeneratorHelper(
             return false;
         }
 
-        // If Filter array only contains 1 filter and its for basetype 'item', allow it
+        // If Filter array only contains 1 filter and it is for basetype 'item', allow it
         if (filter.Count == 1 && filter.Contains(BaseClasses.ITEM))
         {
             return true;
         }
 
-        // If allowed filter has something in it + filter doesnt have basetype 'item', not allowed
+        // If allowed filter has something in it + filter doesn't have basetype 'item', not allowed
         if (filter.Count > 0 && !filter.Contains(itemDetails?.Parent ?? string.Empty))
         {
             return false;

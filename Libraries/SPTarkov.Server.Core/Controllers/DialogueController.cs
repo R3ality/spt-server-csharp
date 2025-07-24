@@ -638,10 +638,7 @@ public class DialogueController(
 
         // Only add the profile to the friends list if it doesn't already exist
         var profile = saveServer.GetProfile(sessionID);
-        if (!profile.FriendProfileIds.Contains(request.To.Value))
-        {
-            profile.FriendProfileIds.Add(request.To.Value);
-        }
+        profile.FriendProfileIds.Add(request.To.Value);
 
         // We need to delay this so that the friend request gets properly added to the clientside list before we accept it
         _ = new Timer(
@@ -677,11 +674,7 @@ public class DialogueController(
     public virtual void DeleteFriend(MongoId sessionID, DeleteFriendRequest request)
     {
         var profile = saveServer.GetProfile(sessionID);
-        var friendIndex = profile.FriendProfileIds.IndexOf(request.FriendId);
-        if (friendIndex != -1)
-        {
-            profile.FriendProfileIds.RemoveAt(friendIndex);
-        }
+        profile?.FriendProfileIds?.Remove(request.FriendId);
     }
 
     /// <summary>

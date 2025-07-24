@@ -58,7 +58,7 @@ public record LootRequest
     ///     Allowed armor plate levels 2/3/4/5/6 for armor generated
     /// </summary>
     [JsonPropertyName("armorLevelWhitelist")]
-    public List<int>? ArmorLevelWhitelist { get; set; }
+    public HashSet<int>? ArmorLevelWhitelist { get; set; }
 
     /// <summary>
     ///     Should boss items be included in allowed items

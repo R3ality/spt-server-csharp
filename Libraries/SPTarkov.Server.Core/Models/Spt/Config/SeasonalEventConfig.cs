@@ -63,7 +63,7 @@ public record SeasonalEventConfig : BaseConfig
     ///     Ids of containers on locations that only have Christmas loot
     /// </summary>
     [JsonPropertyName("christmasContainerIds")]
-    public required List<string> ChristmasContainerIds { get; set; }
+    public required HashSet<string> ChristmasContainerIds { get; set; }
 
     /// <summary>
     ///     Season - botType - location (body/feet/hands/head)

@@ -189,7 +189,7 @@ public record ItemsBlacklist
     public int? MinPlayerLevel { get; set; }
 
     [JsonPropertyName("itemIds")]
-    public List<string>? ItemIds { get; set; }
+    public HashSet<MongoId>? ItemIds { get; set; }
 }
 
 public record ItemsWhitelist
@@ -201,7 +201,7 @@ public record ItemsWhitelist
     public int? MinPlayerLevel { get; set; }
 
     [JsonPropertyName("itemIds")]
-    public List<string>? ItemIds { get; set; }
+    public HashSet<MongoId>? ItemIds { get; set; }
 }
 
 public record SampleQuests

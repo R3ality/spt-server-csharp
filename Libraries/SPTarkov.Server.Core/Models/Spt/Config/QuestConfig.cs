@@ -413,7 +413,7 @@ public record SpecificExits
     ///     Whitelist of specific extract types
     /// </summary>
     [JsonPropertyName("passageRequirementWhitelist")]
-    public required List<string> PassageRequirementWhitelist { get; set; }
+    public required HashSet<string> PassageRequirementWhitelist { get; set; }
 }
 
 public record Completion : BaseQuestConfig
@@ -541,7 +541,7 @@ public record EliminationConfig : BaseQuestConfig
     ///     Locations that should be blacklisted as a requirement
     /// </summary>
     [JsonPropertyName("distLocationBlacklist")]
-    public required List<string> DistLocationBlacklist { get; set; }
+    public required HashSet<string> DistLocationBlacklist { get; set; }
 
     /// <summary>
     ///     Probability that a distance requirement is chosen

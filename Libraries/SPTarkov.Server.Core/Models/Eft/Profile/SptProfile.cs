@@ -57,7 +57,7 @@ public record SptProfile
     ///     List of friend profile IDs
     /// </summary>
     [JsonPropertyName("friends")]
-    public List<MongoId>? FriendProfileIds { get; set; }
+    public HashSet<MongoId>? FriendProfileIds { get; set; }
 
     /// <summary>
     ///     Stores profile-related customisation, e.g. clothing / hideout walls / floors
@@ -422,7 +422,7 @@ public record Spt
     ///     item TPLs blacklisted from being sold on flea for this profile
     /// </summary>
     [JsonPropertyName("blacklistedItemTpls")]
-    public HashSet<string>? BlacklistedItemTemplates { get; set; }
+    public HashSet<MongoId>? BlacklistedItemTemplates { get; set; }
 
     /// <summary>
     ///     key: daily type

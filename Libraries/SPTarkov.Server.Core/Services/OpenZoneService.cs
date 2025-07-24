@@ -53,7 +53,7 @@ public class OpenZoneService(
             var zonesToAdd = _locationConfig.OpenZones[mapKvP.Key];
 
             // Convert openzones string into list, easier to work wih
-            var mapOpenZonesArray = dbLocations[mapKvP.Key].Base.OpenZones.Split(",").ToList();
+            var mapOpenZonesArray = dbLocations[mapKvP.Key].Base.OpenZones.Split(",").ToHashSet();
             foreach (
                 var zoneToAdd in zonesToAdd.Where(zoneToAdd =>
                     !mapOpenZonesArray.Contains(zoneToAdd)

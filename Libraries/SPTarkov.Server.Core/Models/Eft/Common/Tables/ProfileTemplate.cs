@@ -79,11 +79,11 @@ public record ProfileTraderTemplate
     ///     What traders default to being locked on profile creation
     /// </summary>
     [JsonPropertyName("lockedByDefaultOverride")]
-    public List<MongoId>? LockedByDefaultOverride { get; set; }
+    public HashSet<MongoId>? LockedByDefaultOverride { get; set; }
 
     /// <summary>
     ///     What traders should have their clothing unlocked/purchased on creation
     /// </summary>
     [JsonPropertyName("purchaseAllClothingByDefaultForTrader")]
-    public List<MongoId>? PurchaseAllClothingByDefaultForTrader { get; set; }
+    public HashSet<MongoId>? PurchaseAllClothingByDefaultForTrader { get; set; }
 }

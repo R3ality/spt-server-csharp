@@ -1152,7 +1152,7 @@ public class ItemHelper(
     /// <param name="tpl">Items tpl to check parents of</param>
     /// <param name="tplsToCheck">Tpl values to check if parents of item match</param>
     /// <returns>bool Match found</returns>
-    public bool DoesItemOrParentsIdMatch(MongoId tpl, List<MongoId> tplsToCheck)
+    public bool DoesItemOrParentsIdMatch(MongoId tpl, HashSet<MongoId> tplsToCheck)
     {
         var (itemExists, item) = GetItem(tpl);
 
@@ -1631,7 +1631,7 @@ public class ItemHelper(
         string caliber,
         Dictionary<string, IEnumerable<StaticAmmoDetails>> staticAmmoDist,
         MongoId? fallbackCartridgeTpl = null,
-        ICollection<MongoId>? cartridgeWhitelist = null
+        ISet<MongoId>? cartridgeWhitelist = null
     )
     {
         var ammos = staticAmmoDist.GetValueOrDefault(caliber, []);

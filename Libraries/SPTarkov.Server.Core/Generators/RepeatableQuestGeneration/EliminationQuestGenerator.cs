@@ -636,7 +636,7 @@ public class EliminationQuestGenerator(
             // Filter out close range weapons from far distance requirement
             case > 50:
             {
-                List<string> weaponTypeBlacklist = ["Shotgun", "Pistol"];
+                HashSet<string> weaponTypeBlacklist = ["Shotgun", "Pistol"];
 
                 // Filter out close range weapons from long distance requirement
                 generationData.WeaponCategoryRequirementConfig.RemoveAll(category =>
@@ -647,7 +647,7 @@ public class EliminationQuestGenerator(
             // Filter out long range weapons from close distance requirement
             case < 20:
             {
-                List<string> weaponTypeBlacklist = ["MarksmanRifle", "DMR"];
+                HashSet<string> weaponTypeBlacklist = ["MarksmanRifle", "DMR"];
 
                 // Filter out far range weapons from close distance requirement
                 generationData.WeaponCategoryRequirementConfig.RemoveAll(category =>
