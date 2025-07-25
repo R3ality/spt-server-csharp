@@ -245,7 +245,7 @@ public class TradeHelper(
             {
                 var offerClone = cloner.Clone(offerItems);
                 // Handle stackable items that have a max stack size limit
-                var itemCountToSend = Math.Min(itemMaxStackSize ?? 0, itemsToSendRemaining ?? 0);
+                var itemCountToSend = Math.Min(itemMaxStackSize ?? 0, itemsToSendRemaining.Value);
                 offerClone.FirstOrDefault().Upd.StackObjectsCount = itemCountToSend;
 
                 // Prevent any collisions

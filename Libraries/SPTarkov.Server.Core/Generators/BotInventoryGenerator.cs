@@ -506,7 +506,7 @@ public class BotInventoryGenerator(
         }
 
         // Roll dice on equipment item
-        var shouldSpawn = randomUtil.GetChance100(spawnChance ?? 0);
+        var shouldSpawn = randomUtil.GetChance100(spawnChance.Value);
         if (shouldSpawn && settings.RootEquipmentPool.Any())
         {
             TemplateItem? pickedItemDb = null;

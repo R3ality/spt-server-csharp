@@ -804,9 +804,9 @@ public class ItemHelper(
             return rootAndChildren;
         }
 
-        while (remainingCount.Value != 0)
+        while (remainingCount > 0)
         {
-            var amount = Math.Min(remainingCount ?? 0, maxStackSize ?? 0);
+            var amount = Math.Min(remainingCount.Value, maxStackSize ?? 0);
             var newStackClone = cloner.Clone(itemToSplit);
 
             newStackClone.Id = new MongoId();
@@ -845,13 +845,13 @@ public class ItemHelper(
             return result;
         }
 
-        while (remainingCount.Value != 0)
+        while (remainingCount > 0)
         {
             // Clone item and make IDs unique
             var itemWithChildrenClone = cloner.Clone(itemWithChildren).ReplaceIDs().ToList();
 
             // Set stack count to new value
-            var amount = Math.Min(remainingCount ?? 0, maxStackSize ?? 0);
+            var amount = Math.Min(remainingCount.Value, maxStackSize ?? 0);
             itemWithChildrenClone[0].Upd.StackObjectsCount = amount;
             remainingCount -= amount;
             result.Add(itemWithChildrenClone);

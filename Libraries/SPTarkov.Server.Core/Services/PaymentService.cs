@@ -356,7 +356,7 @@ public class PaymentService(
             var itemAmount = profileMoneyItem.Upd.StackObjectsCount;
             if (leftToPay >= itemAmount)
             {
-                leftToPay -= itemAmount ?? 0;
+                leftToPay -= itemAmount.Value;
                 inventoryHelper.RemoveItem(pmcData, profileMoneyItem.Id, sessionID, output);
             }
             else
