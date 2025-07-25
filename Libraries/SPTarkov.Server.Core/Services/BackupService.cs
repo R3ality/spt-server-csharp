@@ -58,7 +58,7 @@ public class BackupService
         }
 
         _backupIntervalTimer = new Timer(
-            async _ =>
+            async void (_) =>
             {
                 try
                 {

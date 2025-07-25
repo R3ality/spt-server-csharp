@@ -211,10 +211,7 @@ public class LocationLifecycleService(
             {
                 foreach (var enemyTypeToAdd in configHostilityChanges.AdditionalEnemyTypes)
                 {
-                    if (!locationBotHostilityDetails.AlwaysEnemies.Contains(enemyTypeToAdd))
-                    {
-                        locationBotHostilityDetails.AlwaysEnemies.Add(enemyTypeToAdd);
-                    }
+                    locationBotHostilityDetails.AlwaysEnemies.Add(enemyTypeToAdd);
                 }
             }
 
@@ -247,10 +244,7 @@ public class LocationLifecycleService(
                 locationBotHostilityDetails.AlwaysFriends = [];
                 foreach (var friendlyTypeToAdd in configHostilityChanges.AdditionalFriendlyTypes)
                 {
-                    if (!locationBotHostilityDetails.AlwaysFriends.Contains(friendlyTypeToAdd))
-                    {
-                        locationBotHostilityDetails.AlwaysFriends.Add(friendlyTypeToAdd);
-                    }
+                    locationBotHostilityDetails.AlwaysFriends.Add(friendlyTypeToAdd);
                 }
             }
 
