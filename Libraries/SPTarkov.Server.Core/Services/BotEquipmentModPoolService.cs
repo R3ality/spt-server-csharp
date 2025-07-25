@@ -263,11 +263,7 @@ public class BotEquipmentModPoolService(
                 && itemHelper.IsOfBaseclasses(item.Id, [BaseClasses.WEAPON, BaseClasses.MOD])
             );
 
-        var x = GeneratePool(weaponsAndMods, "weapon");
-
-        logger.Warning(jsonUtil.Serialize(x));
-
-        return x;
+        return GeneratePool(weaponsAndMods, "weapon");
     }
 
     /// <summary>
