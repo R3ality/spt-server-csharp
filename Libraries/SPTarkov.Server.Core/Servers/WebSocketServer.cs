@@ -21,14 +21,14 @@ public class WebSocketServer(
 
     private async Task HandleWebSocket(HttpContext context, WebSocket webSocket)
     {
-        var socketHandlers = _webSocketConnectionHandler
-            .Where(wsh => context.Request.Path.Value.Contains(wsh.GetHookUrl()))
-            .ToList();
+        var socketHandlers = _webSocketConnectionHandler.Where(wsh =>
+            context.Request.Path.Value.Contains(wsh.GetHookUrl())
+        );
 
         var cts = new CancellationTokenSource();
         var wsToken = cts.Token;
 
-        if (socketHandlers.Count == 0)
+        if (!socketHandlers.Any())
         {
             var message =
                 $"Socket connection received for url {context.Request.Path.Value}, but there is no websocket handler configured for it!";

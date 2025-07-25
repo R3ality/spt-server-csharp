@@ -1051,7 +1051,7 @@ public class QuestHelper(
     /// </summary>
     /// <param name="pmcProfile">profile to update</param>
     /// <param name="statuses">statuses quests should have added to profile</param>
-    public void AddAllQuestsToProfile(PmcData pmcProfile, List<QuestStatusEnum> statuses)
+    public void AddAllQuestsToProfile(PmcData pmcProfile, IEnumerable<QuestStatusEnum> statuses)
     {
         // Iterate over all quests in db
         var quests = databaseService.GetQuests();
@@ -1074,7 +1074,7 @@ public class QuestHelper(
             {
                 QId = key,
                 StartTime = timeUtil.GetTimeStamp(),
-                Status = statuses[^1], // Get last status in list as currently active status
+                Status = statuses.Last(), // Get last status in list as currently active status
                 StatusTimers = statusesDict,
                 CompletedConditions = [],
                 AvailableAfter = 0,
