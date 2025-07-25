@@ -18,6 +18,7 @@ public class ItemBaseClassService(
 {
     private bool _cacheGenerated;
     private Dictionary<MongoId, HashSet<MongoId>> _itemBaseClassesCache = [];
+    private HashSet<MongoId> rootNodeIds = [];
 
     /// <summary>
     ///     Create cache and store inside ItemBaseClassService <br />
@@ -29,18 +30,22 @@ public class ItemBaseClassService(
         _itemBaseClassesCache = new Dictionary<MongoId, HashSet<MongoId>>();
 
         var items = databaseService.GetItems();
-        var filteredDbItems = items.Where(x =>
-            string.Equals(x.Value.Type, "Item", StringComparison.OrdinalIgnoreCase)
-        );
-        foreach (var item in filteredDbItems)
+        foreach (var item in items)
         {
-            var itemIdToUpdate = item.Value.Id;
-            if (!_itemBaseClassesCache.ContainsKey(item.Value.Id))
+            if (string.Equals(item.Value.Type, "Item", StringComparison.OrdinalIgnoreCase))
             {
-                _itemBaseClassesCache[item.Value.Id] = [];
-            }
+                var itemIdToUpdate = item.Value.Id;
+                if (!_itemBaseClassesCache.ContainsKey(item.Value.Id))
+                {
+                    _itemBaseClassesCache[item.Value.Id] = [];
+                }
 
-            AddBaseItems(itemIdToUpdate, item.Value);
+                AddBaseItems(itemIdToUpdate, item.Value);
+            }
+            else
+            {
+                rootNodeIds.Add(item.Key);
+            }
         }
 
         _cacheGenerated = true;
@@ -84,7 +89,7 @@ public class ItemBaseClassService(
 
         // The cache is only generated for item templates with `_type == "Item"`, so return false for any other type,
         // including item templates that simply don't exist.
-        if (!CachedItemIsOfItemType(itemTpl))
+        if (rootNodeIds.Contains(itemTpl))
         {
             return false;
         }
@@ -116,20 +121,6 @@ public class ItemBaseClassService(
         );
 
         return false;
-    }
-
-    /// <summary>
-    ///     Check if cached item template is of type Item
-    /// </summary>
-    /// <param name="itemTemplateId"> ItemTemplateId item to check </param>
-    /// <returns> True if item is of type Item </returns>
-    private bool CachedItemIsOfItemType(MongoId itemTemplateId)
-    {
-        return string.Equals(
-            databaseService.GetItems()[itemTemplateId]?.Type,
-            "Item",
-            StringComparison.OrdinalIgnoreCase
-        );
     }
 
     /// <summary>
