@@ -226,7 +226,7 @@ public class BotHelper(
                 );
 
                 // Return a random string from names
-                return randomUtil.GetCollectionValue(chosenFactionDetails.FirstNames);
+                return randomUtil.GetRandomElement(chosenFactionDetails.FirstNames);
             }
 
             _pmcNameCache.TryAdd(cacheKey, matchingNames);
@@ -234,6 +234,6 @@ public class BotHelper(
             eligibleNames = matchingNames;
         }
 
-        return randomUtil.GetCollectionValue(eligibleNames);
+        return randomUtil.GetRandomElement(eligibleNames);
     }
 }

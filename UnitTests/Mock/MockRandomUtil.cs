@@ -47,7 +47,7 @@ public class MockRandomUtil(ISptLogger<RandomUtil> _logger, ICloner _cloner)
         return true;
     }
 
-    public override T GetCollectionValue<T>(IEnumerable<T> collection)
+    public override T GetRandomElement<T>(IEnumerable<T> collection)
     {
         if (!collection.Any())
         {
@@ -59,12 +59,12 @@ public class MockRandomUtil(ISptLogger<RandomUtil> _logger, ICloner _cloner)
 
     public override TKey GetKey<TKey, TVal>(Dictionary<TKey, TVal> dictionary)
     {
-        return GetCollectionValue(dictionary.Keys);
+        return GetRandomElement(dictionary.Keys);
     }
 
     public override TVal GetVal<TKey, TVal>(Dictionary<TKey, TVal> dictionary)
     {
-        return GetCollectionValue(dictionary.Values);
+        return GetRandomElement(dictionary.Values);
     }
 
     public override double GetNormallyDistributedRandomNumber(
@@ -125,7 +125,7 @@ public class MockRandomUtil(ISptLogger<RandomUtil> _logger, ICloner _cloner)
     public override T? GetArrayValue<T>(IEnumerable<T> list)
         where T : default
     {
-        return GetCollectionValue(list);
+        return GetRandomElement(list);
     }
 
     public override bool RollChance(double chance, double scale = 1)

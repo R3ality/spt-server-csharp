@@ -115,9 +115,9 @@ public class RandomUtil(ISptLogger<RandomUtil> _logger, ICloner _cloner)
     /// </summary>
     /// <param name="collection">The collection of strings to select a random value from.</param>
     /// <returns>A randomly selected string from the array.</returns>
-    public virtual T GetCollectionValue<T>(IEnumerable<T> collection)
+    public virtual T GetRandomElement<T>(IEnumerable<T> collection)
     {
-        // We can call `count` directly if it's a list
+        // Already a List
         if (collection is IList<T> list)
         {
             if (!list.Any())
@@ -128,13 +128,9 @@ public class RandomUtil(ISptLogger<RandomUtil> _logger, ICloner _cloner)
             return list[GetInt(0, list.Count - 1)];
         }
 
-        var count = collection.Count(); // Run query and count elements
-        if (count == 0)
-        {
-            throw new InvalidOperationException("Sequence contains no elements.");
-        }
-
-        return collection.ElementAt(GetInt(0, count - 1));
+        // Faster than Reservoir Sampling or calling collection.Count() and doing above
+        var toListedCollection = collection.ToList();
+        return toListedCollection[GetInt(0, toListedCollection.Count - 1)];
     }
 
     /// <summary>
@@ -147,7 +143,7 @@ public class RandomUtil(ISptLogger<RandomUtil> _logger, ICloner _cloner)
     public virtual TKey GetKey<TKey, TVal>(Dictionary<TKey, TVal> dictionary)
         where TKey : notnull
     {
-        return GetCollectionValue(dictionary.Keys);
+        return GetRandomElement(dictionary.Keys);
     }
 
     /// <summary>
@@ -160,7 +156,7 @@ public class RandomUtil(ISptLogger<RandomUtil> _logger, ICloner _cloner)
     public virtual TVal GetVal<TKey, TVal>(Dictionary<TKey, TVal> dictionary)
         where TKey : notnull
     {
-        return GetCollectionValue(dictionary.Values);
+        return GetRandomElement(dictionary.Values);
     }
 
     /// <summary>
@@ -467,7 +463,7 @@ public class RandomUtil(ISptLogger<RandomUtil> _logger, ICloner _cloner)
 
     public virtual T? GetArrayValue<T>(IEnumerable<T> list)
     {
-        return GetCollectionValue(list);
+        return GetRandomElement(list);
     }
 
     /// <summary>
