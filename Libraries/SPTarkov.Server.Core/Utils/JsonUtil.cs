@@ -2,7 +2,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using SPTarkov.DI.Annotations;
-using SPTarkov.Server.Core.Utils.Json.Converters;
+using SPTarkov.Server.Core.Utils.Json;
 
 namespace SPTarkov.Server.Core.Utils;
 

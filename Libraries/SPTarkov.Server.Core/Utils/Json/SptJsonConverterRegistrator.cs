@@ -1,9 +1,8 @@
-﻿using System.Reflection;
-using System.Text.Json.Serialization;
-using Microsoft.Extensions.Logging;
+﻿using System.Text.Json.Serialization;
 using SPTarkov.DI.Annotations;
+using SPTarkov.Server.Core.Utils.Json.Converters;
 
-namespace SPTarkov.Server.Core.Utils.Json.Converters;
+namespace SPTarkov.Server.Core.Utils.Json;
 
 [Injectable]
 public class SptJsonConverterRegistrator : IJsonConverterRegistrator

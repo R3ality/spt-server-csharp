@@ -37,6 +37,12 @@ public class BaseInteractionRequestDataConverter : JsonConverter<BaseInteraction
         // Get the underlying 'type' of action the client is requesting we do
         var action = jsonDocument.RootElement.GetProperty("Action").GetString();
 
+        // Handle nullability here in case action's GetString is null
+        if (action is null)
+        {
+            action = string.Empty;
+        }
+
         return ConvertToCorrectType(action, jsonDocument.RootElement, jsonText, options);
     }
 

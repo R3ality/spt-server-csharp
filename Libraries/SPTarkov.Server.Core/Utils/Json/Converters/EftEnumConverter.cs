@@ -16,18 +16,13 @@ public class EftEnumConverterFactory : JsonConverterFactory
         JsonSerializerOptions options
     )
     {
-        return (JsonConverter)
-            Activator.CreateInstance(typeof(EftEnumConverter<>).MakeGenericType(typeToConvert));
+        return Activator.CreateInstance(typeof(EftEnumConverter<>).MakeGenericType(typeToConvert))
+            as JsonConverter;
     }
 }
 
 public class EftEnumConverter<T> : JsonConverter<T>
 {
-    private static readonly JsonSerializerOptions _options = new()
-    {
-        Converters = { new JsonStringEnumConverter() },
-    };
-
     public override T? Read(
         ref Utf8JsonReader reader,
         Type typeToConvert,
@@ -56,17 +51,17 @@ public class EftEnumConverter<T> : JsonConverter<T>
     {
         if (typeof(T).GetFields().Any(f => f.FieldType == typeof(string)))
         {
-            JsonSerializer.Serialize(writer, value as string, _options);
+            JsonSerializer.Serialize(writer, value as string, options);
         }
         else
         {
             if (typeof(T).GetFields().Any(f => f.FieldType == typeof(int)))
             {
-                JsonSerializer.Serialize(writer, Convert.ToInt32(value), _options);
+                JsonSerializer.Serialize(writer, Convert.ToInt32(value), options);
             }
             else if (typeof(T).GetFields().Any(f => f.FieldType == typeof(byte)))
             {
-                JsonSerializer.Serialize(writer, Convert.ToByte(value), _options);
+                JsonSerializer.Serialize(writer, Convert.ToByte(value), options);
             }
             else
             {
