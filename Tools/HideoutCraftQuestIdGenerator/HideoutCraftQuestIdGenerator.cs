@@ -34,7 +34,7 @@ public class HideoutCraftQuestIdGenerator(
         new()
         {
             // KEY = PRODUCTION, VALUE = QUEST
-            { "63a571802116d261d2336cd1", "625d6ffaf7308432be1d44c5" }, // Network Provider - Part 2
+            { new MongoId("63a571802116d261d2336cd1"), new MongoId("625d6ffaf7308432be1d44c5") }, // Network Provider - Part 2)
         };
 
     private readonly Dictionary<MongoId, MongoId> _questProductionMap = new();
@@ -77,6 +77,7 @@ public class HideoutCraftQuestIdGenerator(
                     QuestId = questId,
                     ItemTemplate = reward.Items[0].Template,
                     Quantity = 0,
+                    QuestName = quest.QuestName,
                 };
 
                 // Loop over root items only, ignore children
@@ -108,6 +109,7 @@ public class HideoutCraftQuestIdGenerator(
             // Skip blacklisted productions
             if (_blacklistedProductions.Contains(production.Id))
             {
+                _logger.Debug($"Skipped blacklisted production: {production.Id}");
                 continue;
             }
 
@@ -124,7 +126,7 @@ public class HideoutCraftQuestIdGenerator(
             if (questCompleteRequirements.Count > 1)
             {
                 _logger.Error(
-                    $"Error, production: {production.Id} contains multiple QuestComplete requirements"
+                    $"Error, prodId: {production.Id} contains multiple QuestComplete requirements"
                 );
 
                 // Production has no multiple quest requirements
@@ -139,9 +141,11 @@ public class HideoutCraftQuestIdGenerator(
                 )
             )
             {
+                var enLocale = _databaseServer.GetTables().Locales.Global["en"].Value;
+                var questName = enLocale[$"{associatedQuestIdToComplete} name"];
                 // Found one, move to next production
                 _logger.Success(
-                    $"FORCED - Updated: {production.Id} {production.EndProduct} ({_itemHelper.GetItemName(production.EndProduct)}) with quantity: {production.Count} to target quest: {associatedQuestIdToComplete}"
+                    $"FORCED - Updated: prodId: {production.Id} endProd: {production.EndProduct} ({_itemHelper.GetItemName(production.EndProduct)}) with quantity: {production.Count} to quest: {associatedQuestIdToComplete} {questName}"
                 );
                 questCompleteRequirements[0].QuestId = associatedQuestIdToComplete;
 
@@ -172,7 +176,7 @@ public class HideoutCraftQuestIdGenerator(
             _questProductionMap[questProductionOutputs[0].QuestId] = production.Id;
             questCompleteRequirements[0].QuestId = questProductionOutputs[0].QuestId;
             _logger.Success(
-                $"Updated: {production.Id}, {production.EndProduct} with quantity: {production.Count} to target quest: {questProductionOutputs[0].QuestId}"
+                $"Updated prodId: {production.Id}, endProd: {production.EndProduct} quantity: {production.Count} to quest: {questProductionOutputs[0].QuestId} {questProductionOutputs[0].QuestName}"
             );
         }
     }
@@ -187,15 +191,16 @@ public class HideoutCraftQuestIdGenerator(
         if (!questProductionOutputs.Any())
         {
             _logger.Error(
-                $"Unable to find quest for production: {production.Id}, endProduct: {production.EndProduct} ({_itemHelper.GetItemName(production.EndProduct)}) with quantity: {production.Count}. Potential new or removed quest"
+                $"Error: Unable to find matching quest for prodId: {production.Id}, endProduct: {production.EndProduct} ({_itemHelper.GetItemName(production.EndProduct)}) quantity: {production.Count}. Potential new or removed quest?"
             );
             return false;
         }
 
         if (questProductionOutputs.Count > 1)
         {
+            var questNamesCSV = string.Join(",", questProductionOutputs.Select(x => x.QuestName));
             _logger.Error(
-                $"Multiple quests match production {production.Id}, endProduct {production.EndProduct} with quantity: {production.Count}"
+                $"Error: Multiple quests match prodId: {production.Id}, endProduct: {production.EndProduct} with quantity: {production.Count}, quests: {questNamesCSV}"
             );
             return false;
         }
@@ -206,7 +211,7 @@ public class HideoutCraftQuestIdGenerator(
         )
         {
             _logger.Error(
-                $"Multiple productions match quest.EndProduct {production.EndProduct} with quantity {production.Count}, existing quest: {questComplete.QuestId}"
+                $"Error: Multiple productions match quest. EndProduct: {production.EndProduct} with quantity {production.Count}, existing quest: {questComplete.QuestId} {questProductionOutputs[0].QuestName}"
             );
 
             return false;
@@ -214,8 +219,12 @@ public class HideoutCraftQuestIdGenerator(
 
         if (_questProductionMap.ContainsKey(questProductionOutputs[0].QuestId))
         {
+            var recipies = _databaseServer.GetTables().Hideout.Production.Recipes;
+            var prodId = _questProductionMap[questProductionOutputs[0].QuestId];
+            var prod = recipies.FirstOrDefault(x => x.Id == prodId);
+            var prodItemName = _itemHelper.GetItemName(prod.EndProduct);
             _logger.Warning(
-                $"Quest {questProductionOutputs[0].QuestId} is already associated with production: {_questProductionMap[questProductionOutputs[0].QuestId]}. Potential conflict"
+                $"Error: Quest {questProductionOutputs[0].QuestId} {questProductionOutputs[0].QuestName} already associated with production: {prodId} {prodItemName}. Potential conflict"
             );
         }
 
@@ -245,4 +254,5 @@ public class QuestProductionOutput
     public MongoId ItemTemplate { get; set; }
 
     public double Quantity { get; set; }
+    public string QuestName { get; set; }
 }
