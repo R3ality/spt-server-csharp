@@ -612,7 +612,10 @@ public class RagfairOfferHelper(
         return false;
     }
 
-    protected HashSet<MongoId> GetLoyaltyLockedOffers(List<RagfairOffer> offers, PmcData pmcProfile)
+    protected HashSet<MongoId> GetLoyaltyLockedOffers(
+        IEnumerable<RagfairOffer> offers,
+        PmcData pmcProfile
+    )
     {
         var loyaltyLockedOffers = new HashSet<MongoId>();
         foreach (var offer in offers.Where(x => x.IsTraderOffer()))
@@ -657,7 +660,7 @@ public class RagfairOfferHelper(
 
             if (
                 offer.SellResults is null
-                || offer.SellResults.Count == 0
+                || !offer.SellResults.Any()
                 || currentTimestamp < offer.SellResults.FirstOrDefault()?.SellTime
             )
             {
@@ -705,7 +708,7 @@ public class RagfairOfferHelper(
     /// </summary>
     /// <param name="itemsInInventoryToSumStackCount">items to sum up</param>
     /// <returns>Total stack count</returns>
-    public double GetTotalStackCountSize(List<List<Item>> itemsInInventoryToSumStackCount)
+    public double GetTotalStackCountSize(IEnumerable<List<Item>> itemsInInventoryToSumStackCount)
     {
         return itemsInInventoryToSumStackCount.Sum(itemAndChildren =>
             itemAndChildren.FirstOrDefault()?.Upd?.StackObjectsCount.GetValueOrDefault(1) ?? 1

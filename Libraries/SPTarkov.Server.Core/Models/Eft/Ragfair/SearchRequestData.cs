@@ -62,7 +62,7 @@ public record SearchRequestData : IRequestData
     public bool? UpdateOfferCount { get; set; }
 
     [JsonPropertyName("handbookId")]
-    public string? HandbookId { get; set; }
+    public MongoId? HandbookId { get; set; }
 
     [JsonPropertyName("linkedSearchId")]
     public string? LinkedSearchId { get; set; }

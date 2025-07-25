@@ -129,7 +129,7 @@ public class RagfairServerHelper(
     /// </summary>
     /// <param name="sessionID">Player to send items to</param>
     /// <param name="returnedItems">Items to send to player</param>
-    public void ReturnItems(MongoId sessionID, List<Item> returnedItems)
+    public void ReturnItems(MongoId sessionID, IEnumerable<Item> returnedItems)
     {
         mailSendService.SendLocalisedNpcMessageToPlayer(
             sessionID,

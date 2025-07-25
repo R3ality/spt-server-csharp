@@ -282,19 +282,6 @@ public class PmcChatResponseService(
     }
 
     /// <summary>
-    ///     Randomly draw a victim of the list and return their details
-    /// </summary>
-    /// <param name="pmcVictims"> Possible victims to choose from </param>
-    /// <returns> UserDialogInfo object </returns>
-    // TODO: is this used?
-    protected UserDialogInfo ChooseRandomVictim(List<Victim> pmcVictims)
-    {
-        var randomVictim = randomUtil.GetArrayValue(pmcVictims);
-
-        return GetVictimDetails(randomVictim);
-    }
-
-    /// <summary>
     ///     Convert a victim object into a IUserDialogInfo object
     /// </summary>
     /// <param name="pmcVictim"> Victim to convert </param>

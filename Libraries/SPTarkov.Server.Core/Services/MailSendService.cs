@@ -595,12 +595,12 @@ public class MailSendService(
     /// </summary>
     /// <param name="items"> Possible items to choose from </param>
     /// <returns> Chosen 'primary' item </returns>
-    protected Item? GetBaseItemFromRewards(List<Item> items)
+    protected Item? GetBaseItemFromRewards(IEnumerable<Item> items)
     {
         // Only one item in reward, return it
-        if (items?.Count == 1)
+        if (items.Count() == 1)
         {
-            return items[0];
+            return items.First();
         }
 
         // Find first item with slotId that indicates it's a 'base' item

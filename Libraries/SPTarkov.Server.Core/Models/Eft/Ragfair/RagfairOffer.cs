@@ -24,7 +24,7 @@ public record RagfairOffer
     public List<Item>? Items { get; set; }
 
     [JsonPropertyName("requirements")]
-    public List<OfferRequirement>? Requirements { get; set; }
+    public IEnumerable<OfferRequirement>? Requirements { get; set; }
 
     [JsonPropertyName("root")]
     public MongoId Root { get; set; }

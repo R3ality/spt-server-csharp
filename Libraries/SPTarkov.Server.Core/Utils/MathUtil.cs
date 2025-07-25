@@ -12,9 +12,9 @@ public class MathUtil
     /// <param name="values">The list of numbers to which the summand should be added</param>
     /// <param name="additive"></param>
     /// <returns>A list of elements with the additive added to all elements</returns>
-    public List<double> ListAdd(List<double> values, double additive)
+    public IEnumerable<double> ListAdd(IEnumerable<double> values, double additive)
     {
-        return values.Select(v => v + additive).ToList();
+        return values.Select(v => v + additive);
     }
 
     /// <summary>

@@ -54,9 +54,9 @@ public class GiftService(
     ///     Get an array of all gift ids
     /// </summary>
     /// <returns> String list of gift ids </returns>
-    public List<string> GetGiftIds()
+    public IEnumerable<string> GetGiftIds()
     {
-        return _giftConfig.Gifts.Keys.ToList();
+        return _giftConfig.Gifts.Keys;
     }
 
     /// <summary>

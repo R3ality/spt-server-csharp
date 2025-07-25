@@ -129,7 +129,7 @@ public class TraderAssortHelper(
     ///     Reset every traders root item `BuyRestrictionCurrent` property to 0
     /// </summary>
     /// <param name="assortItems">Items to adjust</param>
-    protected void ResetBuyRestrictionCurrentValue(List<Item> assortItems)
+    protected void ResetBuyRestrictionCurrentValue(IEnumerable<Item> assortItems)
     {
         // iterate over root items
         foreach (var assort in assortItems.Where(item => item.SlotId == "hideout"))

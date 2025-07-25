@@ -47,7 +47,7 @@ public class WeightedRandomHelper(
     /// <param name="items">List of items</param>
     /// <param name="weights">List of weights</param>
     /// <returns>Dictionary with item and index</returns>
-    public WeightedRandomResult<T> WeightedRandom<T>(List<T> items, List<double> weights)
+    public WeightedRandomResult<T> WeightedRandom<T>(IList<T> items, IList<double> weights)
     {
         if (items.Count == 0)
         {

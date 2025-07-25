@@ -33,5 +33,13 @@
                 dict[key] += value;
             }
         }
+
+        public static void RemoveItems<K, V>(this IDictionary<K, V> collection, ISet<K> idsToRemove)
+        {
+            foreach (var key in idsToRemove)
+            {
+                collection.Remove(key);
+            }
+        }
     }
 }

@@ -875,21 +875,6 @@ public class HideoutController(
     }
 
     /// <summary>
-    ///     Add generated scav case rewards to player profile
-    /// </summary>
-    /// <param name="pmcData">Players PMC profile</param>
-    /// <param name="rewards">reward items to add to profile</param>
-    /// <param name="recipeId">recipe id to save into Production dict</param>
-    public void AddScavCaseRewardsToProfile(PmcData pmcData, List<Item> rewards, MongoId recipeId)
-    {
-        pmcData.Hideout.Production[$"ScavCase{recipeId}"] = new Production
-        {
-            Products = rewards,
-            RecipeId = recipeId,
-        };
-    }
-
-    /// <summary>
     ///     Start production of continuously created item
     /// </summary>
     /// <param name="pmcData">Players PMC profile</param>

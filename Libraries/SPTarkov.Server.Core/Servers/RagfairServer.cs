@@ -85,7 +85,7 @@ public class RagfairServer(
     public Dictionary<MongoId, int> GetAllActiveCategories(
         bool fleaUnlocked,
         SearchRequestData searchRequestData,
-        List<RagfairOffer> offers
+        IEnumerable<RagfairOffer> offers
     )
     {
         return _ragfairCategoriesService.GetCategoriesFromOffers(

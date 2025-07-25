@@ -49,8 +49,8 @@ public record SptProfile
     /// </summary>
     [JsonPropertyName("traderPurchases")]
     public Dictionary<
-        string,
-        Dictionary<string, TraderPurchaseData>?
+        MongoId,
+        Dictionary<MongoId, TraderPurchaseData>?
     >? TraderPurchases { get; set; }
 
     /// <summary>
@@ -311,7 +311,7 @@ public record Message
     public SystemData? SystemData { get; set; }
 
     [JsonPropertyName("profileChangeEvents")]
-    public List<ProfileChangeEvent>? ProfileChangeEvents { get; set; }
+    public IEnumerable<ProfileChangeEvent>? ProfileChangeEvents { get; set; }
 }
 
 public record ReplyTo

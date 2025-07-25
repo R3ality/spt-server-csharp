@@ -931,9 +931,9 @@ public class FenceService(
                     && string.Equals(item.ParentId, "hideout", StringComparison.OrdinalIgnoreCase)
                 ) != null
             )
-            .SelectMany(i => i)
-            .ToList();
-        if (matchingItems.Count == 0)
+            .SelectMany(i => i);
+
+        if (!matchingItems.Any())
         // Nothing matches by tpl and is root item, exit early
         {
             return null;
@@ -952,9 +952,9 @@ public class FenceService(
             && itemDbDetails.Properties.Slots.Any();
 
         // Only one match and it's not medical or armored gear
-        if (matchingItems.Count == 1 && !(isMedical || isGearAndHasSlots))
+        if (matchingItems.Count() == 1 && !(isMedical || isGearAndHasSlots))
         {
-            return matchingItems[0];
+            return matchingItems.First();
         }
 
         // Items have sub properties that need to be checked against
@@ -1777,34 +1777,46 @@ public class FenceService(
         fenceAssortItem.Upd.StackObjectsCount -= buyCount;
     }
 
-    protected void DeleteOffer(MongoId assortId, List<Item> assorts)
+    /// <summary>
+    /// Remove an offer from assort
+    /// </summary>
+    /// <param name="assortId">Id of assort offer to remove</param>
+    /// <param name="assortItemsToRemoveFrom">Assort items to remove from (fenceAssort.Items / fenceDiscountAssort.Items)</param>
+    protected void DeleteOffer(MongoId assortId, List<Item> assortItemsToRemoveFrom)
     {
         // Assort could have child items, remove those too
-        var itemWithChildrenToRemove = assorts.GetItemWithChildren(assortId);
+        var itemWithChildrenToRemove = assortItemsToRemoveFrom.GetItemWithChildren(assortId);
         foreach (var itemToRemove in itemWithChildrenToRemove)
         {
-            var indexToRemove = assorts.FindIndex(item => item.Id == itemToRemove.Id);
-
-            // No offer found in main assort, check discount items
-            if (indexToRemove == -1)
+            if (!assortItemsToRemoveFrom.Remove(itemToRemove))
             {
-                indexToRemove = fenceDiscountAssort.Items.FindIndex(item =>
-                    item.Id == itemToRemove.Id
+                logger.Warning(
+                    $"unable to remove fence assort item: {itemToRemove.Id} tpl: {itemToRemove.Template}"
                 );
-                fenceDiscountAssort.Items.Splice(indexToRemove, 1);
-
-                if (indexToRemove == -1)
-                {
-                    logger.Warning(
-                        $"unable to remove fence assort item: {itemToRemove.Id} tpl: {itemToRemove.Template}"
-                    );
-                }
-
-                return;
             }
 
-            // Remove offer from assort
-            assorts.Splice(indexToRemove, 1);
+            //var indexToRemove = assortsToDeleteFrom.FindIndex(item => item.Id == itemToRemove.Id);
+
+            //// No offer found in main assort, check discount items
+            //if (indexToRemove == -1)
+            //{
+            //    indexToRemove = fenceDiscountAssort.Items.FindIndex(item =>
+            //        item.Id == itemToRemove.Id
+            //    );
+            //    fenceDiscountAssort.Items.Splice(indexToRemove, 1);
+
+            //    if (indexToRemove == -1)
+            //    {
+            //        logger.Warning(
+            //            $"unable to remove fence assort item: {itemToRemove.Id} tpl: {itemToRemove.Template}"
+            //        );
+            //    }
+
+            //    return;
+            //}
+
+            //// Remove offer from assort
+            //assortsToDeleteFrom.Splice(indexToRemove, 1);
         }
     }
 }

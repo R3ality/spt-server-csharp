@@ -232,20 +232,4 @@ public class LocaleService(
     {
         return CultureInfo.InstalledUICulture;
     }
-
-    public List<string> GetLocaleKeysThatStartsWithValue(string partialKey)
-    {
-        return GetLocaleDb().Keys.Where(x => x.StartsWith(partialKey)).ToList();
-    }
-
-    /// <summary>
-    ///     Blank out the "test" mail message from prapor
-    /// </summary>
-    protected Dictionary<string, string> RemovePraporTestMessage(
-        Dictionary<string, string> dbLocales
-    )
-    {
-        dbLocales["61687e2c3e526901fa76baf9"] = "";
-        return dbLocales;
-    }
 }

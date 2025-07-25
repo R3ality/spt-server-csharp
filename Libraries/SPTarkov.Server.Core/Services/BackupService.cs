@@ -213,7 +213,7 @@ public class BackupService
     }
 
     protected SortedDictionary<long, string> GetBackupPathsWithCreationTimestamp(
-        List<string> backupPaths
+        IEnumerable<string> backupPaths
     )
     {
         var result = new SortedDictionary<long, string>();
@@ -295,7 +295,7 @@ public class BackupService
     /// </summary>
     /// <param name="backupFilenames"> List of backup file names to be removed. </param>
     /// <returns> A promise that resolves when all specified backups have been removed. </returns>
-    protected void RemoveExcessBackups(List<string> backupFilenames)
+    protected void RemoveExcessBackups(IEnumerable<string> backupFilenames)
     {
         var filePathsToDelete = backupFilenames.Select(x => x);
         foreach (var pathToDelete in filePathsToDelete)

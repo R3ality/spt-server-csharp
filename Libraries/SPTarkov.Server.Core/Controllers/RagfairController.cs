@@ -219,7 +219,7 @@ public class RagfairController(
         // No trader found in profile, create a blank record for them
         var existsInProfile = !fullProfile.TraderPurchases.TryAdd(
             offer.User.Id,
-            new Dictionary<string, TraderPurchaseData>()
+            new Dictionary<MongoId, TraderPurchaseData>()
         );
         if (!existsInProfile)
         {
@@ -249,7 +249,7 @@ public class RagfairController(
     ///     Add index to all offers passed in (0-indexed)
     /// </summary>
     /// <param name="offers">Offers to add index value to</param>
-    protected void AddIndexValueToOffers(List<RagfairOffer> offers)
+    protected void AddIndexValueToOffers(IEnumerable<RagfairOffer> offers)
     {
         var counter = 0;
 

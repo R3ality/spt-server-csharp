@@ -168,7 +168,7 @@ public static class Program
         return builder;
     }
 
-    private static List<SptMod> ValidateMods(List<SptMod> mods)
+    private static List<SptMod> ValidateMods(IEnumerable<SptMod> mods)
     {
         if (!ProgramStatics.MODS())
         {

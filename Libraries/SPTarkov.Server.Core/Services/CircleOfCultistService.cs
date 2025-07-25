@@ -838,7 +838,7 @@ public class CircleOfCultistService(
             var nextTargetStageLevel = (currentStageLevel + 1).ToString() ?? "";
             if (dbArea?.Stages?.TryGetValue(nextTargetStageLevel, out var nextStageDbData) ?? false)
             {
-                // Next stage exists, gather up requirements and add to pool
+                // Next stage exists, gather requirements and add to pool
                 var itemRequirements = GetItemRequirements(nextStageDbData.Requirements);
                 foreach (var rewardToAdd in itemRequirements)
                 {
@@ -869,23 +869,23 @@ public class CircleOfCultistService(
     /// </summary>
     /// <param name="areas">Hideout areas to iterate over</param>
     /// <returns>Active area array</returns>
-    protected List<BotHideoutArea> GetPlayerAccessibleHideoutAreas(List<BotHideoutArea> areas)
+    protected IEnumerable<BotHideoutArea> GetPlayerAccessibleHideoutAreas(
+        IEnumerable<BotHideoutArea> areas
+    )
     {
-        return areas
-            .Where(area =>
+        return areas.Where(area =>
+        {
+            if (
+                area.Type == HideoutAreas.ChristmasIllumination
+                && !seasonalEventService.ChristmasEventEnabled()
+            )
+            // Christmas tree area and not Christmas, skip
             {
-                if (
-                    area.Type == HideoutAreas.ChristmasIllumination
-                    && !seasonalEventService.ChristmasEventEnabled()
-                )
-                // Christmas tree area and not Christmas, skip
-                {
-                    return false;
-                }
+                return false;
+            }
 
-                return true;
-            })
-            .ToList();
+            return true;
+        });
     }
 
     /// <summary>
@@ -944,17 +944,9 @@ public class CircleOfCultistService(
     /// </summary>
     /// <param name="requirements">Requirements to iterate over</param>
     /// <returns>Array of item requirements</returns>
-    protected List<StageRequirement> GetItemRequirements(List<StageRequirement> requirements)
-    {
-        return requirements.Where(requirement => requirement.Type == "Item").ToList();
-    }
-
-    /// <summary>
-    ///     Iterate over passed in hideout requirements and return the Item
-    /// </summary>
-    /// <param name="requirements">Requirements to iterate over</param>
-    /// <returns>Array of item requirements</returns>
-    protected List<Requirement> GetItemRequirements(List<Requirement> requirements)
+    protected IEnumerable<StageRequirement> GetItemRequirements(
+        IEnumerable<StageRequirement> requirements
+    )
     {
         return requirements.Where(requirement => requirement.Type == "Item").ToList();
     }

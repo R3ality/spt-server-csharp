@@ -38,7 +38,7 @@ public class ProbabilityObjectArray<K, V> : List<ProbabilityObject<K, V>>
     /// </summary>
     /// <param name="probValues">The relative probability values of which to calculate the normalized cumulative sum</param>
     /// <returns>Cumulative Sum normalized to 1</returns>
-    public List<double> CumulativeProbability(List<double> probValues)
+    public List<double> CumulativeProbability(IEnumerable<double> probValues)
     {
         var sum = probValues.Sum();
         var probCumsum = probValues.CumulativeSum();

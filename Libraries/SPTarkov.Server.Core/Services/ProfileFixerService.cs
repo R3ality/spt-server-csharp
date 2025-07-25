@@ -610,7 +610,8 @@ public class ProfileFixerService(
     {
         for (var i = 0; i < count; i++)
         {
-            if (!slots.Any(x => x.LocationIndex == i))
+            // No slots have this location index
+            if (slots.All(x => x.LocationIndex != i))
             {
                 slots.Add(new HideoutSlot { LocationIndex = i });
             }
@@ -1018,7 +1019,7 @@ public class ProfileFixerService(
     /// <param name="profileBonuses"> Bonuses from profile </param>
     /// <param name="bonus"> Bonus to find </param>
     /// <returns> Matching bonus </returns>
-    protected Bonus? GetBonusFromProfile(List<Bonus>? profileBonuses, Bonus bonus)
+    protected Bonus? GetBonusFromProfile(IEnumerable<Bonus>? profileBonuses, Bonus bonus)
     {
         // match by id first, used by "TextBonus" bonuses
         if (!bonus.Id.IsEmpty())

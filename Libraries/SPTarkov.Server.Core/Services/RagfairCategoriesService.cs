@@ -21,7 +21,7 @@ public class RagfairCategoriesService(
     /// <param name="fleaUnlocked">Can player see full flea yet (level 15 by default)</param>
     /// <returns>KVP of item tpls + count of offers</returns>
     public Dictionary<MongoId, int> GetCategoriesFromOffers(
-        List<RagfairOffer> offers,
+        IEnumerable<RagfairOffer> offers,
         SearchRequestData searchRequestData,
         bool fleaUnlocked
     )
@@ -46,7 +46,7 @@ public class RagfairCategoriesService(
                     string.IsNullOrEmpty(searchRequestData.NeededSearchId)
                     && searchRequestData.RemoveBartering.GetValueOrDefault(false)
                     && (
-                        offer.Requirements.Count > 1
+                        offer.Requirements.Count() > 1
                         || !paymentHelper.IsMoneyTpl(offer.Requirements.FirstOrDefault().TemplateId)
                     )
                 )

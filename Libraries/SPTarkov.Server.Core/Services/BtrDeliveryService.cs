@@ -40,17 +40,21 @@ public class BtrDeliveryService(
         foreach (var transferType in _transferTypes)
         {
             var rootId = $"{Traders.BTR}_{transferType}";
-            List<Item>? itemsToSend = null;
+
+            if (request.TransferItems is null)
+            {
+                continue;
+            }
 
             // if rootId doesn't exist in TransferItems, skip
-            if (!request?.TransferItems?.TryGetValue(rootId, out itemsToSend) ?? false)
+            if (!request.TransferItems.TryGetValue(rootId, out var itemsToSend))
             {
                 continue;
             }
 
             // Filter out the btr container item from transferred items before delivering
-            itemsToSend = itemsToSend?.Where(item => item.Id != Traders.BTR).ToList();
-            if (itemsToSend?.Count == 0)
+            itemsToSend = itemsToSend?.Where(item => item.Id != Traders.BTR);
+            if (itemsToSend is null || !itemsToSend.Any())
             {
                 continue;
             }
@@ -59,7 +63,7 @@ public class BtrDeliveryService(
         }
     }
 
-    protected void HandleTransferItemDelivery(MongoId sessionId, List<Item> items)
+    protected void HandleTransferItemDelivery(MongoId sessionId, IEnumerable<Item> items)
     {
         var serverProfile = saveServer.GetProfile(sessionId);
         var pmcData = serverProfile.CharacterData.PmcData;
@@ -81,12 +85,12 @@ public class BtrDeliveryService(
                 {
                     Id = new MongoId(),
                     ScheduledTime = (int)GetBTRDeliveryReturnTimestamp(),
-                    Items = items,
+                    Items = items.ToList(),
                 }
             );
     }
 
-    public void SendBTRDelivery(MongoId sessionId, List<Item> items)
+    public void SendBTRDelivery(MongoId sessionId, IEnumerable<Item> items)
     {
         var dialogueTemplates = databaseService.GetTrader(Traders.BTR).Dialogue;
         if (dialogueTemplates is null)

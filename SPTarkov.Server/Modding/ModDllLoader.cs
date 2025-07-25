@@ -102,7 +102,10 @@ public class ModDllLoader
     /// <param name="path">Path of the mod directory</param>
     /// <returns>Mod metadata</returns>
     /// <exception cref="Exception">Thrown if duplicate metadata implementations are found</exception>
-    private static AbstractModMetadata LoadModMetadata(List<Assembly> assemblies, string path)
+    private static AbstractModMetadata LoadModMetadata(
+        IEnumerable<Assembly> assemblies,
+        string path
+    )
     {
         AbstractModMetadata? result = null;
 

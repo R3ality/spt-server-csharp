@@ -35,7 +35,7 @@ public record BotType
     public BotTypeInventory BotInventory { get; set; }
 
     [JsonPropertyName("lastName")]
-    public List<string> LastNames { get; set; }
+    public IEnumerable<string> LastNames { get; set; }
 
     [JsonPropertyName("skills")]
     public BotDbSkills BotSkills { get; set; }
@@ -248,24 +248,6 @@ public double? ModPistol_Grip { get; set; }
 }
 */
 
-public record Difficulties
-{
-    [JsonExtensionData]
-    public Dictionary<string, object>? ExtensionData { get; set; }
-
-    [JsonPropertyName("easy")]
-    public DifficultyCategories Easy { get; set; }
-
-    [JsonPropertyName("normal")]
-    public DifficultyCategories Normal { get; set; }
-
-    [JsonPropertyName("hard")]
-    public DifficultyCategories Hard { get; set; }
-
-    [JsonPropertyName("impossible")]
-    public DifficultyCategories Impossible { get; set; }
-}
-
 public record DifficultyCategories
 {
     [JsonExtensionData]
@@ -408,7 +390,7 @@ public record BotTypeHealth
     [JsonExtensionData]
     public Dictionary<string, object>? ExtensionData { get; set; }
 
-    public List<BodyPart> BodyParts { get; set; }
+    public IEnumerable<BodyPart> BodyParts { get; set; }
 
     public MinMax<double> Energy { get; set; }
 
@@ -452,40 +434,6 @@ public record BotTypeInventory
 
     [JsonPropertyName("mods")]
     public GlobalMods Mods { get; set; }
-}
-
-public record Equipment
-{
-    [JsonExtensionData]
-    public Dictionary<string, object>? ExtensionData { get; set; }
-
-    public Dictionary<string, double>? ArmBand { get; set; }
-
-    public Dictionary<string, double>? ArmorVest { get; set; }
-
-    public Dictionary<string, double>? Backpack { get; set; }
-
-    public Dictionary<string, double>? Earpiece { get; set; }
-
-    public Dictionary<string, double>? Eyewear { get; set; }
-
-    public Dictionary<string, double>? FaceCover { get; set; }
-
-    public Dictionary<string, double>? FirstPrimaryWeapon { get; set; }
-
-    public Dictionary<string, double>? Headwear { get; set; }
-
-    public Dictionary<string, double>? Holster { get; set; }
-
-    public Dictionary<string, double>? Pockets { get; set; }
-
-    public Dictionary<string, double>? Scabbard { get; set; }
-
-    public Dictionary<string, double>? SecondPrimaryWeapon { get; set; }
-
-    public Dictionary<string, double>? SecuredContainer { get; set; }
-
-    public Dictionary<string, double>? TacticalVest { get; set; }
 }
 
 public record ItemPools

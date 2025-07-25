@@ -45,13 +45,13 @@ public class QuestHelper(
         QuestStatusEnum.AvailableForFinish,
     ];
     protected readonly QuestConfig _questConfig = configServer.GetConfig<QuestConfig>();
-    private Dictionary<string, List<QuestCondition>>? _sellToTraderQuestConditionCache;
+    private Dictionary<MongoId, List<QuestCondition>>? _sellToTraderQuestConditionCache;
 
     /// <summary>
     /// List of <see cref="Quest"/> conditions that require trader sales be tracked and incremented, keyed by <see cref="Quest.Id"/>
     /// We need to keep track of quests with `SellItemToTrader` finish conditions to avoid expensive lookups during trading.
     /// </summary>
-    protected virtual Dictionary<string, List<QuestCondition>> SellToTraderQuestConditionCache
+    protected virtual Dictionary<MongoId, List<QuestCondition>> SellToTraderQuestConditionCache
     {
         get
         {
@@ -103,10 +103,10 @@ public class QuestHelper(
     /// <param name="before">List of quests #1</param>
     /// <param name="after">List of quests #2</param>
     /// <returns>quests not in before</returns>
-    public IEnumerable<Quest> GetDeltaQuests(List<Quest> before, List<Quest> after)
+    public IEnumerable<Quest> GetDeltaQuests(IEnumerable<Quest> before, IEnumerable<Quest> after)
     {
         // Nothing to compare against, return after
-        if (before.Count == 0)
+        if (!before.Any())
         {
             return after;
         }
@@ -686,10 +686,12 @@ public class QuestHelper(
     /// </summary>
     /// <param name="quests">Quests to process</param>
     /// <returns>List of quests with `SellItemToTrader` finish condition(s)</returns>
-    protected Dictionary<string, List<QuestCondition>> GetSellToTraderQuests(List<Quest> quests)
+    protected Dictionary<MongoId, List<QuestCondition>> GetSellToTraderQuests(
+        IEnumerable<Quest> quests
+    )
     {
         // Create cache
-        var result = new Dictionary<string, List<QuestCondition>>();
+        var result = new Dictionary<MongoId, List<QuestCondition>>();
         foreach (var quest in quests)
         {
             foreach (var cond in quest.Conditions.AvailableForFinish)
@@ -729,7 +731,7 @@ public class QuestHelper(
     {
         return pmcData
             .TaskConditionCounters?.Values.Where(condition =>
-                SellToTraderQuestConditionCache.ContainsKey(condition.SourceId)
+                SellToTraderQuestConditionCache.ContainsKey(condition.SourceId.Value)
                 && condition.Type == "SellItemToTrader"
             )
             .ToList();
@@ -758,7 +760,12 @@ public class QuestHelper(
         foreach (var counter in activeConditionCounters)
         {
             // Condition is in profile, but quest doesn't exist in database
-            if (!SellToTraderQuestConditionCache.TryGetValue(counter.SourceId, out var conditions))
+            if (
+                !SellToTraderQuestConditionCache.TryGetValue(
+                    counter.SourceId.Value,
+                    out var conditions
+                )
+            )
             {
                 logger.Error(
                     serverLocalisationService.GetText(

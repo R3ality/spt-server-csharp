@@ -24,7 +24,7 @@ public record Achievement
     public string? AssetPath { get; set; }
 
     [JsonPropertyName("rewards")]
-    public required List<Reward> Rewards { get; set; }
+    public required IEnumerable<Reward> Rewards { get; set; }
 
     [JsonPropertyName("conditions")]
     public required AchievementQuestConditionTypes Conditions { get; set; }

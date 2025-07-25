@@ -415,15 +415,13 @@ public class CreateProfileService(
                 questFromDb.StartedMessageText,
                 questFromDb.Description
             );
-            var itemRewards = questRewardHelper
-                .ApplyQuestReward(
-                    profileDetails.CharacterData.PmcData,
-                    quest.QId,
-                    QuestStatusEnum.Started,
-                    sessionID,
-                    response
-                )
-                .ToList();
+            var itemRewards = questRewardHelper.ApplyQuestReward(
+                profileDetails.CharacterData.PmcData,
+                quest.QId,
+                QuestStatusEnum.Started,
+                sessionID,
+                response
+            );
 
             mailSendService.SendLocalisedNpcMessageToPlayer(
                 sessionID,

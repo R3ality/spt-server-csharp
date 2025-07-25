@@ -133,7 +133,7 @@ public record CultistCircleSettings
     ///     Item tpls to include in the reward pool
     /// </summary>
     [JsonPropertyName("additionalRewardItemPool")]
-    public required List<string> AdditionalRewardItemPool { get; set; }
+    public required List<MongoId> AdditionalRewardItemPool { get; set; }
 
     [JsonPropertyName("currencyRewards")]
     public required Dictionary<MongoId, MinMax<int>> CurrencyRewards { get; set; }

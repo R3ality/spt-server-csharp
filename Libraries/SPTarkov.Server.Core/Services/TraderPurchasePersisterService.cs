@@ -27,7 +27,7 @@ public class TraderPurchasePersisterService(
     /// <param name="sessionId"> Session id </param>
     /// <param name="traderId"> Trader to loop up purchases for </param>
     /// <returns> Dictionary of assort id and count purchased </returns>
-    public Dictionary<string, TraderPurchaseData>? GetProfileTraderPurchases(
+    public Dictionary<MongoId, TraderPurchaseData>? GetProfileTraderPurchases(
         MongoId sessionId,
         MongoId traderId
     )
@@ -59,7 +59,7 @@ public class TraderPurchasePersisterService(
 
         if (!profile.TraderPurchases.TryGetValue(traderId, out _))
         {
-            profile.TraderPurchases.TryAdd(traderId, new Dictionary<string, TraderPurchaseData>());
+            profile.TraderPurchases.TryAdd(traderId, new());
         }
 
         var traderPurchases = profile.TraderPurchases[traderId];
@@ -94,7 +94,7 @@ public class TraderPurchasePersisterService(
                 continue;
             }
 
-            profile.Value.TraderPurchases[traderId] = new Dictionary<string, TraderPurchaseData>();
+            profile.Value.TraderPurchases[traderId] = new();
         }
 
         logger.Debug($"Reset trader: {traderId} assort buy limits");

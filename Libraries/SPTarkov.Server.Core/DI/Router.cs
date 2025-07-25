@@ -10,18 +10,18 @@ namespace SPTarkov.Server.Core.DI;
 
 public abstract class Router
 {
-    protected List<HandledRoute> handledRoutes = [];
+    protected IEnumerable<HandledRoute> handledRoutes = [];
 
     public virtual string GetTopLevelRoute()
     {
         return "spt";
     }
 
-    protected abstract List<HandledRoute> GetHandledRoutes();
+    protected abstract IEnumerable<HandledRoute> GetHandledRoutes();
 
-    protected List<HandledRoute> GetInternalHandledRoutes()
+    protected IEnumerable<HandledRoute> GetInternalHandledRoutes()
     {
-        if (handledRoutes.Count == 0)
+        if (!handledRoutes.Any())
         {
             handledRoutes = GetHandledRoutes();
         }
@@ -40,7 +40,7 @@ public abstract class Router
     }
 }
 
-public abstract class StaticRouter(JsonUtil jsonUtil, List<RouteAction> routes) : Router
+public abstract class StaticRouter(JsonUtil jsonUtil, IEnumerable<RouteAction> routes) : Router
 {
     public async ValueTask<object> HandleStatic(
         string url,
@@ -60,13 +60,13 @@ public abstract class StaticRouter(JsonUtil jsonUtil, List<RouteAction> routes) 
         return await action.action(url, info, sessionId, output);
     }
 
-    protected override List<HandledRoute> GetHandledRoutes()
+    protected override IEnumerable<HandledRoute> GetHandledRoutes()
     {
-        return routes.Select(route => new HandledRoute(route.url, false)).ToList();
+        return routes.Select(route => new HandledRoute(route.url, false));
     }
 }
 
-public abstract class DynamicRouter(JsonUtil jsonUtil, List<RouteAction> routes) : Router
+public abstract class DynamicRouter(JsonUtil jsonUtil, IEnumerable<RouteAction> routes) : Router
 {
     public async ValueTask<object> HandleDynamic(
         string url,
@@ -86,9 +86,9 @@ public abstract class DynamicRouter(JsonUtil jsonUtil, List<RouteAction> routes)
         return await action.action(url, info, sessionID, output);
     }
 
-    protected override List<HandledRoute> GetHandledRoutes()
+    protected override IEnumerable<HandledRoute> GetHandledRoutes()
     {
-        return routes.Select(route => new HandledRoute(route.url, true)).ToList();
+        return routes.Select(route => new HandledRoute(route.url, true));
     }
 }
 

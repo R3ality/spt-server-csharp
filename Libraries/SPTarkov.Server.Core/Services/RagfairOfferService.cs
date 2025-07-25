@@ -327,7 +327,7 @@ public class RagfairOfferService(
         // Items within stack tolerance, return existing data - no changes needed
         if (totalItemCount <= itemMaxStackSize)
         {
-            // Edge case - Ensure items stack count isnt < 1
+            // Edge case - Ensure items stack count isn't < 1
             if (items[0]?.Upd?.StackObjectsCount < 1)
             {
                 items[0].Upd.StackObjectsCount = 1;

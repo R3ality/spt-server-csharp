@@ -70,7 +70,7 @@ public class MathUtilTests
         var test = new List<double> { 1f, 2f, 3f, 4f };
         var expected = new List<double> { 3f, 4f, 5f, 6f };
 
-        var actual = _mathUtil.ListAdd(test, 2);
+        var actual = _mathUtil.ListAdd(test, 2).ToList();
 
         for (var i = 0; i < actual.Count; i++)
         {

@@ -1019,7 +1019,7 @@ public class RagfairOfferGenerator(
     /// <param name="barterConfig"> Barter config from ragfairConfig.Dynamic.barter </param>
     /// <returns> Barter scheme </returns>
     protected List<BarterScheme> CreateBarterBarterScheme(
-        List<Item> offerItems,
+        IEnumerable<Item> offerItems,
         BarterDetails barterConfig
     )
     {
@@ -1057,13 +1057,11 @@ public class RagfairOfferGenerator(
         var max = desiredItemCostRouble + offerCostVarianceRoubles;
         var rootOfferItem = offerItems.FirstOrDefault();
 
-        var itemsInsidePriceBounds = itemFleaPrices
-            .Where(itemAndPrice =>
-                itemAndPrice.Price >= min
-                && itemAndPrice.Price <= max
-                && itemAndPrice.Tpl != rootOfferItem.Template // Don't allow the item being sold to be chosen
-            )
-            .ToList();
+        var itemsInsidePriceBounds = itemFleaPrices.Where(itemAndPrice =>
+            itemAndPrice.Price >= min
+            && itemAndPrice.Price <= max
+            && itemAndPrice.Tpl != rootOfferItem.Template // Don't allow the item being sold to be chosen
+        );
 
         // No items on flea have a matching price, fall back to currency
         if (!itemsInsidePriceBounds.Any())
@@ -1110,7 +1108,7 @@ public class RagfairOfferGenerator(
     /// <param name="multiplier"> What to multiply the resulting price by </param>
     /// <returns> Barter scheme for offer </returns>
     protected List<BarterScheme> CreateCurrencyBarterScheme(
-        List<Item> offerWithChildren,
+        IEnumerable<Item> offerWithChildren,
         bool isPackOffer,
         double multiplier = 1
     )

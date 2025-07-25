@@ -66,7 +66,7 @@ public class BotNameService(
                     _botConfig.BotNameLengthLimit,
                     botGenerationDetails.Side
                 )
-                : $"{randomUtil.GetArrayValue(botJsonTemplate.FirstNames)} {(botJsonTemplate.LastNames.Count > 0 ? randomUtil.GetArrayValue(botJsonTemplate.LastNames) : "")}";
+                : $"{randomUtil.GetArrayValue(botJsonTemplate.FirstNames)} {(botJsonTemplate.LastNames.Any() ? randomUtil.GetArrayValue(botJsonTemplate.LastNames) : "")}";
 
             name = name.Trim();
 

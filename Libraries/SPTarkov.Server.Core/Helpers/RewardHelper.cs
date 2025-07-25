@@ -40,7 +40,7 @@ public class RewardHelper(
     /// <param name="questResponse">Response to quest completion when a production is unlocked.</param>
     /// <returns>List of items that is the reward.</returns>
     public List<Item> ApplyRewards(
-        List<Reward> rewards,
+        IEnumerable<Reward> rewards,
         string source,
         SptProfile fullProfile,
         PmcData profileData,
@@ -166,7 +166,7 @@ public class RewardHelper(
             }
         }
 
-        return GetRewardItems(rewards, gameVersion);
+        return GetRewardItems(rewards, gameVersion).ToList();
     }
 
     /// <summary>
@@ -287,7 +287,7 @@ public class RewardHelper(
     /// <param name="rewards">Array of rewards to get the items from.</param>
     /// <param name="gameVersion">The game version of the profile.</param>
     /// <returns>Array of items with the correct maxStack.</returns>
-    protected List<Item> GetRewardItems(List<Reward> rewards, string gameVersion)
+    protected IEnumerable<Item> GetRewardItems(IEnumerable<Reward> rewards, string gameVersion)
     {
         // Iterate over all rewards with the desired status, flatten out items that have a type of Item
         var rewardItems = rewards.SelectMany(reward =>
@@ -296,7 +296,7 @@ public class RewardHelper(
                 : []
         );
 
-        return rewardItems.ToList();
+        return rewardItems;
     }
 
     /// <summary>

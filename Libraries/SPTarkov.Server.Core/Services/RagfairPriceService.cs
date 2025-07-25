@@ -102,22 +102,6 @@ public class RagfairPriceService(
     }
 
     /// <summary>
-    ///     Get the flea price for an offers items + children
-    /// </summary>
-    /// <param name="offerItems">offer item + children to process</param>
-    /// <returns>Rouble price</returns>
-    public double GetFleaPriceForOfferItems(List<Item> offerItems)
-    {
-        // Preset weapons take the direct prices.json value, otherwise they're massively inflated
-        if (itemHelper.IsOfBaseclass(offerItems[0].Template, BaseClasses.WEAPON))
-        {
-            return GetFleaPriceForItem(offerItems[0].Template);
-        }
-
-        return offerItems.Sum(item => GetFleaPriceForItem(item.Template));
-    }
-
-    /// <summary>
     ///     Get the dynamic (flea) price for an item
     /// </summary>
     /// <param name="itemTpl"> Item template id to look up </param>
@@ -177,23 +161,6 @@ public class RagfairPriceService(
     }
 
     /// <summary>
-    ///     Get the rouble price for an assorts barter scheme
-    /// </summary>
-    /// <param name="barterScheme"></param>
-    /// <returns>Rouble price</returns>
-    public double GetBarterPrice(List<BarterScheme> barterScheme)
-    {
-        var price = 0d;
-
-        foreach (var item in barterScheme)
-        {
-            price += GetStaticPriceForItem(item.Template).Value * item.Count.Value;
-        }
-
-        return Math.Round(price);
-    }
-
-    /// <summary>
     ///     Generate a currency cost for an item and its mods
     /// </summary>
     /// <param name="offerItems">Item with mods to get price for</param>
@@ -201,8 +168,8 @@ public class RagfairPriceService(
     /// <param name="isPackOffer">Price is for a pack type offer</param>
     /// <returns>cost of item in desired currency</returns>
     public double GetDynamicOfferPriceForOffer(
-        List<Item> offerItems,
-        string desiredCurrency,
+        IEnumerable<Item> offerItems,
+        MongoId desiredCurrency,
         bool isPackOffer
     )
     {
@@ -254,7 +221,7 @@ public class RagfairPriceService(
         MongoId itemTemplateId,
         MongoId desiredCurrency,
         Item? item = null,
-        List<Item>? offerItems = null,
+        IEnumerable<Item>? offerItems = null,
         bool? isPackOffer = null
     )
     {
@@ -453,7 +420,7 @@ public class RagfairPriceService(
     /// <returns>price of weapon in roubles</returns>
     protected double GetWeaponPresetPrice(
         Item weaponRootItem,
-        List<Item> weaponWithChildren,
+        IEnumerable<Item> weaponWithChildren,
         double existingPrice
     )
     {

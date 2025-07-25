@@ -297,7 +297,7 @@ public class InsuranceService(
     /// <param name="lostItem">Item being returned in insurance</param>
     /// <param name="inventoryItems">Player inventory</param>
     /// <returns>True if item</returns>
-    protected bool ItemCannotBeLostOnDeath(Item lostItem, List<Item> inventoryItems)
+    protected bool ItemCannotBeLostOnDeath(Item lostItem, IEnumerable<Item> inventoryItems)
     {
         if (lostItem.SlotId?.StartsWith("specialslot", StringComparison.OrdinalIgnoreCase) ?? false)
         {

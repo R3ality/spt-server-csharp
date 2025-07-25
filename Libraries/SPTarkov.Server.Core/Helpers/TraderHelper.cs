@@ -467,12 +467,11 @@ public class TraderHelper(
             var currentTime = timeUtil.GetTimeStamp();
 
             // Nullguard traderPurchases
-            profile.TraderPurchases ??=
-                new Dictionary<string, Dictionary<string, TraderPurchaseData>?>();
+            profile.TraderPurchases ??= new();
             // Nullguard traderPurchases for this trader
-            profile.TraderPurchases[traderId] ??= new Dictionary<string, TraderPurchaseData>();
+            profile.TraderPurchases[traderId] ??= new();
 
-            // Null guard when dict doesnt exist
+            // Null guard when dict doesn't exist
 
             if (
                 profile.TraderPurchases[traderId][purchasedItem.ItemId].PurchaseCount is null

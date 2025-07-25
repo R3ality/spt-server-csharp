@@ -27,7 +27,7 @@ public class ModValidator(
 
     protected readonly CoreConfig sptConfig = configServer.GetConfig<CoreConfig>();
 
-    public List<SptMod> ValidateAndSort(List<SptMod> mods)
+    public List<SptMod> ValidateAndSort(IEnumerable<SptMod> mods)
     {
         if (ProgramStatics.MODS())
         {
@@ -58,9 +58,9 @@ public class ModValidator(
         return $"{basepath}{mod}/";
     }
 
-    protected void ValidateMods(List<SptMod> mods)
+    protected void ValidateMods(IEnumerable<SptMod> mods)
     {
-        logger.Info(localisationService.GetText("modloader-loading_mods", mods.Count));
+        logger.Info(localisationService.GetText("modloader-loading_mods", mods.Count()));
 
         // Mod order
         if (!fileUtil.FileExists(modOrderPath))
@@ -88,7 +88,7 @@ public class ModValidator(
         }
 
         // Validate and remove broken mods from mod list
-        var validMods = GetValidMods(mods);
+        var validMods = GetValidMods(mods).ToList(); // ToList now so we can .Sort later
 
         var modPackageData = validMods.ToDictionary(m => m.ModMetadata!.Name!, m => m.ModMetadata!);
         CheckForDuplicateMods(modPackageData);
@@ -144,7 +144,7 @@ public class ModValidator(
             }
         }
 
-        // add mods
+        // Add mods
         foreach (var mod in validMods)
         {
             if (ShouldSkipMod(mod.ModMetadata))
@@ -207,9 +207,9 @@ public class ModValidator(
     /// </summary>
     /// <param name="mods">mods to validate</param>
     /// <returns>array of mod folder names</returns>
-    protected List<SptMod> GetValidMods(List<SptMod> mods)
+    protected IEnumerable<SptMod> GetValidMods(IEnumerable<SptMod> mods)
     {
-        return mods.Where(ValidMod).ToList();
+        return mods.Where(ValidMod);
     }
 
     /// <summary>

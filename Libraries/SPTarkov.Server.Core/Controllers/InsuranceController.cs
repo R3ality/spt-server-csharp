@@ -687,17 +687,17 @@ public class InsuranceController(
     /// <param name="traderDialogMessages"></param>
     /// <param name="insurance"></param>
     protected void HandleLabsInsurance(
-        Dictionary<string, List<string>?>? traderDialogMessages,
+        Dictionary<string, List<string>?> traderDialogMessages,
         Insurance insurance
     )
     {
         // Use labs specific messages if available, otherwise use default
-        var responseMesageIds =
-            traderDialogMessages["insuranceFailedLabs"]?.Count > 0
-                ? traderDialogMessages["insuranceFailedLabs"]
-                : traderDialogMessages["insuranceFailed"];
+        if (!traderDialogMessages.TryGetValue("insuranceFailedLabs", out var responseMessageIds))
+        {
+            traderDialogMessages.TryGetValue("insuranceFailed", out responseMessageIds);
+        }
 
-        insurance.MessageTemplateId = randomUtil.GetArrayValue(responseMesageIds);
+        insurance.MessageTemplateId = randomUtil.GetArrayValue(responseMessageIds);
 
         // Remove all insured items taken into labs
         insurance.Items = [];
@@ -709,15 +709,19 @@ public class InsuranceController(
     /// <param name="traderDialogMessages"></param>
     /// <param name="insurance"></param>
     protected void HandleLabyrinthInsurance(
-        Dictionary<string, List<string>?>? traderDialogMessages,
+        Dictionary<string, List<string>?> traderDialogMessages,
         Insurance insurance
     )
     {
-        // Use labs specific messages if available, otherwise use default
-        var responseMessageIds =
-            traderDialogMessages["insuranceFailedLabyrinth"]?.Count > 0
-                ? traderDialogMessages["insuranceFailedLabyrinth"]
-                : traderDialogMessages["insuranceFailed"];
+        if (
+            !traderDialogMessages.TryGetValue(
+                "insuranceFailedLabyrinth",
+                out var responseMessageIds
+            )
+        )
+        {
+            traderDialogMessages.TryGetValue("insuranceFailed", out responseMessageIds);
+        }
 
         insurance.MessageTemplateId = randomUtil.GetArrayValue(responseMessageIds);
 

@@ -31,7 +31,7 @@ public record EndLocalRaidRequestData : IRequestData
     ///     Items sent via traders to player, keyed to service e.g. BTRTransferStash
     /// </summary>
     [JsonPropertyName("transferItems")]
-    public Dictionary<string, List<Item>>? TransferItems { get; set; }
+    public Dictionary<string, IEnumerable<Item>>? TransferItems { get; set; }
 
     [JsonPropertyName("locationTransit")]
     public LocationTransit? LocationTransit { get; set; }

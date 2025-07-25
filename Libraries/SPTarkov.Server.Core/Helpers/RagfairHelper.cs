@@ -88,10 +88,10 @@ public class RagfairHelper(
         }
 
         // Case: category
-        if (!string.IsNullOrEmpty(request.HandbookId))
+        if (request.HandbookId.HasValue && !request.HandbookId.Value.IsEmpty())
         {
-            var handbook = GetCategoryList(request.HandbookId);
-            result = result?.Count > 0 ? result.IntersectWith(handbook) : handbook;
+            var handbook = GetCategoryList(request.HandbookId.Value);
+            result = (result?.Count > 0 ? result.IntersectWith(handbook) : handbook).ToList();
         }
 
         return result;
@@ -157,7 +157,7 @@ public class RagfairHelper(
     /// </summary>
     /// <param name="items">Items to merge</param>
     /// <returns></returns>
-    public List<Item> MergeStackable(List<Item> items)
+    public List<Item> MergeStackable(IEnumerable<Item> items)
     {
         var list = new List<Item>();
         Item? rootItem = null;

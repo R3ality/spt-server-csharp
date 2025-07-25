@@ -38,10 +38,9 @@ public class ServerLocalisationService(
 
         var files = fileUtil
             .GetFiles(LocaleDirectory, true)
-            .Where(f => fileUtil.GetFileExtension(f) == "json")
-            .ToList();
+            .Where(f => fileUtil.GetFileExtension(f) == "json");
 
-        if (files.Count == 0)
+        if (!files.Any())
         {
             throw new Exception($"Localisation files in directory {LocaleDirectory} not found.");
         }

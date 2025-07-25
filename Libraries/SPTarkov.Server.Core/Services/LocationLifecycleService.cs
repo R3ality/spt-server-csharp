@@ -1042,7 +1042,7 @@ public class LocationLifecycleService(
                 questStatus.QId == matchingQuest.Id
             );
             if (profileQuestToUpdate is null)
-            // Profile doesnt have a matching quest
+            // Profile doesn't have a matching quest
             {
                 continue;
             }
@@ -1071,20 +1071,18 @@ public class LocationLifecycleService(
     )
     {
         // LK quests that were not completed before raid but now are
-        var newlyCompletedLightkeeperQuests = postRaidQuests
-            .Where(postRaidQuest =>
-                postRaidQuest.Status == QuestStatusEnum.Success
-                && // Quest is complete
-                preRaidQuests.Any(preRaidQuest =>
-                    preRaidQuest.QId == postRaidQuest.QId
-                    && // Get matching pre-raid quest
-                    preRaidQuest.Status != QuestStatusEnum.Success
-                )
-                && // Completed quest was not completed before raid started
-                databaseService.GetQuests().TryGetValue(postRaidQuest.QId, out var quest)
-                && quest?.TraderId == Traders.LIGHTHOUSEKEEPER
-            ) // Quest is from LK
-            .ToList();
+        var newlyCompletedLightkeeperQuests = postRaidQuests.Where(postRaidQuest =>
+            postRaidQuest.Status == QuestStatusEnum.Success
+            && // Quest is complete
+            preRaidQuests.Any(preRaidQuest =>
+                preRaidQuest.QId == postRaidQuest.QId
+                && // Get matching pre-raid quest
+                preRaidQuest.Status != QuestStatusEnum.Success
+            )
+            && // Completed quest was not completed before raid started
+            databaseService.GetQuests().TryGetValue(postRaidQuest.QId, out var quest)
+            && quest?.TraderId == Traders.LIGHTHOUSEKEEPER
+        ); // Quest is from LK
 
         // Run server complete quest process to ensure player gets rewards
         foreach (var questToComplete in newlyCompletedLightkeeperQuests)

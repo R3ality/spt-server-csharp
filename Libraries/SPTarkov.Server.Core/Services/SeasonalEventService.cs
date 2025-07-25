@@ -389,12 +389,8 @@ public class SeasonalEventService(
 
         foreach (var container in containersToCheck)
         {
-            // Find all Christmas items in container
-            var keysToRemove = container.Keys.Where(key => christmasItems.Contains(key)).ToList();
-            foreach (var key in keysToRemove)
-            {
-                container.Remove(key);
-            }
+            // Find all Christmas items in container and remove
+            container.RemoveItems(christmasItems);
         }
     }
 
@@ -711,7 +707,7 @@ public class SeasonalEventService(
         }
     }
 
-    protected void RemoveEntryRequirement(List<string> locationIds)
+    protected void RemoveEntryRequirement(IEnumerable<string> locationIds)
     {
         foreach (var locationId in locationIds)
         {
