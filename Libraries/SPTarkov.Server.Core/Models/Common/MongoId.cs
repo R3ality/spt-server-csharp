@@ -84,7 +84,7 @@ public readonly struct MongoId : IEquatable<MongoId>
     {
         if (other is null)
         {
-            return this == null;
+            return _stringId == null;
         }
 
         return other.Equals(ToString(), StringComparison.InvariantCultureIgnoreCase);
