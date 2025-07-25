@@ -52,20 +52,8 @@
                 "repeatable": false
             },
             {
-                "reward": ["655c669103999d3c810c025b"],
-                "requiredItems": ["635267ab3c89e2112001f826"],
-                "craftTimeSeconds": 3960,
-                "repeatable": false
-            },
-            {
-                "reward": ["5fc64ea372b0dd78d51159dc"],
-                "requiredItems": [
-                    "635267ab3c89e2112001f826",
-                    "635267ab3c89e2112001f826",
-                    "635267ab3c89e2112001f826",
-                    "635267ab3c89e2112001f826",
-                    "635267ab3c89e2112001f826"
-                ],
+                "reward": ["635267ab3c89e2112001f826"],
+                "requiredItems": ["655c669103999d3c810c025b"],
                 "craftTimeSeconds": 3960,
                 "repeatable": false
             },
@@ -154,6 +142,12 @@
               "repeatable": false
             },
             {
+              "reward": ["590c5bbd86f774785762df04"],
+              "requiredItems": ["590c5c9f86f77477c91c36e7"],
+              "craftTimeSeconds": 3960,
+              "repeatable": false
+            },
+            {
               "reward": ["590c346786f77423e50ed342"],
               "requiredItems": ["679b9d55708cfcb2060b9ae3"],
               "craftTimeSeconds": 3960,
@@ -220,6 +214,18 @@
                 "repeatable": true
             },
             {
+              "reward": ["5fc64ea372b0dd78d51159dc"],
+              "requiredItems": [
+                "655c669103999d3c810c025b",
+                "655c669103999d3c810c025b",
+                "655c669103999d3c810c025b",
+                "655c669103999d3c810c025b",
+                "655c669103999d3c810c025b"
+              ],
+              "craftTimeSeconds": 39960,
+              "repeatable": false
+            },
+            {
                 "reward": [
                     "5e2aedd986f7746d404f3aa4",
                     "5e2aedd986f7746d404f3aa4",
@@ -228,13 +234,13 @@
                 ],
                 "requiredItems": ["59faff1d86f7746c51718c9c"],
                 "craftTimeSeconds": 39960,
-                "repeatable": true
+                "repeatable": false
             },
             {
                 "reward": ["6389c8c5dbfd5e4b95197e6b"],
                 "requiredItems": ["5c0530ee86f774697952d952"],
                 "craftTimeSeconds": 39960,
-                "repeatable": true
+                "repeatable": false
             }
         ],
         "directRewardStackSize": {
