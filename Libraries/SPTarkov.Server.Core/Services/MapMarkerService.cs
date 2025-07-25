@@ -16,10 +16,14 @@ public class MapMarkerService(ISptLogger<MapMarkerService> logger)
     /// <param name="pmcData">Player profile</param>
     /// <param name="request">Add marker request</param>
     /// <returns>Item</returns>
-    public Item CreateMarkerOnMap(PmcData pmcData, InventoryCreateMarkerRequestData request)
+    public Item? CreateMarkerOnMap(PmcData pmcData, InventoryCreateMarkerRequestData request)
     {
         // Get map from inventory
         var mapItem = pmcData?.Inventory?.Items?.FirstOrDefault(i => i?.Id == request?.Item);
+        if (mapItem is null)
+        {
+            return null;
+        }
 
         // add marker to map item
         mapItem.Upd.Map = mapItem?.Upd?.Map ?? new UpdMap { Markers = [] };

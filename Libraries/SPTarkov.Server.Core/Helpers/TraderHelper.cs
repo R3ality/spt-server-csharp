@@ -69,6 +69,8 @@ public class TraderHelper(
             return new TraderBase { Currency = CurrencyType.RUB };
         }
 
+        var traderIdMongo = new MongoId(traderID);
+
         var pmcData = profileHelper.GetPmcProfile(sessionID);
         if (pmcData == null)
         {
@@ -81,14 +83,17 @@ public class TraderHelper(
         }
 
         // Profile has traderInfo dict (profile beyond creation stage) but no requested trader in profile
-        if (pmcData?.TradersInfo != null && !(pmcData?.TradersInfo?.ContainsKey(traderID) ?? false))
+        if (
+            pmcData?.TradersInfo != null
+            && !(pmcData?.TradersInfo?.ContainsKey(traderIdMongo) ?? false)
+        )
         {
             // Add trader values to profile
-            ResetTrader(sessionID, traderID);
-            LevelUp(traderID, pmcData);
+            ResetTrader(sessionID, traderIdMongo);
+            LevelUp(traderIdMongo, pmcData);
         }
 
-        var traderBase = databaseService.GetTrader(traderID).Base;
+        var traderBase = databaseService.GetTrader(traderIdMongo).Base;
         if (traderBase == null)
         {
             logger.Error(

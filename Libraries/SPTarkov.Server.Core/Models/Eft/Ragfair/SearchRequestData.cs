@@ -65,7 +65,7 @@ public record SearchRequestData : IRequestData
     public MongoId? HandbookId { get; set; }
 
     [JsonPropertyName("linkedSearchId")]
-    public string? LinkedSearchId { get; set; }
+    public MongoId? LinkedSearchId { get; set; }
 
     [JsonPropertyName("neededSearchId")]
     public MongoId? NeededSearchId { get; set; }

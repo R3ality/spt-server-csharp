@@ -83,7 +83,7 @@ public class RagfairHelper(
         // Case: search
         if (!string.IsNullOrEmpty(request.LinkedSearchId))
         {
-            var data = ragfairLinkedItemService.GetLinkedItems(request.LinkedSearchId);
+            var data = ragfairLinkedItemService.GetLinkedItems(request.LinkedSearchId.Value);
             result = [.. data];
         }
 

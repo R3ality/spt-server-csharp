@@ -5,6 +5,7 @@ using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
 using SPTarkov.Server.Core.Models.Enums;
 using SPTarkov.Server.Core.Models.Utils;
+using SPTarkov.Server.Core.Utils;
 
 namespace SPTarkov.Server.Core.Services;
 
@@ -12,6 +13,7 @@ namespace SPTarkov.Server.Core.Services;
 public class BotEquipmentModPoolService(
     ISptLogger<BotEquipmentModPoolService> logger,
     ItemHelper itemHelper,
+    JsonUtil jsonUtil,
     DatabaseService databaseService,
     ServerLocalisationService localisationService
 )
@@ -261,7 +263,11 @@ public class BotEquipmentModPoolService(
                 && itemHelper.IsOfBaseclasses(item.Id, [BaseClasses.WEAPON, BaseClasses.MOD])
             );
 
-        return GeneratePool(weaponsAndMods, "weapon");
+        var x = GeneratePool(weaponsAndMods, "weapon");
+
+        logger.Warning(jsonUtil.Serialize(x));
+
+        return x;
     }
 
     /// <summary>

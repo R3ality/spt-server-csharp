@@ -11,13 +11,13 @@ public class SptLoggerProvider(
     SptLoggerQueueManager queueManager
 ) : ILoggerProvider, ILoggerFactory
 {
-    private readonly List<ILoggerProvider> loggerProviders = [];
+    private readonly List<ILoggerProvider> _loggerProviders = [];
 
     public void Dispose() { }
 
     public void AddProvider(ILoggerProvider provider)
     {
-        loggerProviders?.Add(provider);
+        _loggerProviders?.Add(provider);
     }
 
     public ILogger CreateLogger(string categoryName)

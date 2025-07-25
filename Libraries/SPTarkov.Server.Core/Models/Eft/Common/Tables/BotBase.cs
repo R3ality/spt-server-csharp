@@ -798,7 +798,7 @@ public record Hideout
     [JsonPropertyName("sptUpdateLastRunTimestamp")]
     public long? SptUpdateLastRunTimestamp { get; set; }
 
-    public Dictionary<string, MongoId>? Customization { get; set; } // Key = Area customisaion type as string, e.g. "Wall", "Light", "ShootingRangeMark"
+    public Dictionary<string, MongoId>? Customization { get; set; } // Key = Area customisation type as string, e.g. "Wall", "Light", "ShootingRangeMark"
 }
 
 public record HideoutCounters
