@@ -19,13 +19,12 @@ public class DictionaryOfListOrTConverter : JsonConverterFactory
         JsonSerializerOptions options
     )
     {
-        return (JsonConverter)
-            Activator.CreateInstance(
+        return Activator.CreateInstance(
                 typeof(DictionaryOfListOrTConverter<,>).MakeGenericType(
                     typeToConvert.GenericTypeArguments[0],
                     typeToConvert.GenericTypeArguments[1].GenericTypeArguments[0]
                 )
-            );
+            ) as JsonConverter;
     }
 }
 

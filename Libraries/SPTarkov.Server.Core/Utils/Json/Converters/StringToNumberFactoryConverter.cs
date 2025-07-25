@@ -10,7 +10,15 @@ public class StringToNumberFactoryConverter : JsonConverterFactory
 {
     public override bool CanConvert(Type typeToConvert)
     {
-        return true;
+        var type = Nullable.GetUnderlyingType(typeToConvert) ?? typeToConvert;
+
+        return type == typeof(byte)
+            || type == typeof(short)
+            || type == typeof(int)
+            || type == typeof(long)
+            || type == typeof(float)
+            || type == typeof(double)
+            || type == typeof(decimal);
     }
 
     public override JsonConverter? CreateConverter(
@@ -18,10 +26,9 @@ public class StringToNumberFactoryConverter : JsonConverterFactory
         JsonSerializerOptions options
     )
     {
-        return (JsonConverter)
-            Activator.CreateInstance(
+        return Activator.CreateInstance(
                 typeof(StringToNumberConverter<>).MakeGenericType(typeToConvert)
-            );
+            ) as JsonConverter;
     }
 
     private class StringToNumberConverter<T> : JsonConverter<T>
@@ -66,7 +73,7 @@ public class StringToNumberFactoryConverter : JsonConverterFactory
                             _stringParseMethod.Invoke(null, [value, CultureInfo.InvariantCulture]);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Debug.WriteLine(
                         $"Failed to parse '{value}' into {typeToConvert.Name}, returning null."

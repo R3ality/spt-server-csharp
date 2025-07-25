@@ -7,7 +7,7 @@ public class ArrayToObjectFactoryConverter : JsonConverterFactory
 {
     public override bool CanConvert(Type typeToConvert)
     {
-        return true;
+        return typeToConvert.IsClass;
     }
 
     public override JsonConverter? CreateConverter(
@@ -15,10 +15,9 @@ public class ArrayToObjectFactoryConverter : JsonConverterFactory
         JsonSerializerOptions options
     )
     {
-        return (JsonConverter)
-            Activator.CreateInstance(
+        return Activator.CreateInstance(
                 typeof(ArrayToObjectConverter<>).MakeGenericType(typeToConvert)
-            );
+            ) as JsonConverter;
     }
 
     private class ArrayToObjectConverter<T> : JsonConverter<T?>

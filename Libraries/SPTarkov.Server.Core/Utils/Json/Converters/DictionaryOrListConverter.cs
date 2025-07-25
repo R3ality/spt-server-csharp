@@ -16,13 +16,12 @@ public class DictionaryOrListConverter : JsonConverterFactory
         JsonSerializerOptions options
     )
     {
-        return (JsonConverter)
-            Activator.CreateInstance(
+        return Activator.CreateInstance(
                 typeof(DictionaryOrListConverter<,>).MakeGenericType(
                     typeToConvert.GenericTypeArguments[0],
                     typeToConvert.GenericTypeArguments[1]
                 )
-            );
+            ) as JsonConverter;
     }
 }
 

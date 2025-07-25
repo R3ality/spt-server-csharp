@@ -17,26 +17,27 @@ public class EftListEnumConverterFactory : JsonConverterFactory
         JsonSerializerOptions options
     )
     {
-        return (JsonConverter)
-            Activator.CreateInstance(
+        return Activator.CreateInstance(
                 typeof(EftListEnumConverter<>).MakeGenericType(
                     typeToConvert.GenericTypeArguments[0]
                 )
-            );
+            ) as JsonConverter;
     }
 }
 
 public class EftListEnumConverter<T> : JsonConverter<List<T>>
 {
+    // We have to use these options here, because down below if we use the options passed we create a stack overflow
+    // Due to the converter trying to use itself
     private static readonly JsonSerializerOptions _options = new()
     {
-        Converters = { new JsonStringEnumConverter() },
+        Converters = { new JsonStringEnumConverter(), new EftEnumConverterFactory() },
     };
 
     public override List<T>? Read(
         ref Utf8JsonReader reader,
         Type typeToConvert,
-        JsonSerializerOptions options
+        JsonSerializerOptions _
     )
     {
         if (reader.TokenType == JsonTokenType.StartArray)
@@ -47,7 +48,7 @@ public class EftListEnumConverter<T> : JsonConverter<List<T>>
         throw new JsonException();
     }
 
-    public override void Write(Utf8JsonWriter writer, List<T> value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, List<T> value, JsonSerializerOptions _)
     {
         writer.WriteStartArray();
         foreach (var x1 in value)

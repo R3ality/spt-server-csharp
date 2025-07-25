@@ -16,10 +16,9 @@ public class ListOrTConverterFactory : JsonConverterFactory
         JsonSerializerOptions options
     )
     {
-        return (JsonConverter)
-            Activator.CreateInstance(
+        return Activator.CreateInstance(
                 typeof(ListOrTConverter<>).MakeGenericType(typeToConvert.GenericTypeArguments[0])
-            );
+            ) as JsonConverter;
     }
 }
 
