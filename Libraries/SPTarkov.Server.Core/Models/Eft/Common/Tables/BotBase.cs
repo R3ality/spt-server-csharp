@@ -360,7 +360,7 @@ public record BodyPartHealth
 
     public CurrentMinMax? Health { get; set; }
 
-    public Dictionary<string, BodyPartEffectProperties>? Effects { get; set; } // TODO: change key to DamageEffectType enum
+    public Dictionary<string, BodyPartEffectProperties?>? Effects { get; set; } // TODO: change key to DamageEffectType enum
 }
 
 public record BodyPartEffectProperties
