@@ -323,7 +323,7 @@ public class ItemHelper(
     /// <returns>is the tpl a descendant</returns>
     public bool IsOfBaseclass(MongoId tpl, MongoId baseClassTpl)
     {
-        return itemBaseClassService.ItemHasBaseClass(tpl, [baseClassTpl]);
+        return itemBaseClassService.ItemHasBaseClass(tpl, baseClassTpl);
     }
 
     /// <summary>

@@ -17,8 +17,12 @@ public class ItemBaseClassService(
 )
 {
     private bool _cacheGenerated;
+
+    /// <summary>
+    /// Key = Item tpl, values = Ids of its parents
+    /// </summary>
     private Dictionary<MongoId, HashSet<MongoId>> _itemBaseClassesCache = [];
-    private HashSet<MongoId> rootNodeIds = [];
+    private readonly HashSet<MongoId> _rootNodeIds = [];
 
     /// <summary>
     ///     Create cache and store inside ItemBaseClassService <br />
@@ -44,7 +48,7 @@ public class ItemBaseClassService(
             }
             else
             {
-                rootNodeIds.Add(item.Key);
+                _rootNodeIds.Add(item.Key);
             }
         }
 
@@ -89,7 +93,7 @@ public class ItemBaseClassService(
 
         // The cache is only generated for item templates with `_type == "Item"`, so return false for any other type,
         // including item templates that simply don't exist.
-        if (rootNodeIds.Contains(itemTpl))
+        if (_rootNodeIds.Contains(itemTpl))
         {
             return false;
         }
@@ -124,11 +128,67 @@ public class ItemBaseClassService(
     }
 
     /// <summary>
+    ///     Does item tpl inherit from the requested base class
+    /// </summary>
+    /// <param name="itemTpl"> ItemTpl item to check base classes of </param>
+    /// <param name="baseClasses"> BaseClass base class to check for </param>
+    /// <returns> true if item inherits from base class passed in </returns>
+    public bool ItemHasBaseClass(MongoId itemTpl, MongoId baseClasses)
+    {
+        if (!_cacheGenerated)
+        {
+            HydrateItemBaseClassCache();
+        }
+
+        if (itemTpl.IsEmpty())
+        {
+            logger.Warning("Unable to check itemTpl base class as value passed is null");
+
+            return false;
+        }
+
+        // The cache is only generated for item templates with `_type == "Item"`, so return false for any other type,
+        // including item templates that simply don't exist.
+        if (_rootNodeIds.Contains(itemTpl))
+        {
+            return false;
+        }
+
+        var existsInCache = _itemBaseClassesCache.TryGetValue(itemTpl, out var baseClassList);
+        if (!existsInCache)
+        {
+            // Not found
+            if (logger.IsLogEnabled(LogLevel.Debug))
+            {
+                logger.Debug(
+                    serverLocalisationService.GetText("baseclass-item_not_found", itemTpl)
+                );
+            }
+
+            // Not found in cache, Hydrate again - some mods add items late in server startup lifecycle
+            HydrateItemBaseClassCache();
+
+            existsInCache = _itemBaseClassesCache.TryGetValue(itemTpl, out baseClassList);
+        }
+
+        if (existsInCache)
+        {
+            return baseClassList.Contains(baseClasses);
+        }
+
+        logger.Warning(
+            serverLocalisationService.GetText("baseclass-item_not_found_failed", itemTpl)
+        );
+
+        return false;
+    }
+
+    /// <summary>
     ///     Get base classes item inherits from
     /// </summary>
     /// <param name="itemTpl"> ItemTpl item to get base classes for </param>
     /// <returns> array of base classes </returns>
-    public List<MongoId> GetItemBaseClasses(MongoId itemTpl)
+    public HashSet<MongoId> GetItemBaseClasses(MongoId itemTpl)
     {
         if (!_cacheGenerated)
         {
@@ -140,6 +200,6 @@ public class ItemBaseClassService(
             return [];
         }
 
-        return value.ToList();
+        return value;
     }
 }
