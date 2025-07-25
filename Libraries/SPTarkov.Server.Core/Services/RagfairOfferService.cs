@@ -201,9 +201,7 @@ public class RagfairOfferService(
         }
 
         // Handle dynamic offer from PMCs
-        var isPlayer = profileHelper.IsPlayer(
-            staleOffer.User.Id.ToString().RegexReplace("^pmc", "")
-        );
+        var isPlayer = staleOffer.CreatedBy == OfferCreator.Player;
         if (flagOfferAsExpired && !isPlayer)
         {
             // Not trader or a player offer

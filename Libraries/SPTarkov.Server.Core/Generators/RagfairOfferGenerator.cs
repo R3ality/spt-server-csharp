@@ -278,32 +278,6 @@ public class RagfairOfferGenerator(
     }
 
     /// <summary>
-    ///     Is the offers user rating growing
-    /// </summary>
-    /// <param name="userID"> User to check rating of</param>
-    /// <returns> True if growing </returns>
-    protected bool GetRatingGrowing(MongoId userID)
-    {
-        if (profileHelper.IsPlayer(userID))
-        // player offer
-        {
-            return saveServer
-                    .GetProfile(userID)
-                    .CharacterData?.PmcData?.RagfairInfo?.IsRatingGrowing ?? false;
-        }
-
-        if (ragfairServerHelper.IsTrader(userID))
-        // trader offer
-        {
-            return true;
-        }
-
-        // generated offer
-        // 50/50 growing/falling
-        return randomUtil.GetBool();
-    }
-
-    /// <summary>
     ///     Get number of section until offer should expire
     /// </summary>
     /// <param name="creatorType"></param>
@@ -438,7 +412,8 @@ public class RagfairOfferGenerator(
                 clonedAssort,
                 isPreset,
                 itemToSellDetails.Value,
-                isExpiredOffer
+                isExpiredOffer,
+                OfferCreator.FakePlayer
             );
         }
     }
@@ -499,12 +474,14 @@ public class RagfairOfferGenerator(
     /// <param name="isPreset"> Is item a weapon preset</param>
     /// <param name="itemToSellDetails"> Raw DB item details </param>
     /// <param name="isExpiredOffer">Offer being created is to replace an expired, existing offer</param>
+    /// <param name="offerCreator">What type of entity created this offer</param>
     protected void CreateSingleOfferForItem(
         MongoId sellerId,
         List<Item> itemWithChildren,
         bool isPreset,
         TemplateItem itemToSellDetails,
-        bool isExpiredOffer
+        bool isExpiredOffer,
+        OfferCreator offerCreator
     )
     {
         var rootItem = itemWithChildren.FirstOrDefault();
@@ -553,7 +530,12 @@ public class RagfairOfferGenerator(
         else if (isBarterOffer)
         {
             // Apply randomised properties
-            RandomiseOfferItemUpdProperties(sellerId, itemWithChildren, itemToSellDetails);
+            RandomiseOfferItemUpdProperties(
+                sellerId,
+                itemWithChildren,
+                itemToSellDetails,
+                offerCreator
+            );
             barterScheme = CreateBarterBarterScheme(itemWithChildren, ragfairConfig.Dynamic.Barter);
             if (ragfairConfig.Dynamic.Barter.MakeSingleStackOnly)
             {
@@ -568,7 +550,12 @@ public class RagfairOfferGenerator(
         {
             // Not barter or pack offer
             // Apply randomised properties
-            RandomiseOfferItemUpdProperties(sellerId, itemWithChildren, itemToSellDetails);
+            RandomiseOfferItemUpdProperties(
+                sellerId,
+                itemWithChildren,
+                itemToSellDetails,
+                offerCreator
+            );
             barterScheme = CreateCurrencyBarterScheme(itemWithChildren, isPackOffer);
         }
 
@@ -580,7 +567,7 @@ public class RagfairOfferGenerator(
             BarterScheme = barterScheme,
             LoyalLevel = 1,
             Quantity = desiredStackSize,
-            Creator = OfferCreator.FakePlayer,
+            Creator = offerCreator,
             SellInOnePiece = isPackOffer, // sellAsOnePiece - pack offer
         };
         CreateAndAddFleaOffer(createOfferDetails);
@@ -723,16 +710,18 @@ public class RagfairOfferGenerator(
     /// <param name="userID"> ID of owner of item </param>
     /// <param name="itemWithMods"> Item and mods, get condition of first item (only first array item is modified) </param>
     /// <param name="itemDetails"> DB details of first item</param>
+    /// <param name="offerCreator"></param>
     protected void RandomiseOfferItemUpdProperties(
         MongoId userID,
         IEnumerable<Item> itemWithMods,
-        TemplateItem itemDetails
+        TemplateItem itemDetails,
+        OfferCreator offerCreator
     )
     {
         // Add any missing properties to first item in array
         AddMissingConditions(itemWithMods.First());
 
-        if (!(profileHelper.IsPlayer(userID) || ragfairServerHelper.IsTrader(userID)))
+        if (offerCreator is OfferCreator.FakePlayer)
         {
             var parentId = GetDynamicConditionIdForTpl(itemDetails.Id);
             if (parentId == null)

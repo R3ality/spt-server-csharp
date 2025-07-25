@@ -298,7 +298,7 @@ public class RagfairOfferHolder(
     ///     Add a stale offers id to _expiredOfferIds collection for later processing
     /// </summary>
     /// <param name="staleOfferId">Id of offer to add to stale collection</param>
-    public void FlagOfferAsExpired(string staleOfferId)
+    public void FlagOfferAsExpired(MongoId staleOfferId)
     {
         lock (_expiredOfferIdsLock)
         {
