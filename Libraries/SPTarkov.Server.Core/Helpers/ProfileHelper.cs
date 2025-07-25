@@ -227,9 +227,9 @@ public class ProfileHelper(
     /// </summary>
     /// <param name="sessionID">Profile id to get</param>
     /// <returns>SptProfile object</returns>
-    public SptProfile? GetFullProfile(MongoId sessionID)
+    public SptProfile GetFullProfile(MongoId sessionID)
     {
-        return saveServer.ProfileExists(sessionID) ? saveServer.GetProfile(sessionID) : null;
+        return saveServer.GetProfile(sessionID);
     }
 
     /// <summary>
