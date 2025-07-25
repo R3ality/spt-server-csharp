@@ -242,12 +242,12 @@ public class PaymentService(
             }
 
             // Found currency item
-            if (item.Upd.StackObjectsCount < currencyMaxStackSize)
+            if (item.Upd?.StackObjectsCount < currencyMaxStackSize)
             {
                 if (item.Upd.StackObjectsCount + calcAmount > currencyMaxStackSize)
                 {
                     // calculate difference
-                    calcAmount -= (int)(currencyMaxStackSize - item.Upd.StackObjectsCount ?? 0);
+                    calcAmount -= (int)(currencyMaxStackSize - item.Upd.StackObjectsCount);
                     item.Upd.StackObjectsCount = currencyMaxStackSize;
                 }
                 else

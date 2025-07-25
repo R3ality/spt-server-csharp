@@ -358,7 +358,6 @@ public class SeasonalEventService(
         var christmasItems = GetChristmasEventItems();
 
         // Remove christmas related equipment
-        botInventory.Equipment ??= new Dictionary<EquipmentSlots, Dictionary<MongoId, double>>();
         foreach (var equipmentSlotKey in _equipmentSlotsToFilter)
         {
             if (!botInventory.Equipment.TryGetValue(equipmentSlotKey, out var equipment))

@@ -443,7 +443,7 @@ public class TraderHelper(
             loyaltyLevel = traderBase.LoyaltyLevels.Count;
         }
 
-        return traderBase.LoyaltyLevels[loyaltyLevel - 1 ?? 1];
+        return traderBase.LoyaltyLevels[loyaltyLevel.Value - 1];
     }
 
     /// <summary>

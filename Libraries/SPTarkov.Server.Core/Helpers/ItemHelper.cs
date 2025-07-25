@@ -660,8 +660,7 @@ public class ItemHelper(
             {
                 // keys - keys count upwards, not down like everything else
                 var maxNumOfUsages = itemDetails.Properties.MaximumNumberOfUsage;
-                result =
-                    (maxNumOfUsages ?? 0 - item.Upd.Key.NumberOfUsages ?? 0) / maxNumOfUsages ?? 0;
+                result = (maxNumOfUsages ?? 0 - item.Upd.Key.NumberOfUsages) / maxNumOfUsages ?? 0;
             }
             else if (item.Upd.Resource?.UnitsConsumed > 0)
             {
@@ -1554,7 +1553,7 @@ public class ItemHelper(
         }
 
         var desiredStackCount = randomUtil.GetInt(
-            (int)Math.Round(minSizeMultiplier * magazineCartridgeMaxCount ?? 0),
+            (int)Math.Round(minSizeMultiplier * magazineCartridgeMaxCount.Value),
             (int)magazineCartridgeMaxCount
         );
 

@@ -319,7 +319,7 @@ public class BackupService
 
         foreach (var mod in _loadedMods)
         {
-            result.Add($"{mod.ModMetadata.Author} - {mod.ModMetadata.Version ?? ""}");
+            result.Add($"{mod.ModMetadata.Author} - {mod.ModMetadata.Version}");
         }
 
         return result;
