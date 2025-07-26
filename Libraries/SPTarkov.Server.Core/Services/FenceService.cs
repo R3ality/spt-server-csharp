@@ -791,7 +791,8 @@ public class FenceService(
                 && item.Upd?.SptPresetId == null
             )
             .ToList();
-        if (assortRootItems.Count == 0)
+
+        if (!assortRootItems.Any())
         {
             logger.Error(localisationService.GetText("fence-unable_to_find_root_item_to_add"));
 
@@ -800,6 +801,11 @@ public class FenceService(
 
         for (var i = 0; i < assortCount; i++)
         {
+            if (!assortRootItems.Any())
+            {
+                break;
+            }
+
             var chosenBaseAssortRoot = randomUtil.GetArrayValue(assortRootItems);
             if (chosenBaseAssortRoot == null)
             {
@@ -807,25 +813,36 @@ public class FenceService(
                 continue;
             }
 
-            var itemDbDetails = itemHelper.GetItem(chosenBaseAssortRoot.Template).Value;
-            var itemLimitCount = GetMatchingItemLimit(itemTypeLimits, itemDbDetails.Id);
+            var itemLimitCount = GetMatchingItemLimit(
+                itemTypeLimits,
+                chosenBaseAssortRoot.Template
+            );
             if (itemLimitCount?.current >= itemLimitCount?.max)
             {
-                // Skip adding item as assort as limit reached, decrement i counter so we still get another item
+                // Skip adding item as assort as limit reached, try another item
                 i--;
+
+                // Remove assort root now it's failed limit count check
+                assortRootItems.Remove(chosenBaseAssortRoot);
+
                 continue;
             }
-
-            var itemIsPreset = presetHelper.IsPreset(chosenBaseAssortRoot.Id);
 
             var price = baseFenceAssortClone.BarterScheme?[chosenBaseAssortRoot.Id][0][0].Count;
-            if (price == 0 || (price == 1 && !itemIsPreset) || price == 100)
+            if (
+                price is 0 or 100
+                || (price == 1 && !presetHelper.IsPreset(chosenBaseAssortRoot.Id))
+            )
             {
-                // Don't allow "special" items / presets
+                // Don't allow "special" items / presets, try another item
                 i--;
+
+                assortRootItems.Remove(chosenBaseAssortRoot);
+
                 continue;
             }
 
+            var itemDbDetails = itemHelper.GetItem(chosenBaseAssortRoot.Template).Value;
             if (
                 priceLimits.ContainsKey(itemDbDetails.Parent)
                 && price > priceLimits[itemDbDetails.Parent]
@@ -833,6 +850,9 @@ public class FenceService(
             {
                 // Too expensive for fence, try another item
                 i--;
+
+                assortRootItems.Remove(chosenBaseAssortRoot);
+
                 continue;
             }
 
@@ -844,12 +864,10 @@ public class FenceService(
             }
 
             // Filter to only 1 root item + all children
-            var childItemsAndSingleRoot = baseFenceAssortClone
-                .Items.Where(item =>
-                    !string.Equals(item.ParentId, "hideout", StringComparison.Ordinal)
-                    || item.Id == chosenBaseAssortRoot.Id
-                )
-                .ToList();
+            var childItemsAndSingleRoot = baseFenceAssortClone.Items.Where(item =>
+                !string.Equals(item.ParentId, "hideout", StringComparison.Ordinal)
+                || item.Id == chosenBaseAssortRoot.Id
+            );
 
             // MUST randomise Ids as its possible to add the same base fence assort twice = duplicate IDs = dead client
             var desiredAssortItemAndChildrenClone = _cloner
@@ -863,7 +881,7 @@ public class FenceService(
             // Set stack size based on possible overrides, e.g. ammos, otherwise set to 1
             rootItemBeingAdded.Upd.StackObjectsCount = GetSingleItemStackCount(itemDbDetails);
 
-            // Only randomise Upd values for single
+            // Only randomise Upd values for single stacks
             var isSingleStack =
                 Math.Abs((rootItemBeingAdded.Upd?.StackObjectsCount ?? 0) - 1) < 0.1;
             if (isSingleStack)
@@ -877,8 +895,10 @@ public class FenceService(
                 itemDbDetails,
                 assorts.SptItems
             );
-            var shouldBeStacked = ItemShouldBeForceStacked(existingItemThatMatches, itemDbDetails);
-            if (shouldBeStacked && existingItemThatMatches != null)
+            if (
+                existingItemThatMatches != null
+                && ItemShouldBeForceStacked(existingItemThatMatches, itemDbDetails)
+            )
             {
                 // Decrement loop counter so another items gets added
                 i--;
