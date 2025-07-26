@@ -362,9 +362,9 @@ public class ProfileFixerService(
             // For started or successful quests, check for unlocks in the `Started` rewards
             if (profileQuest.Status is QuestStatusEnum.Started or QuestStatusEnum.Success)
             {
-                var productionRewards = quest.Rewards.Started?.Where(reward =>
-                    reward.Type == RewardType.ProductionScheme
-                );
+                var productionRewards = quest
+                    .Rewards["Started"]
+                    ?.Where(reward => reward.Type == RewardType.ProductionScheme);
 
                 if (productionRewards is not null)
                 {
@@ -378,9 +378,9 @@ public class ProfileFixerService(
             // For successful quests, check for unlocks in the `Success` rewards
             if (profileQuest.Status is QuestStatusEnum.Success)
             {
-                var productionRewards = quest.Rewards.Success?.Where(reward =>
-                    reward.Type == RewardType.ProductionScheme
-                );
+                var productionRewards = quest
+                    .Rewards["Success"]
+                    ?.Where(reward => reward.Type == RewardType.ProductionScheme);
 
                 if (productionRewards is not null)
                 {
@@ -793,16 +793,16 @@ public class ProfileFixerService(
                     continue;
                 }
 
-                if (activeQuest.Rewards?.Success is null)
+                if (activeQuest.Rewards?["Success"] is null)
                 {
                     continue;
                 }
 
                 // Get Item rewards only
                 foreach (
-                    var successReward in activeQuest.Rewards.Success.Where(reward =>
-                        reward.Type == RewardType.Item
-                    )
+                    var successReward in activeQuest
+                        .Rewards["Success"]
+                        .Where(reward => reward.Type == RewardType.Item)
                 )
                 foreach (var item in successReward.Items)
                 {

@@ -1,6 +1,5 @@
 using System.Collections.Frozen;
 using System.Globalization;
-using SPTarkov.Common.Extensions;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Extensions;
 using SPTarkov.Server.Core.Models.Common;
@@ -1403,7 +1402,10 @@ public class QuestHelper(
             }
         }
 
-        return UpdateQuestsForGameEdition(questsToShowPlayer, profile.Info.GameVersion);
+        return UpdateQuestsForGameEdition(
+            cloner.Clone(questsToShowPlayer),
+            profile.Info.GameVersion
+        );
     }
 
     /// <summary>
@@ -1414,11 +1416,10 @@ public class QuestHelper(
     /// <returns>Collection of Quest objects with the rewards filtered correctly for the game version</returns>
     protected List<Quest> UpdateQuestsForGameEdition(List<Quest> quests, string gameVersion)
     {
-        var modifiedQuests = cloner.Clone(quests);
-        foreach (var quest in modifiedQuests)
+        foreach (var quest in quests)
         {
             // Remove any reward that doesn't pass the game edition check
-            var propsAsDict = quest.Rewards.GetAllPropsAsDict();
+            var propsAsDict = quest.Rewards;
             foreach (var rewardType in propsAsDict)
             {
                 if (rewardType.Value is null)
@@ -1426,13 +1427,13 @@ public class QuestHelper(
                     continue;
                 }
 
-                propsAsDict[rewardType.Key] = ((List<Reward>)propsAsDict[rewardType.Key])
+                propsAsDict[rewardType.Key] = propsAsDict[rewardType.Key]
                     .Where(reward => rewardHelper.RewardIsForGameEdition(reward, gameVersion))
                     .ToList();
             }
         }
 
-        return modifiedQuests;
+        return quests;
     }
 
     /// <summary>

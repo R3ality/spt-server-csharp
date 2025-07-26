@@ -1,4 +1,3 @@
-using SPTarkov.Common.Extensions;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Extensions;
 using SPTarkov.Server.Core.Models.Common;
@@ -89,7 +88,7 @@ public class QuestRewardHelper(
         }
 
         // e.g. 'Success' or 'AvailableForFinish'
-        var rewards = questDetails.Rewards.GetByJsonProp<List<Reward>>(state.ToString());
+        var rewards = questDetails.Rewards[state.ToString()];
         return rewardHelper.ApplyRewards(
             rewards,
             CustomisationSource.UNLOCKED_IN_GAME,
@@ -172,18 +171,20 @@ public class QuestRewardHelper(
     public Quest ApplyMoneyBoost(Quest quest, double bonusPercent, QuestStatusEnum questStatus)
     {
         var clonedQuest = cloner.Clone(quest);
-        if (clonedQuest?.Rewards?.Success == null)
+        if (clonedQuest?.Rewards?["Success"] == null)
         {
             return clonedQuest;
         }
 
         // Grab just the money rewards from quest reward pool
-        var moneyRewards = clonedQuest.Rewards.Success.Where(reward =>
-            reward.Type == RewardType.Item
-            && reward.Items != null
-            && reward.Items.Count > 0
-            && paymentHelper.IsMoneyTpl(reward.Items.FirstOrDefault().Template)
-        );
+        var moneyRewards = clonedQuest
+            .Rewards["Success"]
+            .Where(reward =>
+                reward.Type == RewardType.Item
+                && reward.Items != null
+                && reward.Items.Count > 0
+                && paymentHelper.IsMoneyTpl(reward.Items.FirstOrDefault().Template)
+            );
 
         foreach (var moneyReward in moneyRewards)
         {

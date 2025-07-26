@@ -240,7 +240,7 @@ public record SampleQuests
     public bool? CanShowNotificationsInGame { get; set; }
 
     [JsonPropertyName("rewards")]
-    public QuestRewards? Rewards { get; set; }
+    public Dictionary<string, List<Reward>>? Rewards { get; set; }
 
     [JsonPropertyName("conditions")]
     public QuestConditionTypes? Conditions { get; set; }

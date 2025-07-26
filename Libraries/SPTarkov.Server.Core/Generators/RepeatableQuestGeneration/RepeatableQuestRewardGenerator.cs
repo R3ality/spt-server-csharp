@@ -58,7 +58,7 @@ public class RepeatableQuestRewardGenerator(
     /// <param name="eliminationConfig"> Base Quest config</param>
     /// <param name="rewardTplBlacklist"> Optional: list of tpls to NOT use when picking a reward </param>
     /// <returns> QuestRewards </returns>
-    public QuestRewards? GenerateReward(
+    public Dictionary<string, List<Reward>>? GenerateReward(
         int pmcLevel,
         double difficulty,
         MongoId traderId,
@@ -78,11 +78,11 @@ public class RepeatableQuestRewardGenerator(
         var itemRewardBudget = rewardParams.RewardRoubles;
 
         // Possible improvement -> draw trader-specific items e.g. with _itemHelper.isOfBaseclass(val._id, ItemHelper.BASECLASS.FoodDrink)
-        QuestRewards rewards = new()
+        var rewards = new Dictionary<string, List<Reward>>
         {
-            Started = [],
-            Success = [],
-            Fail = [],
+            { "Success", [] },
+            { "Started", [] },
+            { "Fail", [] },
         };
 
         // Start reward index to keep track
@@ -91,29 +91,29 @@ public class RepeatableQuestRewardGenerator(
         // Add xp reward
         if (rewardParams.RewardXP > 0)
         {
-            rewards.Success.Add(
-                new Reward
-                {
-                    Id = new MongoId(),
-                    Unknown = false,
-                    GameMode = [],
-                    AvailableInGameEditions = [],
-                    Index = rewardIndex,
-                    Value = rewardParams.RewardXP,
-                    Type = RewardType.Experience,
-                }
-            );
+            rewards["Success"]
+                .Add(
+                    new Reward
+                    {
+                        Id = new MongoId(),
+                        Unknown = false,
+                        GameMode = [],
+                        AvailableInGameEditions = [],
+                        Index = rewardIndex,
+                        Value = rewardParams.RewardXP,
+                        Type = RewardType.Experience,
+                    }
+                );
             rewardIndex++;
         }
 
         // Add money reward
-        rewards.Success.Add(GetMoneyReward(traderId, rewardParams.RewardRoubles, rewardIndex));
+        rewards["Success"].Add(GetMoneyReward(traderId, rewardParams.RewardRoubles, rewardIndex));
         rewardIndex++;
 
         // Add GP coin reward
-        rewards.Success.Add(
-            GenerateItemReward(Money.GP, rewardParams.GpCoinRewardCount, rewardIndex)
-        );
+        rewards["Success"]
+            .Add(GenerateItemReward(Money.GP, rewardParams.GpCoinRewardCount, rewardIndex));
         rewardIndex++;
 
         // Add preset weapon to reward if checks pass
@@ -135,7 +135,7 @@ public class RepeatableQuestRewardGenerator(
             var chosenWeapon = GetRandomWeaponPresetWithinBudget(itemRewardBudget, rewardIndex);
             if (chosenWeapon is not null)
             {
-                rewards.Success.Add(chosenWeapon.Value.Key);
+                rewards["Success"].Add(chosenWeapon.Value.Key);
 
                 // Subtract price of preset from item budget so we don't give player too much stuff
                 itemRewardBudget -= chosenWeapon.Value.Value;
@@ -180,9 +180,8 @@ public class RepeatableQuestRewardGenerator(
             // Add item rewards
             foreach (var itemReward in itemsToReward)
             {
-                rewards.Success.Add(
-                    GenerateItemReward(itemReward.Key.Id, itemReward.Value, rewardIndex)
-                );
+                rewards["Success"]
+                    .Add(GenerateItemReward(itemReward.Key.Id, itemReward.Value, rewardIndex));
                 rewardIndex++;
             }
         }
@@ -201,7 +200,7 @@ public class RepeatableQuestRewardGenerator(
                 Type = RewardType.TraderStanding,
                 Index = rewardIndex,
             };
-            rewards.Success.Add(reward);
+            rewards["Success"].Add(reward);
             rewardIndex++;
 
             if (logger.IsLogEnabled(LogLevel.Debug))
@@ -227,7 +226,7 @@ public class RepeatableQuestRewardGenerator(
                 Type = RewardType.Skill,
                 Index = rewardIndex,
             };
-            rewards.Success.Add(reward);
+            rewards["Success"].Add(reward);
 
             if (logger.IsLogEnabled(LogLevel.Debug))
             {

@@ -85,7 +85,7 @@ public record Quest
     public string? TemplateId { get; set; }
 
     [JsonPropertyName("rewards")]
-    public QuestRewards? Rewards { get; set; }
+    public Dictionary<string, List<Reward>>? Rewards { get; set; }
 
     /// <summary>
     ///     Becomes 'AppearStatus' inside client
@@ -488,31 +488,4 @@ public record VisibilityCondition
 
     [JsonPropertyName("conditionType")]
     public required string ConditionType { get; set; }
-}
-
-public record QuestRewards
-{
-    [JsonExtensionData]
-    public Dictionary<string, object>? ExtensionData { get; set; }
-
-    [JsonPropertyName("AvailableForStart")]
-    public List<Reward>? AvailableForStart { get; set; }
-
-    [JsonPropertyName("AvailableForFinish")]
-    public List<Reward>? AvailableForFinish { get; set; }
-
-    [JsonPropertyName("Started")]
-    public List<Reward>? Started { get; set; }
-
-    [JsonPropertyName("Success")]
-    public List<Reward>? Success { get; set; }
-
-    [JsonPropertyName("Fail")]
-    public List<Reward>? Fail { get; set; }
-
-    [JsonPropertyName("FailRestartable")]
-    public List<Reward>? FailRestartable { get; set; }
-
-    [JsonPropertyName("Expired")]
-    public List<Reward>? Expired { get; set; }
 }

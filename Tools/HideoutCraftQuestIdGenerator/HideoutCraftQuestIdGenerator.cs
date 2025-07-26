@@ -231,19 +231,14 @@ public class HideoutCraftQuestIdGenerator(
         return true;
     }
 
-    private HashSet<Reward> CombineRewards(QuestRewards? questRewards)
+    /// <summary>
+    /// Merge all rewards together into one collection
+    /// </summary>
+    /// <param name="questRewards">Rewards to merge</param>
+    /// <returns>IEnumerable</returns>
+    protected IEnumerable<Reward> CombineRewards(Dictionary<string, List<Reward>>? questRewards)
     {
-        var result = new HashSet<Reward>();
-        questRewards.Started?.ForEach(x => result.Add(x));
-        questRewards.Success?.ForEach(x => result.Add(x));
-        questRewards.AvailableForFinish?.ForEach(x => result.Add(x));
-        questRewards.Expired?.ForEach(x => result.Add(x));
-        questRewards.AvailableForStart?.ForEach(x => result.Add(x));
-        questRewards.Fail?.ForEach(x => result.Add(x));
-        questRewards.FailRestartable?.ForEach(x => result.Add(x));
-        questRewards.Started?.ForEach(x => result.Add(x));
-
-        return result;
+        return questRewards?.SelectMany(rewardKvP => rewardKvP.Value) ?? [];
     }
 }
 
