@@ -624,7 +624,7 @@ public class ProfileFixerService(
     ///     Check for and cap profile skills at 5100.
     /// </summary>
     /// <param name="pmcProfile"> Profile to check and fix </param>
-    protected void CheckForSkillsOverMaxLevel(PmcData pmcProfile)
+    public void CheckForSkillsOverMaxLevel(PmcData pmcProfile)
     {
         var skills = pmcProfile.Skills.Common;
 

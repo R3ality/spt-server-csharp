@@ -20,6 +20,7 @@ public class ProfileController(
     ISptLogger<ProfileController> logger,
     SaveServer saveServer,
     CreateProfileService createProfileService,
+    ProfileFixerService profileFixerService,
     PlayerScavGenerator playerScavGenerator,
     ProfileHelper profileHelper
 )
@@ -98,7 +99,23 @@ public class ProfileController(
     /// <returns>Return a full profile, scav and pmc profiles + meta data</returns>
     public virtual List<PmcData> GetCompleteProfile(MongoId sessionId)
     {
-        return profileHelper.GetCompleteProfile(sessionId);
+        var profile = profileHelper.GetCompleteProfile(sessionId);
+
+        // Some users like to crank massive skill multipliers and send the client invalid information,
+        // causing a json exception during parsing
+        if (profile[0].Skills != null)
+        {
+            // Pmc profile is index 0
+            profileFixerService.CheckForSkillsOverMaxLevel(profile[0]);
+        }
+
+        if (profile[1].Skills != null)
+        {
+            // We also do the scav profile here because it is also affected by the skill multipliers
+            profileFixerService.CheckForSkillsOverMaxLevel(profile[1]);
+        }
+
+        return profile;
     }
 
     /// <summary>
