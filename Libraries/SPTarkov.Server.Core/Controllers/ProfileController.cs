@@ -103,16 +103,19 @@ public class ProfileController(
 
         // Some users like to crank massive skill multipliers and send the client invalid information,
         // causing a json exception during parsing
-        if (profile[0].Skills != null)
+        if (profile.Any())
         {
-            // Pmc profile is index 0
-            profileFixerService.CheckForSkillsOverMaxLevel(profile[0]);
-        }
+            if (profile[0].Skills != null)
+            {
+                // Pmc profile is index 0
+                profileFixerService.CheckForSkillsOverMaxLevel(profile[0]);
+            }
 
-        if (profile[1].Skills != null)
-        {
-            // We also do the scav profile here because it is also affected by the skill multipliers
-            profileFixerService.CheckForSkillsOverMaxLevel(profile[1]);
+            if (profile[1].Skills != null)
+            {
+                // We also do the scav profile here because it is also affected by the skill multipliers
+                profileFixerService.CheckForSkillsOverMaxLevel(profile[1]);
+            }
         }
 
         return profile;
